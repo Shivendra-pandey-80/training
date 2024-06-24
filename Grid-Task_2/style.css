@@ -1,0 +1,91 @@
+
+body{
+    height: 98vh;
+    padding:0%;
+}
+
+.container {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+}
+
+.mohenjodaro{
+    background-color: #88d8b0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: 	#ffeead;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.list{
+    display: grid;
+    grid-template-columns: 20% 40% 40% ;
+    grid-template-rows: 10% 40% 40% 10%;
+    height: 100%;
+    gap: 2px 2px;
+}
+
+
+.header {
+    background-color:  #735bdb;	
+    grid-column: span 3;
+ 
+}
+
+
+.Sidebar {
+    background-image: linear-gradient(to bottom , #3ad5cd , #2aa69f);
+    background-color:(#0f948d);
+    grid-column: span 1;
+    grid-row: span 2;
+   
+}
+.Content1 {
+    background-image: linear-gradient(to bottom right, #374fec,#2dc3eb, #3bdcdc) ;
+    grid-column: span 2;
+
+}
+.Content2 {
+    background-image: linear-gradient(to bottom right, #374fec, #2dc3eb , #3bdcdc) ;
+    grid-column: span 1;
+
+}
+.Content3 {
+    background-image: linear-gradient(to bottom right, #374fec, #2dc3eb , #3bdcdc) ;
+    grid-column: span 1;
+}
+.footer {
+    background-color: #735bdb;	
+    grid-column: span 3;
+    
+}
+
+/* .list :nth-child(1) {
+    grid-column: span 16;
+}
+
+.list :nth-child(2) {
+    grid-row: span 2;
+    grid-column: span 4;
+}
+
+.list :nth-child(3) {
+    grid-column: span 12;
+}
+
+.list :nth-child(4) {
+    grid-column: span 6;
+}
+
+.list :nth-child(5) {
+    grid-column: span 6;
+}
+
+.list :nth-child(6) {
+    grid-column: span 16;
+} */
+

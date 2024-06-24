@@ -1,0 +1,82 @@
+body {
+    font-family: 'roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: rgb(253, 253, 253);
+}
+
+.container {
+    width: 457px;
+    height:138px;
+   /* padding: 4px;
+    border: 1px solid;
+    border-radius: 4px; */
+    background-color: rgb(253, 253, 253);
+}
+
+.sub-container{
+    margin: 4px;
+    display: flex;
+    align-items: center;
+}
+.Profile-img{
+    width: 130px;
+    height: 130px;
+}
+ 
+
+.roboto-regular {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+  
+.roboto-medium {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.roboto-bold {
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.content{
+    padding-left: 14px;
+}
+.username{
+    font-size: 20px;
+    margin-bottom:14px
+}
+.user_content{
+    font-size: 20px;
+    margin-bottom: 24px;
+}
+
+.comment {
+    width: 20px;
+    height: 20px;
+    margin-right: 14px;
+}
+
+.button{
+    font-size: 15px;
+    margin-right:24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.options{
+    display: flex;
+}
+
+.null{
+    margin: 0px;
+    color:#858991;
+}

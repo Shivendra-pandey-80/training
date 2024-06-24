@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="header">
+            <img src="imgs\Quantum.png">
+            <nav class="navbar">
+                <ul class="nav-list rightNav heading_of_cards">
+
+                    <li><a href="#Dashboard">DASHBOARD</a></li>
+                    <li><a href="#Content">CONTENT</a></li>
+                    <li><a href="#User">USER</a></li>
+                    <li><a href="#Report">REPORT</a></li>
+                    <li><a href="#Admin">ADMIN</a></li>
+                    <li><a href="#Report"><i class='fas fa-bell'></i></li>
+
+                    <li><a href="#Report"><i class="fa-solid fa-bullhorn"></i></a></li>
+                    <li class="user-circle"><a href="#Report"><i class="fa-solid fa-user"></i></a></li>
+                </ul>
+        </div>
+
+        <div class="container">
+            <div class="content-1"> <a href="#bookmark"> <i class="fa-solid fa-book-bookmark"
+                        style="margin-right: 10px;"></i>4 Courses </a></div>
+            <div class="content-1"> <a href="#user-group"> <i class="fa-solid fa-user-group"
+                        style="margin-right: 10px;"></i>4 classes </a> </div>
+            <div class="content-2"> Showing 4 of 4 courses
+                <div class="select1 mymargin">
+                    <label for="Sort">Sort by: </label>
+                    <select name="Sort" id="Sort" class="quicksand_title" >
+                        <option value="Course Name" >Course Name</option>
+                        <option value="Author Name" >Author Name</option>
+                    </select>
+                    <i class="fa-solid fa-arrow-up" style="margin-left: 10px; "></i>
+                </div>
+            </div>
+            <div class="content-3">
+                <div class="books">
+                    <div class="book-info">
+                        <img src="imgs/imageMask.png" alt="pdf-image">
+                        <div class="book-detail">
+                            <p class="heading_of_cards"> Acceleration </p>
+                            <p>Physics  | Grade 7 +2</p>
+                            <p>4 Units | 18 Lessons | 24 Topics</p>
+                            <select name="Sort" id="Sort" class="heading_of_cards">
+                                <option value="Course Name" >Mr. Frank's Class B</option>
+                                <option value="Author Name" >Author Name</option>
+                            </select>
+                            <p>50 Students | 21-Jan-2020 - 21-Aug-2020</p>
+                        </div>
+                        <i class="fa-solid fa-star fa-xl" style = "color: gold; margin-top: 15px;"></i>
+                    </div>
+                    
+                    <div class="action">
+                        <i class="fa-solid fa-eye"></i>
+                        <i class="fa-solid fa-calendar-day" ></i>
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <i class="fa-solid fa-square-poll-vertical"></i>
+
+                    </div>
+
+                </div>
+                <div class="books">
+                    <div class="book-info">
+                        <img src="imgs/imageMask-1.png" alt="pdf-image">
+                        <div class="book-detail">
+                            <p class="heading_of_cards">Displacement, Velocity and Speed </p>
+                            <p>Physics 2  | Grade 6 + 2</p>
+                            <p>2 Units | 15 Lessons | 20 Topics</p>
+                            <select disabled name="Sort" id="Sort" class="heading_of_cards">
+                                <option value="Course Name" >No classes</option>
+                            </select>
+                            <p style="opacity: 0;">Units |  lesson | topics</p>
+                        </div>
+                        <i class="fa-solid fa-star fa-xl" style = "color: gold; margin-top: 15px;"></i>
+                    </div>
+                    
+                    <div class="action">
+                        <i class="fa-solid fa-eye"></i>
+                        <i class="fa-solid fa-calendar-day" style="opacity: 0.5;"></i>
+                        <i class="fa-solid fa-bag-shopping" style="opacity: 0.5;"></i>
+                        <i class="fa-solid fa-square-poll-vertical"></i>
+
+                    </div>
+                </div>
+                <div class="books">
+                    <div class="book-info">
+                        <img src="imgs/imageMask-1.png" alt="pdf-image">
+                        <div class="book-detail">
+                            <p class="heading_of_cards">Introduction to Biology: Micro organisms and how they affec...</p>
+                            <p>Physics 2  | Grade 6 + 2</p>
+                            <p>2 Units | 15 Lessons | 20 Topics</p>
+                            <select name="Sort" id="Sort" class="heading_of_cards">
+                                <option value="Course Name" >All Classes</option>
+                            </select>
+                            <p>50 Students | 21-Jan-2020 - 21-Aug-2020</p>
+                        </div>
+                        <i class="fa-solid fa-star fa-xl" style = "color: gold; margin-top: 15px;"></i>
+                    </div>
+                    
+                    <div class="action">
+                        <i class="fa-solid fa-eye"></i>
+                        <i class="fa-solid fa-calendar-day" style="opacity: 0.5;"></i>
+                        <i class="fa-solid fa-bag-shopping" style="opacity: 0.5;"></i>
+                        <i class="fa-solid fa-square-poll-vertical"></i>
+
+                    </div>
+                </div>
+                <div class="books">
+                    <div class="book-info">
+                        <img src="imgs/imageMask-1.png" alt="pdf-image">
+                        <div class="book-detail">
+                            <p class="heading_of_cards">Introduction to High School Mathematics</p>
+                            <p>Physics 2  | Grade 6 + 2</p>
+                            <p>2 Units | 15 Lessons | 20 Topics</p>
+                            <select name="Sort" id="Sort" class="heading_of_cards">
+                                <option value="Course Name" >Mr. Frank's Class A</option>
+                            </select>
+                            <p>50 Students | 21-Jan-2020 - 21-Aug-2020</p>
+                        </div>
+                        <i class="fa-regular fa-star fa-xl" style="margin-top: 15px;"></i>
+                    </div>
+                    
+                    <div class="action">
+                        <i class="fa-solid fa-eye"></i>
+                        <i class="fa-solid fa-calendar-day"></i>
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <i class="fa-solid fa-square-poll-vertical"></i>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="info">
+            <div class="contact">
+                About | Contact us
+            </div>
+
+        </div>
+        <div class="footer">
+            <img src="imgs\quantum_icon.png" alt="quantum_icon">
+            <b>Quantum</b> | Copyright©2000-2021 Zeus Systems Pvt. Ltd. All rights reserved.
+        </div>
+    </div>
+
+</body>
+
+</html>

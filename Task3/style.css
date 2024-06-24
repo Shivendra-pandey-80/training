@@ -1,0 +1,168 @@
+
+body{
+    /* Layout Properties */
+    top: 0px;
+    left: 0px;
+    height: 100vh;
+    /* UI Properties */
+    background: #EEEEEE 0% 0% no-repeat padding-box;
+    opacity: 1;
+    margin: 0;
+    padding: 0;
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+  
+    font-style: normal;
+}
+
+.main-container{
+    display: grid;
+    height: 100%;
+    grid-template-rows: 10% 80% 5% 5%;
+}
+
+.header{
+    background-color: #25313F;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #31b9e4;
+}
+
+.header img{
+    margin-left: 2%;
+    height: 90%;
+}
+
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;  
+
+}
+
+.block{
+    border-top: 2px solid #31b9e4;
+    border-radius: 2px 2px 0px 0px;
+    height: 600px;
+    width: 500px;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.title1{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-left: 6%;
+    margin-right: 6%;
+}
+.title1 > img{
+    height: 40px;
+    width: 40px;
+    position:fixed;
+ 
+}
+.title1 > p{
+    margin-left: auto;
+    margin-right: auto;
+}
+/* 
+.mymargin{
+    margin-top: 8%;
+}
+.mymargin_bottom{
+    margin-bottom: 8%;
+} */
+
+.formstyle{
+    margin-top: 32px;
+    margin-left: 6%;
+    margin-right: 6%;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    height: 80%;
+}
+
+.radios > input[type = 'radio']{
+    accent-color: green;
+    height: 15px;
+    width: 20px;
+}
+
+.radios > label{
+    margin-right: 30px;
+}
+
+.select1{
+    display: flex;
+    flex-direction: column;
+}
+.select1 > select{
+    border : none ;
+    border-bottom: 1px solid black;
+    outline: none;
+}
+
+.select1 > input{
+    border : none ;
+    border-bottom: 1px solid black;
+    outline: none;
+
+}
+
+.eye_open {
+    height: 25px;
+    width: 25px;
+    position: relative;
+    display: block;
+    top: -40%;
+    right: -94%;
+}
+
+
+.toRight{
+    display: block;
+    text-align: right;
+    text-decoration: none;
+    color: #1F7A54;
+}
+
+.remember >input{
+    accent-color: green;
+}
+.login_button{
+    text-align: center;
+}
+#login{
+    background-color: #3FD28B;
+    padding: 10px 55px;
+    border: none;
+}
+.info{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contact{
+    color: #1F7A54;
+}
+.footer{
+    background-color: #E0E1E1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+select,input{
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-size:16px;
+    font-style: normal;
+}
