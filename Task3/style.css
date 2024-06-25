@@ -89,9 +89,17 @@ body{
 }
 
 .radios > input[type = 'radio']{
+    appearance: none;
     accent-color: green;
-    height: 15px;
+    height: 20px;
     width: 20px;
+    border: 2px solid green;
+    border-radius: 50%;
+    
+}
+
+.radios > input[type = 'radio']:checked{
+    appearance: auto;
 }
 
 .radios > label{
@@ -101,6 +109,7 @@ body{
 .select1{
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 .select1 > select{
     border : none ;
@@ -118,10 +127,10 @@ body{
 .eye_open {
     height: 25px;
     width: 25px;
-    position: relative;
+    position: absolute;
     display: block;
-    top: -40%;
-    right: -94%;
+    top: -5px;
+    right: 0px;
 }
 
 
@@ -135,9 +144,11 @@ body{
 .remember >input{
     accent-color: green;
 }
+
 .login_button{
     text-align: center;
 }
+
 #login{
     background-color: #3FD28B;
     padding: 10px 55px;
