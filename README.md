@@ -1,2 +1,3 @@
 # training
-Bugfix 
+
+-This repo is use for training 
