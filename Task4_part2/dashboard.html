@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style/dashboard.css">
+  <link rel="stylesheet" href="style/font.css">
+  <script src="scripts/dashboard.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="header">
+    <img src="imgs\Quantum.png">
+    <nav class="navbar">
+      <ul class="nav-list rightNav quicksand-medium-14px-3FD28B">
+        <li><a href="#Dashboard" class="pcview">DASHBOARD</a></li>
+        <li><a href="#Content" class="pcview">CONTENT</a></li>
+        <li><a href="#User" class="pcview">USER</a></li>
+        <li><a href="#Report" class="pcview">REPORT</a></li>
+        <li><a href="#Admin" class="pcview">ADMIN</a></li>
+        <li><a href="#Report" class="notification"><i class='fas fa-bell design-iconic-font-24px-3FD28B'><span
+                class='quicksand-medium-12px-FFFFFF'>2</span></i></li></a>
+        <li><a href="#Report" class="notification"><i class="fa-solid fa-bullhorn design-iconic-font-24px-3FD28B"><span
+                class='quicksand-medium-12px-FFFFFF'>1</span></i></li></a>
+        <li class="user-circle "><a href="#user-profile"><img src="imgs/Programming_with_Mosh.jpeg"
+              alt="profile picture"> <span style="color: black;">T</span></li></a>
+        <li class="phoneview"><a href="#" onclick="toggleClassName('horizontalNav')"><i
+              class="fa-solid fa-bars"></i></a></li>
+      </ul>
+
+      <div class="horizontalNav">
+        <li class="nav">DASHBOARD</li>
+        <li class="nav">CONTENT
+          <div class="subNav">COURSE CATELOG</div>
+        </li>
+        <li class="nav">USERS
+          <div class="subNav">SHIV</div>
+          <div class="subNav">ROHAN</div>
+        </li>
+        <li class="nav">REPORTS
+          <div class="subNav">REPORT 1</div>
+          <div class="subNav">REPORT 2</div>
+
+        </li>
+        <li class="nav">ADMIN
+          <div class="subNav">PROFILE</div>
+          <div class="subNav">LOGOUT</div>
+
+        </li>
+      </div>
+      <div class="dashboard-2">
+        <div class="db-list">
+          <div class="ashish">
+            <p class="para-1">PA: Wilson Kumar</p>
+            <p class="para-2">No classes will be held on 21st Nov</p>
+            <div class="para-bottom">
+              <p class="para-3">2 files are attached</p>
+              <p class="para-4">15-Sep-2018 at 07:21 pm</p>
+            </div>
+          </div>
+          <div class="ashish">
+            <p class="para-1">PA: Wilson Kumar</p>
+            <p class="para-2">No classes will be held on 21st Nov</p>
+            <div class="para-bottom">
+              <p class="para-3">2 files are attached</p>
+              <p class="para-4">15-Sep-2018 at 07:21 pm</p>
+            </div>
+          </div>
+          <div class="ashish">
+            <p class="para-1">PA: Wilson Kumar</p>
+            <p class="para-2">No classes will be held on 21st Nov</p>
+            <div class="para-bottom">
+              <p class="para-3">2 files are attached</p>
+              <p class="para-4">15-Sep-2018 at 07:21 pm</p>
+            </div>
+          </div>
+          <div class="ashish">
+            <p class="para-1">PA: Wilson Kumar</p>
+            <p class="para-2">No classes will be held on 21st Nov</p>
+            <div class="para-bottom">
+              <p class="para-3">2 files are attached</p>
+              <p class="para-4">15-Sep-2018 at 07:21 pm</p>
+            </div>
+          </div>
+          <div class="ashish">
+            <p class="para-1">PA: Wilson Kumar</p>
+            <p class="para-2">No classes will be held on 21st Nov</p>
+            <div class="para-bottom">
+              <p class="para-3">2 files are attached</p>
+              <p class="para-4">15-Sep-2018 at 07:21 pm</p>
+            </div>
+          </div>
+          <div class="ashish">
+            <p class="para-1">PA: Wilson Kumar</p>
+            <p class="para-2">No classes will be held on 21st Nov</p>
+            <div class="para-bottom">
+              <p class="para-3">2 files are attached</p>
+              <p class="para-4">15-Sep-2018 at 07:21 pm</p>
+            </div>
+          </div>
+          <div class="ashish">
+            <p class="para-1">PA: Wilson Kumar</p>
+            <p class="para-2">No classes will be held on 21st Nov</p>
+            <div class="para-bottom">
+              <p class="para-3">2 files are attached</p>
+              <p class="para-4">15-Sep-2018 at 07:21 pm</p>
+            </div>
+          </div>
+          <div class="ashish">
+            <p class="para-1">PA: Wilson Kumar</p>
+            <p class="para-2">No classes will be held on 21st Nov</p>
+            <div class="para-bottom">
+              <p class="para-3">2 files are attached</p>
+              <p class="para-4">15-Sep-2018 at 07:21 pm</p>
+            </div>
+          </div>
+        </div>
+        <div class="db-buttons">
+          <button>SHOW ALL</button>
+          <button>CREATE NEW</button>
+        </div>
+      </div>
+  </div>
+  <div class="container">
+    <div class="mid-table">
+      <div class="content-1"> <a href="#bookmark"> <i class="fa-solid fa-book-bookmark design-iconic-font-32px-222222"
+            style="margin-right: 10px;"></i><span class="quicksand-bold-24px-222222">4</span> <span
+            class="quicksand-medium-16px-222222">Courses</span> </a></div>
+      <div class="content-1"> <a href="#user-group"> <i class="fa-solid fa-user-group design-iconic-font-32px-222222"
+            style="margin-right: 10px;"></i><span class="quicksand-bold-24px-222222">4</span> <span
+            class="quicksand-medium-16px-222222">Classes</span></a> </div>
+      <div class="content-2">
+        <div class="quicksand-medium-12px-686868">Showing 4 of 4 courses</div>
+        <div class="content-2-interior">
+          <div class="select1">
+            <label for="Sort" style="padding-right: 5px"><span class="quicksand-medium-12px-686868"> Sort by: </span>
+            </label>
+            <select name="Sort" id="Sort" class="custom-select quicksand-medium-16px-333333">
+              <option value="Course Name">Course Name</option>
+              <option value="Author Name">Author Name</option>
+            </select>
+          </div>
+          <i class="fa-solid fa-arrow-up design-iconic-font-24px-1F7A54" style="margin:0px 2%"></i>
+        </div>
+      </div>
+      <div class="content-3">
+        <div>
+          <div class="card">
+            <div class="descripton">
+              <div class="img-div">
+                <img src="imgs/imageMask.png" alt="">
+              </div>
+              <div class="info">
+                <div class="card-head">
+                  <div class="topic quicksand-medium-16px-222222">
+                    Acceleration
+                  </div>
+                  <div class="star">
+                    <img src="imgs/favourite.svg" alt="">
+                  </div>
+                </div>
+                <div class="subject"><span>Physics | Grade 7</span> <span class="extra-class"> + 2</span></div>
+                <div class="subject">
+                  <span class="number">4 </span><span class="class-detail">Units</span>
+                  <span class="number">18 </span><span class="class-detail">Lessons</span>
+                  <span class="number">24 </span><span class="class-detail">Topics</span>
+                </div>
+                <div class="content-3-interior">
+                  <div class="select2 select-div">
+                    <select name="Sort" id="Sort" class="custom-select1 quicksand-medium-16px-222222 classroom">
+                      <option value="Course Name">Mr. Frank's Class B</option>
+                      <option value="Author Name">Author Name</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="class-info">
+                  50 Students | 21-Jan-2020 - 21-Aug-2020
+                </div>
+              </div>
+            </div>
+            <div class="card-buttom">
+              <img src="imgs/preview.svg" alt="">
+              <img src="imgs/manage course.svg" alt="">
+              <img src="imgs/grade submissions.svg" alt="">
+              <img src="imgs/reports.svg" alt="">
+            </div>
+
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="descripton">
+              <div class="img-div">
+                <img src="imgs/imageMask-1.png" alt="">
+              </div>
+              <div class="info">
+                <div class="card-head">
+                  <div class="topic quicksand-medium-16px-222222">
+                    Displacement, Velocity and Speed
+                  </div>
+                  <div class="star">
+                    <img src="imgs/favourite.svg" alt="">
+                  </div>
+                </div>
+                <div class="subject"><span>Physics 2 | Grade 6</span> <span class="extra-class"> + 3</span></div>
+                <div class="subject">
+                  <span class="number">2 </span><span class="class-detail">Units</span>
+                  <span class="number">15 </span><span class="class-detail">Lessons</span>
+                  <span class="number">20 </span><span class="class-detail">Topics</span>
+                </div>
+                <div class="content-3-interior">
+                  <div class="select2 select-div">
+                    <select disabled name="Sort" id="Sort"
+                      class="custom-select1 quicksand-medium-16px-222222 classroom">
+                      <option value="Course Name">No classes</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="class-info mynone">
+                  50 Students | 21-Jan-2020 - 21-Aug-2020
+                </div>
+              </div>
+            </div>
+            <div class="card-buttom">
+              <img src="imgs/preview.svg" alt="">
+              <img src="imgs/manage course.svg" alt="" class="no-classes">
+              <img src="imgs/grade submissions.svg" alt="" class="no-classes">
+              <img src="imgs/reports.svg" alt="">
+            </div>
+
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="descripton">
+              <div class="img-div">
+                <img src="imgs/imageMask-2.png" alt="">
+              </div>
+              <div class="info">
+                <div class="card-head">
+                  <div class="topic quicksand-medium-16px-222222">
+                    Introduction to Biology: Micro organisms and how they affec...
+                  </div>
+                  <div class="star">
+                    <img src="imgs/favourite.svg" alt="">
+                  </div>
+                </div>
+                <div class="subject"><span>Biology | Grade 4</span> <span class="extra-class"> + 1</span></div>
+                <div class="subject">
+                  <span class="number">5 </span><span class="class-detail">Units</span>
+                  <span class="number">16 </span><span class="class-detail">Lessons</span>
+                  <span class="number">22 </span><span class="class-detail">Topics</span>
+                </div>
+                <div class="content-3-interior">
+                  <div class="select2 select-div">
+                    <select name="Sort" id="Sort" class="custom-select1 quicksand-medium-16px-222222 classroom">
+                      <option value="Course Name">Mr. Frank's Class B</option>
+                      <option value="Author Name">Author Name</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="class-info">
+                  300 Students <span class="mynone">| 21-Jan-2020 - 21-Aug-2020</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-buttom">
+              <img src="imgs/preview.svg" alt="">
+              <img src="imgs/manage course.svg" alt="" class="no-classes">
+              <img src="imgs/grade submissions.svg" alt="" class="no-classes">
+              <img src="imgs/reports.svg" alt="">
+            </div>
+
+          </div>
+        </div>
+        <div class="expired">
+          <div class="card">
+            <div class="descripton">
+              <div class="img-div">
+                <img src="imgs/imageMask-3.png" alt="">
+              </div>
+              <div class="info">
+                <div class="card-head">
+                  <div class="topic quicksand-medium-16px-222222">
+                    Introduction to High School Mathematics
+                  </div>
+                  <div class="star">
+                    <img src="imgs/favourite.svg" alt="" style="fill:#EEEEEE">
+                  </div>
+                </div>
+                <div class="subject"><span>Physics | Grade 7</span> <span class="extra-class"> + 2</span></div>
+                <div class="subject mynone">
+                  <span class="number">4 </span><span class="class-detail">Units</span>
+                  <span class="number">18 </span><span class="class-detail">Lessons</span>
+                  <span class="number">24 </span><span class="class-detail">Topics</span>
+                </div>
+                <div class="content-3-interior">
+                  <div class="select2 select-div">
+                    <select name="Sort" id="Sort" class="custom-select1 quicksand-medium-16px-222222 classroom">
+                      <option value="Course Name">Mr. Frank's Class B</option>
+                      <option value="Author Name">Author Name</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="class-info">
+                  50 Students | 21-Jan-2020 - 21-Aug-2020
+                </div>
+              </div>
+            </div>
+            <div class="card-buttom">
+              <img src="imgs/preview.svg" alt="">
+              <img src="imgs/manage course.svg" alt="">
+              <img src="imgs/grade submissions.svg" alt="">
+              <img src="imgs/reports.svg" alt="">
+            </div>
+
+          </div>
+          <span>EXPIRED</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="contact">
+      About | Contact us
+    </div>
+    <div class="copyright">
+      <img src="imgs\quantum_icon.png" alt="quantum_icon">
+      <b>Quantum</b> | Copyright©2000-2021 Zeus Systems Pvt. Ltd. All rights reserved.
+    </div>
+
+  </div>
+
+</body>
+
+</html>

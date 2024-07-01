@@ -1,0 +1,127 @@
+{
+  "cards": [
+    {
+      "title": "Acceralation",
+      "subject": "Physics",
+      "grade": "7",
+      "addition": "+2",
+      "units": 4,
+      "lessons": 18,
+      "topics": 24,
+      "info": {
+        "totalStudents": 50,
+        "duration": "| 21-Jan-2020 - 21-Aug-2020"
+      },
+      "image": "imgs/imageMask.png",
+      "favorite": true,
+      "expired": false,
+      "classesOptions": [
+        "Mr. Franks Class B",
+        "Mr. Franks Class C"
+      ]
+    },
+    {
+      "title": "Displacement, Velocity and Speed",
+      "subject": "Physics 2",
+      "grade": "6",
+      "addition": "+3",
+      "units": 2,
+      "lessons": 15,
+      "topics": 20,
+      "info": {
+        "totalStudents": 0,
+        "duration": ""
+      },
+      "image": "imgs/imageMask-1.png",
+      "favorite": true,
+      "expired": false,
+      "classesOptions": []
+    },
+    {
+      "title": "Introduction to Biology: Micro organisms and how they affec...",
+      "subject": "Biology",
+      "grade": "4",
+      "addition": "+1",
+      "units": 5,
+      "lessons": 16,
+      "topics": 22,
+      "info": {
+        "totalStudents": "300",
+        "duration": ""
+      },
+      "image": "imgs/imageMask-3.png",
+      "favorite": true,
+      "expired": false,
+      "classesOptions": [
+        "All Classes"
+      ]
+    },
+    {
+      "title": "Introduction to High School Mathematics",
+      "subject": "Mathematics",
+      "grade": "8",
+      "addition": "+3",
+      "units": 0,
+      "lessons": 0,
+      "topics": 0,
+      "info": {
+        "totalStudents": "44",
+        "duration": "| 14-Oct-2019 - 20-Oct-2020"
+      },
+      "image": "imgs/imageMask-2.png",
+      "favorite": false,
+      "expired": true,
+      "classesOptions": [
+        "Mr. Franks Class A"
+      ]
+    }
+  ],
+  "alerts": [
+    {
+      "title":"License for Introduction to Algebra has been assigned to your school",
+      "course":"Course: Mathematics",
+      "time":"15-Sep-2018 at 07:21 pm",
+      "ticked":true
+    },    {
+      "title":"License for Introduction to Algebra has been assigned to your school",
+      "course":"Course: Mathematics",
+      "time":"15-Sep-2018 at 07:21 pm",
+      "ticked":false
+    },    {
+      "title":"License for Introduction to Algebra has been assigned to your school",
+      "course":"Course: Mathematics",
+      "time":"15-Sep-2018 at 07:21 pm",
+      "ticked":true
+    },    {
+      "title":"License for Introduction to Algebra has been assigned to your school",
+      "course":"Course: Mathematics",
+      "time":"15-Sep-2018 at 07:21 pm",
+      "ticked":true
+    },    {
+      "title":"License for Introduction to Algebra has been assigned to your school",
+      "course":"Course: Mathematics",
+      "time":"15-Sep-2018 at 07:21 pm",
+      "ticked":false
+    },    {
+      "title":"License for Introduction to Algebra has been assigned to your school",
+      "course":"Course: Mathematics",
+      "time":"15-Sep-2018 at 07:21 pm",
+      "ticked":true
+    },    {
+      "title":"License for Introduction to Algebra has been assigned to your school",
+      "course":"Course: Mathematics",
+      "time":"15-Sep-2018 at 07:21 pm",
+      "ticked":false
+    },    {
+      "title":"License for Introduction to Algebra has been assigned to your school",
+      "course":"Course: Mathematics",
+      "time":"15-Sep-2018 at 07:21 pm",
+      "ticked":false
+    },    {
+      "title":"License for Introduction to Algebra has been assigned to your school",
+      "course":"Course: Mathematics",
+      "time":"15-Sep-2018 at 07:21 pm",
+      "ticked":true
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+/* Import Google Fonts for Quicksand */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap');
+
+/* Import Material Design Iconic Font */
+@import url('https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css');
+
+/* Quicksand Styles */
+.quicksand-medium-12px-686868 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    color: #686868;
+}
+
+.quicksand-medium-16px-333333 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #333333;
+}
+
+.quicksand-medium-12px-666666 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    color: #666666;
+}
+
+.quicksand-bold-24px-222222 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: #222222;
+}
+
+.quicksand-medium-16px-222222 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    color: #222222;
+}
+
+.quicksand-bold-12px-222222 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: #222222;
+}
+
+.quicksand-medium-12px-1F7A54 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    color: #1F7A54;
+}
+
+.quicksand-medium-14px-3FD28B {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #3FD28B;
+}
+
+.quicksand-medium-14px-FFFFFF {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #FFFFFF;
+}
+
+.quicksand-medium-12px-FFFFFF {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    color: #FFFFFF;
+}
+
+.quicksand-medium-8px-222222 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 8px;
+    color: #222222;
+}
+
+.quicksand-medium-14px-1F7A54 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #1F7A54;
+}
+
+.quicksand-medium-12px-616161 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    color: #616161;
+}
+
+.quicksand-bold-12px-616161 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: #616161;
+}
+
+/* Material Design Iconic Font Styles */
+.design-iconic-font-24px-333333 {
+    font-family: 'Material Design Icons';
+    font-size: 24px;
+    color: #333333;
+}
+
+.design-iconic-font-24px-1F7A54 {
+    font-family: 'Material Design Icons';
+    font-size: 24px;
+    color: #1F7A54;
+}
+
+.design-iconic-font-32px-222222 {
+    font-family: 'Material Design Icons';
+    font-size: 32px;
+    color: #222222;
+}
+
+.design-iconic-font-24px-222222 {
+    font-family: 'Material Design Icons';
+    font-size: 24px;
+    color: #222222;
+}
+
+.design-iconic-font-24px-EDC900 {
+    font-family: 'Material Design Icons';
+    font-size: 24px;
+    color: #EDC900;
+}
+
+.design-iconic-font-24px-EEEEEE {
+    font-family: 'Material Design Icons';
+    font-size: 24px;
+    color: #EEEEEE;
+}
+
+.design-iconic-font-20px-2A7FF3 {
+    font-family: 'Material Design Icons';
+    font-size: 20px;
+    color: #2A7FF3;
+}
+
+.design-iconic-font-24px-3FD28B {
+    font-family: 'Material Design Icons';
+    font-size: 24px;
+    color: #3FD28B;
+}
+
+/* Museo Sans Styles */
+.museo-sans-500-10px-D80000 {
+    font-family: 'Museo Sans', sans-serif;
+    font-weight: 500;
+    font-size: 10px;
+    color: #D80000;
+}

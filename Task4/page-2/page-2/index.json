@@ -1,0 +1,98 @@
+{
+  "cards": [
+    {
+      "title": "Acceralation",
+      "subject": "Physics",
+      "grade": "Grade 7",
+      "addition": "+2",
+      "info": {
+        "totalStudents": "50",
+        "duration": "21-Jan-2020 - 21-Aug-2020"
+      },
+      "image": "images/imageMask.png"
+    },
+    {
+      "title": "Displacement, Velocity and Speed",
+      "subject": "Physics 2",
+      "grade": "Physics 2",
+      "addition": "+3",
+      "info": {
+        "totalStudents": "50",
+        "duration": "21-Jan-2020 - 21-Aug-2020"
+      },
+      "image": "images/imageMask-1.png"
+    },
+    {
+      "title": "Introduction to Biology: Micro organisms and how they affec...",
+      "subject": "Biology",
+      "grade": "Grade 4",
+      "addition": "+1",
+      "info": {
+        "totalStudents": "300",
+        "duration": "21-Jan-2020 - 21-Aug-2020"
+      },
+      "image": "images/imageMask-3.png"
+    },
+    {
+      "title": "Introduction to High School Mathematics",
+      "subject": "Mathematics",
+      "grade": "Grade 8",
+      "addition": "+3",
+      "info": {
+        "totalStudents": "44",
+        "duration": "14-Oct-2019 - 20-Oct-2020"
+      },
+      "image": "images/imageMask-2.png"
+    }
+  ],
+  "notifications": [
+    {
+      "author": "PA: Wilson Kumar",
+      "desc": "No classes will be held on 21st Nov",
+      "fileInfo": "2 files are attached",
+      "time": "15-Sep-2018 at 07:21 pm"
+    },
+    {
+      "author": "PA: Wilson Kumar",
+      "desc": "No classes will be held on 21st Nov",
+      "fileInfo": "2 files are attached",
+      "time": "15-Sep-2018 at 07:21 pm"
+    },
+    {
+      "author": "PA: Wilson Kumar",
+      "desc": "No classes will be held on 21st Nov",
+      "fileInfo": "2 files are attached",
+      "time": "15-Sep-2018 at 07:21 pm"
+    },
+    {
+      "author": "PA: Wilson Kumar",
+      "desc": "No classes will be held on 21st Nov",
+      "fileInfo": "2 files are attached",
+      "time": "15-Sep-2018 at 07:21 pm"
+    },
+    {
+      "author": "PA: Wilson Kumar",
+      "desc": "No classes will be held on 21st Nov",
+      "fileInfo": "2 files are attached",
+      "time": "15-Sep-2018 at 07:21 pm"
+    },
+    {
+      "author": "PA: Wilson Kumar",
+      "desc": "No classes will be held on 21st Nov",
+      "fileInfo": "2 files are attached",
+      "time": "15-Sep-2018 at 07:21 pm"
+    },
+    {
+      "author": "PA: Wilson Kumar",
+      "desc": "No classes will be held on 21st Nov",
+      "fileInfo": "2 files are attached",
+      "time": "15-Sep-2018 at 07:21 pm"
+    },
+    {
+      "author": "PA: Wilson Kumar",
+      "desc": "No classes will be held on 21st Nov",
+      "fileInfo": "2 files are attached",
+      "time": "15-Sep-2018 at 07:21 pm"
+    }
+  ]
+}
