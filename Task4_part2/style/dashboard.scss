@@ -1,6 +1,8 @@
 $background-color : #EEEEEE;
 $primary_greenColor: #3FD28B;
 $secondary_greenColor: #2b9c6d;
+$header_icon_height: 40px;
+$header_items_color: #3FD28B;
 
 @mixin flex-column {
     display: flex;
@@ -15,7 +17,74 @@ $secondary_greenColor: #2b9c6d;
 
 }
 
+@mixin alignCenterFlex {
+    display: flex;
+    align-items: center;
+}
 
+@mixin gapFromSide {
+    padding: 0px 2%;
+}
+
+@mixin setSelectElement {
+
+    font-size: 18px;
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid gray;
+}
+
+@mixin setFont {
+
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+
+}
+
+@mixin setTextDecorNone {
+    text-decoration: none;
+}
+
+
+@mixin resetToNormal {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+@mixin alignCenterFlex {
+    display: flex;
+    align-items: center;
+}
+
+@mixin gapFromSide {
+    padding: 0px 2%;
+}
+
+@mixin setSelectElement {
+
+    font-size: 18px;
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid gray;
+}
+
+@mixin setFont {
+
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+
+}
+
+@mixin setTextDecorNone {
+    text-decoration: none;
+}
 
 html,
 body {
@@ -26,126 +95,222 @@ body {
     box-sizing: border-box;
     width: 100%;
     background-color: $background-color;
+    @include resetToNormal();
+    background-color: $bg_body;
 
-    .dFlex {
-        display: flex;
+    .dNone {
+        display: none;
     }
 
     >.header {
-        @include flex-center-item();
-        background-color: #25313F;
-        border-bottom: 2px solid #31b9e4;
-        margin: 0;
-        width: 100%;
-        min-width: fit-content;
-        position: relative;
-        height: 7vh;
+        @include alignCenterFlex();
+        @include gapFromSide();
+        justify-content: space-between;
+        background-color: #222222;
+        height: 10vh;
+        border-bottom: 2px solid #31B9E4;
 
-        >img {
-            margin-left: 2%;
-            height: 80%;
+        >.icon {
+            display: flex;
+            height: $header_icon_height;
         }
 
-        >.navbar {
-            width: 100%;
-            overflow: hidden;
+        >ul {
+            @include resetToNormal();
+            display: flex;
+            justify-content: space-around;
             height: 100%;
-            >.horizontalNav {
-                display: none
-            }
-            >.rightNav {
-                text-align: right;
-            }
 
-            >.nav-list {
-                @include flex-center-item();
-                justify-content: flex-end;
-                list-style: none;
-                height: 100%;
-            }
+            >li {
+                @include alignCenterFlex();
+                list-style-type: none;
 
-            >ul {
-                margin: 0;
-
-                >li {
-                    height: 100%;
-                    margin-right: 3%;
-
-                    >a {
-                        @include flex-center-item();
-                        text-decoration: none;
-                        color: #3FD28B;
-                        font-size: 18px;
-                        transition: color 0.3s ease-in-out;
-                        float: left;
-                        height: 100%;
-                        box-sizing: border-box;
-
-                        &:active {
-                            border-bottom: 4px solid white;
-                        }
-
-                        &:hover {
-                            color: #ffffff;
-                        }
-                    }
-
-                    .notification {
-                        @include flex-center-item();
-                        position: relative;
-
-                        >i>span {
-                            height: 20px;
-                            width: 20px;
-                            border-radius: 50%;
-                            top: 20%;
-                            right: -30%;
-                            position: absolute;
-                            background-color: #2A7FF3;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                        }
-
-                    }
+                &:active {
+                    border-bottom: 5px solid white;
                 }
 
-                >.phoneview {
-                    display: none;
+                >a {
+                    color: $header_items_color;
+                    text-decoration: none;
+                    padding: 8px 8px;
+                    font-weight: bold;
                 }
 
-                >.user-circle {
-                    background-color: white;
-                    height: 35px;
-                    width: 35px;
-                    border-radius: 50%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
+                &:hover a {
+                    color: white;
+                }
+
+            }
+
+            >.links {
+                padding: 0px 10px;
+                position: relative;
+                @include alignCenterFlex();
+
+                img {
+                    height: 30px;
+                }
+
+                >.img {
+
                     position: relative;
-                    border: 3px solid #8DDC97;
 
-                    >a>span {
+                    >span {
+
                         height: 20px;
                         width: 20px;
                         border-radius: 50%;
-                        top: -8%;
-                        right: -15%;
+                        background-color: #2A7FF3;
                         position: absolute;
-                        background-color: white;
+                        top: -5px;
+                        right: -5px;
+                        color: white;
                         text-align: center;
                     }
 
-                    >a>img {
-                        height: 100%;
-                        width: 100%;
-                        border-radius: 50%;
-                    }
                 }
 
+                >.announcements,
+                .alertDetails {
+                    background-color: white;
+                    position: absolute;
+                    top: 10vh;
+                    right: 0px;
+                    width: 320px;
+                    max-height: 550px;
+                    overflow-y: auto;
+                    z-index: 5;
+                    box-shadow: 10px 10px 8px #dadada;
+
+
+                    >&::-webkit-scrollbar {
+                        width: 5px;
+                    }
+
+                    >&::-webkit-scrollbar-track {
+                        background: #f1f1f1;
+                    }
+
+                    >&::-webkit-scrollbar-thumb {
+                        background: #888;
+                    }
+
+                    >&::-webkit-scrollbar-thumb:hover {
+                        background: #555;
+                    }
+
+
+                    .individualAnnouncements,
+                    .individualAlert {
+
+                        padding: 10px;
+                        border-bottom: 1px solid grey;
+                        @include setFont();
+
+
+                        >p {
+                            @include resetToNormal();
+                            margin: 5px 0px
+                        }
+
+                        >.author,
+                        .information {
+                            font-size: 14px;
+                        }
+
+                        >.title {
+                            font-size: 16px;
+                            font-weight: bold;
+                        }
+
+                        .more {
+                            display: flex;
+                            font-size: 12px;
+                            justify-content: space-between;
+                        }
+
+                    }
+
+
+
+                    .ticked {
+                        background-color: #FFFFEE;
+                    }
+
+                    .buttons {
+                        position: sticky;
+                        bottom: 0;
+                        display: flex;
+                        height: 50px;
+
+                        >button {
+
+                            border: none;
+                            @include resetToNormal();
+                            outline: none;
+                            border: 1px solid #dadada;
+
+
+                            width: 50%;
+                            height: 100%;
+                            background-color: white;
+                            color: $secondary_greenColor;
+
+                        }
+
+
+
+                    }
+
+                }
+
+                >.alertDetails {
+
+                    .buttons {
+                        >button {
+
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+
+            >.profile {
+
+                >.img {
+
+                    >span {
+
+                        top: -20%;
+                        right: -20%;
+                        background-color: white;
+                        color: black;
+                        font-weight: bold;
+                    }
+
+                    >img {
+
+                        width: 32px;
+                        height: 32px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                        border: 3px solid $primary_greenColor;
+                    }
+                }
+            }
+
+            >.onlyPhone {
+                display: none;
+                margin: auto 0px;
 
             }
+
         }
+
+        >.horizontalNav {
+            display: none
+        }
+
     }
 
     // Mid content
@@ -180,10 +345,11 @@ body {
                 box-sizing: border-box;
 
                 >a {
+                    @include flex-center-item();
                     text-decoration: none;
-                    display: block;
                     color: black;
                     font-size: 18px;
+                    height: 100%;
 
                     &:hover {
                         border-bottom: 4px solid black;
@@ -271,7 +437,7 @@ body {
                 gap: 20px;
                 /* border: 2px solid violet */
 
-                >div {
+                >.expired,.empty {
                     background-color: #FFFFFF;
                     margin: 0px;
                     position: relative;
@@ -329,6 +495,7 @@ body {
                                         color: #222222;
                                         font-size: 15px;
                                         font-weight: bold;
+                                        margin-right: 2px;
                                     }
                                 }
 

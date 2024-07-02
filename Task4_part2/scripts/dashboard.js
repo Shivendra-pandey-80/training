@@ -1,4 +1,4 @@
-function toggleClassName(itemCalled) {
+function togglestyle(itemCalled) {
     const item = document.querySelector(`.${itemCalled}`);
     if (item.style.display == "flex") {
         item.style.display = "none";
@@ -8,123 +8,194 @@ function toggleClassName(itemCalled) {
     }
 }
 
+
+function toggleClassName(itemCalled, classToToggle) {
+    const item = document.querySelector(`.${itemCalled}`);
+    item.classList.toggle(classToToggle);
+}
+
+
 document.addEventListener("DOMContentLoaded", function () {
-    fetch("index.json").then((response) =>
-        response
-            .json()
-            .then((data) => {
-                data.cards.map((d) => {
-                    populateCards(d);
-                });
-            })
-            .catch((error) => console.error("Error fetching JSON data:", error))
-    );
+    fetch("index.json")
+        .then((response) => response.json())
+        .then((data) => {
+            data.cards.forEach((cardData) => {
+                populateCards(cardData);
+            });
+        })
+        .catch((error) => console.error("Error fetching JSON data:", error));
 });
 
-function populateCards(cards) {
- 
-    const cardsClass = document.querySelector('.content-3');
- 
-    individualCard => {
- 
-        const card = document.createElement("div");
-        card.className = "card";
- 
-        // details
- 
-        const details = document.createElement('div');
-        details.className = "description";
- 
-        const img = document.createElement('img');
-        img.setAttribute('src', individualCard.image);
- 
-        // content
- 
-        const content = document.createElement('div');
-        content.className = 'info';
- 
-        const title = document.createElement('div');
-        title.className = "topic quicksand-medium-16px-222222";
-        title.setAttribute('style', "font-size: 20px; font-weight: bold;margin-top: 0px;");
-        title.innerHTML = individualCard.title;
- 
-        const desc = document.createElement('div');
-        desc.className = "subject"
-        desc.innerHTML = `${individualCard.subject} &nbsp; | &nbsp;Grade ${individualCard.grade} <span style="color: green;font-weight: bold;">${individualCard.addition}</span>`;
- 
-        const divisions = document.createElement('div');
-        divisions.innerHTML = `<b>${individualCard.units}</b> Units &nbsp;<b>${individualCard.lessons}</b> Lessons &nbsp;<b>${individualCard.topics}</b> Topics`;
- 
- 
-        const select = document.createElement('select');
-        individualCard.classesOptions.length > 0 ?
-            "" :
-            select.setAttribute('disabled', true);
-        ;
-        select.setAttribute('name', 'classType');
-        select.setAttribute('id', 'classType');
- 
- 
-        select.innerHTML = `${individualCard.classesOptions.map((classes) => {
-            return `<option value="${classes}">${classes}</option>`
-        })}`
- 
-        individualCard.classesOptions.length > 0 ?
-            "" :
-            select.innerHTML = `<option value="noClasses">No Classes</option>`;
-        ;
- 
- 
-        const extraInfo = document.createElement('p');
-        extraInfo.innerHTML = `${individualCard.info.totalStudents} Students &nbsp; | &nbsp;${individualCard.info.duration}`;
- 
- 
-        content.appendChild(title);
-        individualCard.subject ? content.appendChild(desc) : "";
-        (individualCard.units > 0 || individualCard.topics || individualCard.lessons) ? content.appendChild(divisions) : "";
-        content.appendChild(select);
- 
-        (individualCard.info.totalStudents || individualCard.info.duration) ?
-            content.appendChild(extraInfo) : "";
- 
-        // favorite
- 
-        const starIcon = document.createElement('img');
-        starIcon.className = 'favIcon';
-        starIcon.setAttribute('src', 'icons/favourite.svg');
- 
-        (individualCard.favorite) ?
-            starIcon.setAttribute('style', "height: 35px;") :
-            starIcon.setAttribute('style', "height: 35px;opacity: 0.2;")
- 
-        details.appendChild(img)
-        details.appendChild(content)
-        details.append(starIcon)
- 
-        // operations
- 
-        const operations = document.createElement('div');
-        operations.className = 'operations';
-        operations.innerHTML = `<img src="icons/preview.svg" style="font-size: 22px;"></img>
-                    <img src="icons/manage course.svg" style="font-size: 22px;"></img>
-                    <img src="icons/grade submissions.svg" style="font-size: 22px;"></img>
-                    <img src="icons/reports.svg" style="font-size: 22px;"></img>`
- 
+function populateCards(cardData) {
+    const cardsContainer = document.querySelector('.content-3');
+
+    const empty = document.createElement("div");
+    empty.className = cardData.expired ? "expired" : "empty";
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const description = document.createElement('div');
+    description.className = "descripton";
+
+    const imgDiv = document.createElement('div');
+    imgDiv.className = "img-div";
+    const img = document.createElement('img');
+    img.setAttribute('src', cardData.image);
+    img.setAttribute('alt', '');
+    imgDiv.appendChild(img);
+
+    const info = document.createElement('div');
+    info.className = 'info';
+
+    const cardHead = document.createElement('div');
+    cardHead.className = "card-head";
+    const title = document.createElement('div');
+    title.className = "topic quicksand-medium-16px-222222";
+    title.innerHTML = cardData.title;
+
+    const star = document.createElement('div');
+    star.className = "star";
+    const starIcon = document.createElement('img');
+    starIcon.setAttribute('src', 'imgs/favourite.svg');
+    if (!cardData.favorite) {
+        starIcon.style.opacity = "0.2";
+    }
+    star.appendChild(starIcon);
+
+    cardHead.appendChild(title);
+    cardHead.appendChild(star);
+
+    const subject = document.createElement('div');
+    subject.className = "subject";
+    subject.innerHTML = `<span>${cardData.subject} | Grade ${cardData.grade}</span> <span class="extra-class"> + ${cardData.addition}</span>`;
+
+    const details = document.createElement('div');
+    details.className = "subject";
+    // Check for zero values and set display to none
+    const unitsDisplay = cardData.units === 0 ? "none" : "inline-block";
+    const lessonsDisplay = cardData.lessons === 0 ? "none" : "inline-block";
+    const topicsDisplay = cardData.topics === 0 ? "none" : "inline-block";
+    details.innerHTML = `
+        <span class="number" style="display: ${unitsDisplay};">${cardData.units} </span><span class="class-detail" style="display: ${unitsDisplay};"> Units</span>
+        <span class="number" style="display: ${lessonsDisplay};">${cardData.lessons} </span><span class="class-detail" style="display: ${lessonsDisplay};"> Lessons</span>
+        <span class="number" style="display: ${topicsDisplay};">${cardData.topics} </span><span class="class-detail" style="display: ${topicsDisplay};"> Topics</span>
+    `;
+
+    const contentInterior = document.createElement('div');
+    contentInterior.className = "content-3-interior";
+    const selectDiv = document.createElement('div');
+    selectDiv.className = "select2 select-div";
+    const select = document.createElement('select');
+    select.name = "Sort";
+    select.id = "Sort";
+    select.className = "custom-select1 quicksand-medium-16px-222222 classroom";
+    if (cardData.classesOptions.length > 0) {
+        cardData.classesOptions.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.textContent = option;
+            select.appendChild(opt);
+        });
+    } else {
+        select.disabled = true;
+        const opt = document.createElement('option');
+        opt.value = "noClasses";
+        opt.textContent = "No Classes";
+        select.appendChild(opt);
+    }
+    selectDiv.appendChild(select);
+    contentInterior.appendChild(selectDiv);
+
+    const classInfo = document.createElement('div');
+    classInfo.className = "class-info";
+    const studentDisplay = cardData.info.totalStudents === 0 ? "none" : "inline-block";
+    const durationDisplay = cardData.info.duration ? "inline-block" : "none";
+    classInfo.innerHTML = `
+        <span style="display: ${studentDisplay};">${cardData.info.totalStudents} Students</span> 
+        <span style="display: ${durationDisplay};">${cardData.info.duration}</span>
+        `;
+    info.appendChild(cardHead);
+    info.appendChild(subject);
+    info.appendChild(details);
+    info.appendChild(contentInterior);
+    info.appendChild(classInfo);
+
+    description.appendChild(imgDiv);
+    description.appendChild(info);
+
+    const cardBottom = document.createElement('div');
+    cardBottom.className = "card-buttom";
+    cardBottom.innerHTML = `
+        <img src="imgs/preview.svg" alt="" class="icon">
+        <img src="imgs/manage course.svg" alt="" class="icon">
+        <img src="imgs/grade submissions.svg" alt="" class="icon">
+        <img src="imgs/reports.svg" alt="" class="icon">
+    `;
+
+    card.appendChild(description);
+    card.appendChild(cardBottom);
+
+    if (cardData.expired) {
         const expired = document.createElement('span');
         expired.className = "expired";
-        expired.innerHTML = "Expired";
- 
-        card.appendChild(details)
-        card.appendChild(operations)
- 
-        // expired
- 
-        individualCard.expired ? card.appendChild(expired) : ""
- 
-        console.log(card)
-        cardsClass.appendChild(card);
- 
- 
+        expired.innerHTML = "EXPIRED";
+        empty.appendChild(expired);
     }
- 
+    empty.appendChild(card);
+    cardsContainer.appendChild(empty);
+
+}
+
+
+function updateAlerts(alerts) {
+
+    console.log(alerts)
+
+    alerts.map((alert)=>{
+
+        const alertContainer = document.querySelector('.alerts');
+
+        const alertBox = document.createElement('div');
+        alertBox.className = 'individualAlert';
+        (alert.ticked ? alertBox.classList.add('ticked') : "")
+    
+        alertBox.innerHTML =
+            `<p class="title">${alert.title}</p>
+            ${alert.course ? `<p class="information">${alert.course}</p>` : ""}
+            <div class="more">
+                <p class="time" style="width: 100%;text-align: right;">${alert.time}</p>
+            </div>`
+    
+        console.log(alertBox)
+        alertContainer.appendChild(alertBox);
+    })
+
+}
+
+function updateAnnouncements(announces) {
+    console.log(announces)
+
+    announces.map((announce)=>{
+
+        const announceContainer = document.querySelector('.announce');
+
+        const announceBox = document.createElement('div');
+        announceBox.className = 'individualAnnouncements';
+        (announce.ticked ? announceBox.classList.add('ticked') : "")
+    
+        announceBox.innerHTML =
+            `<p class="author">PA:<b>${announce.author}</b></p>
+            <p class="title">${announce.title}</p>
+            <div class="more">
+                <p class="file">
+                ${announce.files > 0 ? `<span><i style="transform: rotate(-45deg);color: #6E6E6E;" class="fa-solid fa-paperclip"></i></span>` : ""}
+                
+                ${announce.files > 0 ? announce.files +" files are attached" : ""}</p>
+                <p class="time">${announce.time}</p>
+            </div>`
+    
+        console.log(announceBox)
+        announceContainer.appendChild(announceBox);
+    })
 }

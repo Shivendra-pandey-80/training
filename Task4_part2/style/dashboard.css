@@ -19,128 +19,241 @@ body .dFlex {
 html > .header,
 body > .header {
   display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: #25313F;
-  border-bottom: 2px solid #31b9e4;
-  margin: 0;
-  width: 100%;
-  min-width: -webkit-fit-content;
-  min-width: -moz-fit-content;
-  min-width: fit-content;
-  position: relative;
-  height: 7vh;
+  padding: 0px 2%;
+  justify-content: space-between;
+  background-color: #222222;
+  height: 10vh;
+  border-bottom: 2px solid #31B9E4;
 }
-html > .header > img,
-body > .header > img {
-  margin-left: 2%;
-  height: 80%;
-}
-html > .header > .navbar,
-body > .header > .navbar {
-  width: 100%;
-  overflow: hidden;
-  height: 100%;
-}
-html > .header > .navbar > .horizontalNav,
-body > .header > .navbar > .horizontalNav {
-  display: none;
-}
-html > .header > .navbar > .rightNav,
-body > .header > .navbar > .rightNav {
-  text-align: right;
-}
-html > .header > .navbar > .nav-list,
-body > .header > .navbar > .nav-list {
+html > .header > .icon,
+body > .header > .icon {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  justify-content: flex-end;
-  list-style: none;
-  height: 100%;
+  height: 40px;
 }
-html > .header > .navbar > ul,
-body > .header > .navbar > ul {
-  margin: 0;
-}
-html > .header > .navbar > ul > li,
-body > .header > .navbar > ul > li {
-  height: 100%;
-  margin-right: 3%;
-}
-html > .header > .navbar > ul > li > a,
-body > .header > .navbar > ul > li > a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  color: #3FD28B;
-  font-size: 18px;
-  transition: color 0.3s ease-in-out;
-  float: left;
-  height: 100%;
+html > .header > ul,
+body > .header > ul {
+  margin: 0px;
+  padding: 0px;
   box-sizing: border-box;
-}
-html > .header > .navbar > ul > li > a:active,
-body > .header > .navbar > ul > li > a:active {
-  border-bottom: 4px solid white;
-}
-html > .header > .navbar > ul > li > a:hover,
-body > .header > .navbar > ul > li > a:hover {
-  color: #ffffff;
-}
-html > .header > .navbar > ul > li .notification,
-body > .header > .navbar > ul > li .notification {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  height: 100%;
+}
+html > .header > ul > li,
+body > .header > ul > li {
+  display: flex;
   align-items: center;
+  list-style-type: none;
+}
+html > .header > ul > li:active,
+body > .header > ul > li:active {
+  border-bottom: 5px solid white;
+}
+html > .header > ul > li > a,
+body > .header > ul > li > a {
+  color: #3FD28B;
+  text-decoration: none;
+  padding: 8px 8px;
+  font-weight: bold;
+}
+html > .header > ul > li:hover a,
+body > .header > ul > li:hover a {
+  color: white;
+}
+html > .header > ul > .links,
+body > .header > ul > .links {
+  padding: 0px 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+html > .header > ul > .links img,
+body > .header > ul > .links img {
+  height: 30px;
+}
+html > .header > ul > .links > .img,
+body > .header > ul > .links > .img {
   position: relative;
 }
-html > .header > .navbar > ul > li .notification > i > span,
-body > .header > .navbar > ul > li .notification > i > span {
+html > .header > ul > .links > .img > span,
+body > .header > ul > .links > .img > span {
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  top: 20%;
-  right: -30%;
-  position: absolute;
   background-color: #2A7FF3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-html > .header > .navbar > ul > .phoneview,
-body > .header > .navbar > ul > .phoneview {
-  display: none;
-}
-html > .header > .navbar > ul > .user-circle,
-body > .header > .navbar > ul > .user-circle {
-  background-color: white;
-  height: 35px;
-  width: 35px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  border: 3px solid #8DDC97;
-}
-html > .header > .navbar > ul > .user-circle > a > span,
-body > .header > .navbar > ul > .user-circle > a > span {
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  top: -8%;
-  right: -15%;
   position: absolute;
-  background-color: white;
+  top: -5px;
+  right: -5px;
+  color: white;
   text-align: center;
 }
-html > .header > .navbar > ul > .user-circle > a > img,
-body > .header > .navbar > ul > .user-circle > a > img {
+html > .header > ul > .links > .announcements,
+html > .header > ul > .links .alertDetails,
+body > .header > ul > .links > .announcements,
+body > .header > ul > .links .alertDetails {
+  background-color: white;
+  position: absolute;
+  top: 10vh;
+  right: 0px;
+  width: 320px;
+  max-height: 550px;
+  overflow-y: auto;
+  z-index: 5;
+  box-shadow: 10px 10px 8px #dadada;
+}
+> html > .header > ul > .links > .announcements::-webkit-scrollbar,
+> html > .header > ul > .links .alertDetails::-webkit-scrollbar,
+> body > .header > ul > .links > .announcements::-webkit-scrollbar,
+> body > .header > ul > .links .alertDetails::-webkit-scrollbar {
+  width: 5px;
+}
+> html > .header > ul > .links > .announcements::-webkit-scrollbar-track,
+> html > .header > ul > .links .alertDetails::-webkit-scrollbar-track,
+> body > .header > ul > .links > .announcements::-webkit-scrollbar-track,
+> body > .header > ul > .links .alertDetails::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+> html > .header > ul > .links > .announcements::-webkit-scrollbar-thumb,
+> html > .header > ul > .links .alertDetails::-webkit-scrollbar-thumb,
+> body > .header > ul > .links > .announcements::-webkit-scrollbar-thumb,
+> body > .header > ul > .links .alertDetails::-webkit-scrollbar-thumb {
+  background: #888;
+}
+> html > .header > ul > .links > .announcements::-webkit-scrollbar-thumb:hover,
+> html > .header > ul > .links .alertDetails::-webkit-scrollbar-thumb:hover,
+> body > .header > ul > .links > .announcements::-webkit-scrollbar-thumb:hover,
+> body > .header > ul > .links .alertDetails::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+html > .header > ul > .links > .announcements .individualAnnouncements,
+html > .header > ul > .links > .announcements .individualAlert,
+html > .header > ul > .links .alertDetails .individualAnnouncements,
+html > .header > ul > .links .alertDetails .individualAlert,
+body > .header > ul > .links > .announcements .individualAnnouncements,
+body > .header > ul > .links > .announcements .individualAlert,
+body > .header > ul > .links .alertDetails .individualAnnouncements,
+body > .header > ul > .links .alertDetails .individualAlert {
+  padding: 10px;
+  border-bottom: 1px solid grey;
+  font-family: "Quicksand", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+html > .header > ul > .links > .announcements .individualAnnouncements > p,
+html > .header > ul > .links > .announcements .individualAlert > p,
+html > .header > ul > .links .alertDetails .individualAnnouncements > p,
+html > .header > ul > .links .alertDetails .individualAlert > p,
+body > .header > ul > .links > .announcements .individualAnnouncements > p,
+body > .header > ul > .links > .announcements .individualAlert > p,
+body > .header > ul > .links .alertDetails .individualAnnouncements > p,
+body > .header > ul > .links .alertDetails .individualAlert > p {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  margin: 5px 0px;
+}
+html > .header > ul > .links > .announcements .individualAnnouncements > .author,
+html > .header > ul > .links > .announcements .individualAnnouncements .information,
+html > .header > ul > .links > .announcements .individualAlert > .author,
+html > .header > ul > .links > .announcements .individualAlert .information,
+html > .header > ul > .links .alertDetails .individualAnnouncements > .author,
+html > .header > ul > .links .alertDetails .individualAnnouncements .information,
+html > .header > ul > .links .alertDetails .individualAlert > .author,
+html > .header > ul > .links .alertDetails .individualAlert .information,
+body > .header > ul > .links > .announcements .individualAnnouncements > .author,
+body > .header > ul > .links > .announcements .individualAnnouncements .information,
+body > .header > ul > .links > .announcements .individualAlert > .author,
+body > .header > ul > .links > .announcements .individualAlert .information,
+body > .header > ul > .links .alertDetails .individualAnnouncements > .author,
+body > .header > ul > .links .alertDetails .individualAnnouncements .information,
+body > .header > ul > .links .alertDetails .individualAlert > .author,
+body > .header > ul > .links .alertDetails .individualAlert .information {
+  font-size: 14px;
+}
+html > .header > ul > .links > .announcements .individualAnnouncements > .title,
+html > .header > ul > .links > .announcements .individualAlert > .title,
+html > .header > ul > .links .alertDetails .individualAnnouncements > .title,
+html > .header > ul > .links .alertDetails .individualAlert > .title,
+body > .header > ul > .links > .announcements .individualAnnouncements > .title,
+body > .header > ul > .links > .announcements .individualAlert > .title,
+body > .header > ul > .links .alertDetails .individualAnnouncements > .title,
+body > .header > ul > .links .alertDetails .individualAlert > .title {
+  font-size: 16px;
+  font-weight: bold;
+}
+html > .header > ul > .links > .announcements .individualAnnouncements .more,
+html > .header > ul > .links > .announcements .individualAlert .more,
+html > .header > ul > .links .alertDetails .individualAnnouncements .more,
+html > .header > ul > .links .alertDetails .individualAlert .more,
+body > .header > ul > .links > .announcements .individualAnnouncements .more,
+body > .header > ul > .links > .announcements .individualAlert .more,
+body > .header > ul > .links .alertDetails .individualAnnouncements .more,
+body > .header > ul > .links .alertDetails .individualAlert .more {
+  display: flex;
+  font-size: 12px;
+  justify-content: space-between;
+}
+html > .header > ul > .links > .announcements .ticked,
+html > .header > ul > .links .alertDetails .ticked,
+body > .header > ul > .links > .announcements .ticked,
+body > .header > ul > .links .alertDetails .ticked {
+  background-color: #FFFFEE;
+}
+html > .header > ul > .links > .announcements .buttons,
+html > .header > ul > .links .alertDetails .buttons,
+body > .header > ul > .links > .announcements .buttons,
+body > .header > ul > .links .alertDetails .buttons {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  height: 50px;
+}
+html > .header > ul > .links > .announcements .buttons > button,
+html > .header > ul > .links .alertDetails .buttons > button,
+body > .header > ul > .links > .announcements .buttons > button,
+body > .header > ul > .links .alertDetails .buttons > button {
+  border: none;
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  outline: none;
+  border: 1px solid #dadada;
+  width: 50%;
   height: 100%;
+  background-color: white;
+  color: #2b9c6d;
+}
+html > .header > ul > .links > .alertDetails .buttons > button,
+body > .header > ul > .links > .alertDetails .buttons > button {
   width: 100%;
+}
+html > .header > ul > .profile > .img > span,
+body > .header > ul > .profile > .img > span {
+  top: -20%;
+  right: -20%;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+}
+html > .header > ul > .profile > .img > img,
+body > .header > ul > .profile > .img > img {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border: 3px solid #3FD28B;
+}
+html > .header > ul > .onlyPhone,
+body > .header > ul > .onlyPhone {
+  display: none;
+  margin: auto 0px;
+}
+html > .header > .horizontalNav,
+body > .header > .horizontalNav {
+  display: none;
 }
 html > .container,
 body > .container {
@@ -183,10 +296,13 @@ body > .container > .mid-table > .content-1 {
 }
 html > .container > .mid-table > .content-1 > a,
 body > .container > .mid-table > .content-1 > a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-decoration: none;
-  display: block;
   color: black;
   font-size: 18px;
+  height: 100%;
 }
 html > .container > .mid-table > .content-1 > a:hover,
 body > .container > .mid-table > .content-1 > a:hover {
@@ -280,14 +396,16 @@ body > .container > .mid-table .content-3 {
   gap: 20px;
   /* border: 2px solid violet */
 }
-html > .container > .mid-table .content-3 > div,
-body > .container > .mid-table .content-3 > div {
+html > .container > .mid-table .content-3 > .expired, html > .container > .mid-table .content-3 .empty,
+body > .container > .mid-table .content-3 > .expired,
+body > .container > .mid-table .content-3 .empty {
   background-color: #FFFFFF;
   margin: 0px;
   position: relative;
 }
-html > .container > .mid-table .content-3 > div > span,
-body > .container > .mid-table .content-3 > div > span {
+html > .container > .mid-table .content-3 > .expired > span, html > .container > .mid-table .content-3 .empty > span,
+body > .container > .mid-table .content-3 > .expired > span,
+body > .container > .mid-table .content-3 .empty > span {
   top: 0px;
   left: 0px;
   position: absolute;
@@ -299,14 +417,16 @@ body > .container > .mid-table .content-3 > div > span {
   min-width: -moz-fit-content;
   min-width: fit-content;
 }
-html > .container > .mid-table .content-3 > div > .card,
-body > .container > .mid-table .content-3 > div > .card {
+html > .container > .mid-table .content-3 > .expired > .card, html > .container > .mid-table .content-3 .empty > .card,
+body > .container > .mid-table .content-3 > .expired > .card,
+body > .container > .mid-table .content-3 .empty > .card {
   margin: 24px 0px 24px 0px;
   background-color: #FFFFFF;
   position: relative;
 }
-html > .container > .mid-table .content-3 > div > .card > .descripton,
-body > .container > .mid-table .content-3 > div > .card > .descripton {
+html > .container > .mid-table .content-3 > .expired > .card > .descripton, html > .container > .mid-table .content-3 .empty > .card > .descripton,
+body > .container > .mid-table .content-3 > .expired > .card > .descripton,
+body > .container > .mid-table .content-3 .empty > .card > .descripton {
   margin-top: 24px;
   margin-left: 24px;
   margin-right: 24px;
@@ -314,39 +434,47 @@ body > .container > .mid-table .content-3 > div > .card > .descripton {
   padding-bottom: 16px;
   border-bottom: 1px solid #000000;
 }
-html > .container > .mid-table .content-3 > div > .card > .descripton > .img-div > img,
-body > .container > .mid-table .content-3 > div > .card > .descripton > .img-div > img {
+html > .container > .mid-table .content-3 > .expired > .card > .descripton > .img-div > img, html > .container > .mid-table .content-3 .empty > .card > .descripton > .img-div > img,
+body > .container > .mid-table .content-3 > .expired > .card > .descripton > .img-div > img,
+body > .container > .mid-table .content-3 .empty > .card > .descripton > .img-div > img {
   /* margin-left: 24px; */
   /* margin-top: 24px; */
   margin-right: 16px;
 }
-html > .container > .mid-table .content-3 > div > .card > .descripton > .info,
-body > .container > .mid-table .content-3 > div > .card > .descripton > .info {
+html > .container > .mid-table .content-3 > .expired > .card > .descripton > .info, html > .container > .mid-table .content-3 .empty > .card > .descripton > .info,
+body > .container > .mid-table .content-3 > .expired > .card > .descripton > .info,
+body > .container > .mid-table .content-3 .empty > .card > .descripton > .info {
   width: 100%;
 }
-html > .container > .mid-table .content-3 > div > .card > .descripton > .info > .card-head,
-body > .container > .mid-table .content-3 > div > .card > .descripton > .info > .card-head {
+html > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .card-head, html > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .card-head,
+body > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .card-head,
+body > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .card-head {
   display: flex;
   justify-content: space-between;
 }
-html > .container > .mid-table .content-3 > div > .card > .descripton > .info > .subject,
-body > .container > .mid-table .content-3 > div > .card > .descripton > .info > .subject {
+html > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .subject, html > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .subject,
+body > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .subject,
+body > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .subject {
   font-size: 12px;
   color: #666666;
   margin-bottom: 5px;
 }
-html > .container > .mid-table .content-3 > div > .card > .descripton > .info > .subject > .extra-class,
-body > .container > .mid-table .content-3 > div > .card > .descripton > .info > .subject > .extra-class {
+html > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .subject > .extra-class, html > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .subject > .extra-class,
+body > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .subject > .extra-class,
+body > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .subject > .extra-class {
   color: #1F7A54;
 }
-html > .container > .mid-table .content-3 > div > .card > .descripton > .info > .subject > .number,
-body > .container > .mid-table .content-3 > div > .card > .descripton > .info > .subject > .number {
+html > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .subject > .number, html > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .subject > .number,
+body > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .subject > .number,
+body > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .subject > .number {
   color: #222222;
   font-size: 15px;
   font-weight: bold;
+  margin-right: 2px;
 }
-html > .container > .mid-table .content-3 > div > .card > .descripton > .info > .content-3-interior,
-body > .container > .mid-table .content-3 > div > .card > .descripton > .info > .content-3-interior {
+html > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .content-3-interior, html > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .content-3-interior,
+body > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .content-3-interior,
+body > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .content-3-interior {
   display: flex;
   position: relative;
   width: 100%;
@@ -354,8 +482,9 @@ body > .container > .mid-table .content-3 > div > .card > .descripton > .info > 
   min-width: -moz-fit-content;
   min-width: fit-content;
 }
-html > .container > .mid-table .content-3 > div > .card > .descripton > .info > .content-3-interior > .select2,
-body > .container > .mid-table .content-3 > div > .card > .descripton > .info > .content-3-interior > .select2 {
+html > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .content-3-interior > .select2, html > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .content-3-interior > .select2,
+body > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .content-3-interior > .select2,
+body > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .content-3-interior > .select2 {
   display: flex;
   width: 100%;
   justify-content: flex-end;
@@ -366,8 +495,9 @@ body > .container > .mid-table .content-3 > div > .card > .descripton > .info > 
   margin-top: 10px;
   margin-bottom: 10px;
 }
-html > .container > .mid-table .content-3 > div > .card > .descripton > .info > .content-3-interior > .select2 > select,
-body > .container > .mid-table .content-3 > div > .card > .descripton > .info > .content-3-interior > .select2 > select {
+html > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .content-3-interior > .select2 > select, html > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .content-3-interior > .select2 > select,
+body > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .content-3-interior > .select2 > select,
+body > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .content-3-interior > .select2 > select {
   border: none;
   border-bottom: 1px solid black;
   outline: none;
@@ -377,8 +507,9 @@ body > .container > .mid-table .content-3 > div > .card > .descripton > .info > 
   min-width: -moz-fit-content;
   min-width: fit-content;
 }
-html > .container > .mid-table .content-3 > div > .card > .descripton > .info > .content-3-interior > .select2 > .custom-select1,
-body > .container > .mid-table .content-3 > div > .card > .descripton > .info > .content-3-interior > .select2 > .custom-select1 {
+html > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .content-3-interior > .select2 > .custom-select1, html > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .content-3-interior > .select2 > .custom-select1,
+body > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .content-3-interior > .select2 > .custom-select1,
+body > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .content-3-interior > .select2 > .custom-select1 {
   display: block;
   width: 100%;
   -webkit-appearance: none;
@@ -392,8 +523,9 @@ body > .container > .mid-table .content-3 > div > .card > .descripton > .info > 
   min-width: -moz-fit-content;
   min-width: fit-content;
 }
-html > .container > .mid-table .content-3 > div > .card > .descripton > .info > .content-3-interior > .select2::after,
-body > .container > .mid-table .content-3 > div > .card > .descripton > .info > .content-3-interior > .select2::after {
+html > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .content-3-interior > .select2::after, html > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .content-3-interior > .select2::after,
+body > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .content-3-interior > .select2::after,
+body > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .content-3-interior > .select2::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -406,25 +538,29 @@ body > .container > .mid-table .content-3 > div > .card > .descripton > .info > 
   transform: translateY(-50%);
   pointer-events: none;
 }
-html > .container > .mid-table .content-3 > div > .card > .descripton > .info > .class-info,
-body > .container > .mid-table .content-3 > div > .card > .descripton > .info > .class-info {
+html > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .class-info, html > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .class-info,
+body > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .class-info,
+body > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .class-info {
   color: #666666;
   font-size: 12px;
 }
-html > .container > .mid-table .content-3 > div > .card > .descripton > .info > .mynone,
-body > .container > .mid-table .content-3 > div > .card > .descripton > .info > .mynone {
+html > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .mynone, html > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .mynone,
+body > .container > .mid-table .content-3 > .expired > .card > .descripton > .info > .mynone,
+body > .container > .mid-table .content-3 .empty > .card > .descripton > .info > .mynone {
   display: none;
 }
-html > .container > .mid-table .content-3 > div > .card > .card-buttom,
-body > .container > .mid-table .content-3 > div > .card > .card-buttom {
+html > .container > .mid-table .content-3 > .expired > .card > .card-buttom, html > .container > .mid-table .content-3 .empty > .card > .card-buttom,
+body > .container > .mid-table .content-3 > .expired > .card > .card-buttom,
+body > .container > .mid-table .content-3 .empty > .card > .card-buttom {
   padding-left: 24px;
   padding-right: 24px;
   padding-top: 10px;
   display: flex;
   justify-content: space-around;
 }
-html > .container > .mid-table .content-3 > div > .card > .card-buttom > .no-classes,
-body > .container > .mid-table .content-3 > div > .card > .card-buttom > .no-classes {
+html > .container > .mid-table .content-3 > .expired > .card > .card-buttom > .no-classes, html > .container > .mid-table .content-3 .empty > .card > .card-buttom > .no-classes,
+body > .container > .mid-table .content-3 > .expired > .card > .card-buttom > .no-classes,
+body > .container > .mid-table .content-3 .empty > .card > .card-buttom > .no-classes {
   opacity: 0.4;
 }
 html > .footer,
@@ -452,6 +588,7 @@ body > .footer > .copyright {
   .content-3 {
     grid-template-columns: 1fr 1fr;
   }
+
   html > .container > .mid-table, body > .container > .mid-table {
     grid-auto-rows: auto;
   }
@@ -467,18 +604,22 @@ body > .footer > .copyright {
     justify-self: center;
     gap: 20px;
   }
+
   html > .container > .mid-table, body > .container > .mid-table {
     grid-auto-rows: auto;
   }
+
   body > .header > .navbar > .nav-list > li > a.pcview {
     display: none;
   }
+
   body > .header > .navbar > .nav-list > li.phoneview {
     display: inline;
     color: #3FD28B;
     align-self: center;
     justify-self: center;
   }
+
   body > .header > .navbar > .horizontalNav {
     background-color: white;
     height: -webkit-fit-content;
