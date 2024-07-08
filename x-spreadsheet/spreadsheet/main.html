@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spreadsheet using canvas</title>
+    <link rel="stylesheet" href="style/styles.css"> 
+</head>
+<body>
+    <!-- main-container of body  -->
+    <div class="container">
+        <!-- header or operation -->
+        <div class="header"></div>
+        <!-- body of the spreadsheet  -->
+        <div class="content">
+            <div class="upper">
+                <!-- upper body -->
+                <div class="none"></div>
+                <div class="column" id="columnContainer">
+                    <canvas id="column"></canvas>
+                </div>
+                
+            </div>
+            <div class="lower">
+                <!-- lower body -->
+                <div class="row" id="rowContainer">
+                    <canvas id="row"></canvas>
+                </div>
+                <div class="sheet" id="sheetContainer">
+                    <canvas id="spreadsheet"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script/script.js"></script>
+</body>
+</html>
+

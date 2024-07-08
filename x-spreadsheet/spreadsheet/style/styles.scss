@@ -1,0 +1,94 @@
+body{
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    border: 2px solid black;
+    box-sizing: border-box;
+
+    .container{
+        width: 100%;
+        height: 100%;
+        border: 2px solid red;
+        box-sizing: border-box;
+        .header{
+            width: 100%;
+            height: 15%;
+            border: 2px solid blue;
+            box-sizing: border-box;
+        }
+        .content{
+            width: 100%;
+            height: 85%;
+            display: flex;
+            flex-direction: column;
+            border: 4px solid green;
+            box-sizing: border-box;
+            
+            .upper{
+                width: 100%;
+                height: 10%;
+                border: 2px solid yellow;
+                box-sizing: border-box;
+                display: flex;
+                overflow: auto;
+                .none{
+                    width: 5%;
+                    height: 100%;
+                    border: 2px solid black;
+                    box-sizing: border-box;
+                    background-color: antiquewhite;
+                }
+
+                .column{
+                    width: 95%;
+                    height: 100%;
+                    overflow: hidden;
+                    #column{
+                        width: 200%;
+                        height: 100%;
+                        border: 2px solid aqua;
+                        box-sizing: border-box;
+                    }
+                }
+            }
+
+            .lower{
+                width: 100%;
+                height: 90%;
+                border: 2px solid yellow;
+                box-sizing: border-box;
+                display: flex;
+                .row{
+                    width: 5%;
+                    height: 100%;
+                    overflow: hidden;
+                    #row{
+                        width: 100%;
+                        height: 200%;
+                        border: 5px solid black;
+                        box-sizing: border-box;
+                        // background-color: grey;
+                    }
+                }
+                
+                .sheet{
+                    width: 100%;
+                    height: 100%;
+                    border: 2px solid aqua;
+                    overflow: auto;
+                    #spreadsheet{
+                        width: 200%;
+                        height: 200%;
+                        border: 2px solid rgb(234, 255, 0);
+                        box-sizing: border-box;
+
+                    }
+
+                }
+                
+            }
+            
+        }
+    }
+}

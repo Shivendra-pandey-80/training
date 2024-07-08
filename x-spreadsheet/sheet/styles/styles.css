@@ -1,0 +1,16 @@
+
+#spreadsheet {
+    border: 1px solid #000;
+    cursor: default;
+}
+
+#cellInput {
+    position: absolute;
+    display: none;
+    font: 14px Arial;
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+}

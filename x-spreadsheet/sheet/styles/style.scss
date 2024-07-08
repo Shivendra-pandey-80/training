@@ -1,0 +1,94 @@
+body{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    border: 2px solid red;
+    box-sizing: border-box;
+    .header{
+        min-width: 100%;
+        min-height: 15%;
+        border: 2px solid blue;
+        box-sizing: border-box;
+    }
+    
+    .container{
+        min-width: fit-content;
+        height: 80%;
+        border: 2px solid purple;
+        box-sizing: border-box;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+
+        .top{
+            display: flex;
+         
+            height: 5%;
+            position: sticky;
+            top: 0;
+            #nothing{
+                height: 100%;
+                width: 5%;
+                background-color : green;
+                z-index: 55;
+                position: sticky;
+                top: 0;
+            }
+    
+            #columns{
+                height: 100%;
+                width: 95%;
+                background-color: greenyellow;
+                position: sticky;
+                top : 0;
+            }
+        }
+
+        .bottom{
+            display: flex;
+            height: 95%;
+            min-width: fit-content;
+            border: 2px solid pink;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            top: 0px;
+           
+            #rows{
+                height: 100%;
+                width: 5%;
+                background-color: red;
+                position: sticky;
+                left: 0;
+                z-index: inherit;
+            }
+
+            #spreadsheet{
+                height: 200%;
+                width: 300%;
+                cursor: default;
+                min-height: fit-content;
+                min-width: fit-content;
+                border: 2px solid green;
+                box-sizing: border-box;
+            }
+        }
+
+        #cellInput {
+            position: absolute;
+            display: none;
+            font: 14px Arial;
+            padding: 0;
+            margin: 0;
+            border: none;
+            outline: none;
+            background: transparent;
+        }
+       
+      
+    }
+    
+
+}

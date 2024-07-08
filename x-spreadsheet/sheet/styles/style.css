@@ -1,0 +1,95 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  border: 2px solid red;
+  box-sizing: border-box;
+}
+body .header {
+  min-width: 100%;
+  min-height: 15%;
+  border: 2px solid blue;
+  box-sizing: border-box;
+}
+body .container {
+  min-width: -webkit-fit-content;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+  height: 80%;
+  border: 2px solid purple;
+  box-sizing: border-box;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+body .container .top {
+  display: flex;
+  height: 5%;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+body .container .top #nothing {
+  height: 100%;
+  width: 5%;
+  background-color: green;
+  z-index: 55;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+body .container .top #columns {
+  height: 100%;
+  width: 95%;
+  background-color: greenyellow;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+body .container .bottom {
+  display: flex;
+  height: 95%;
+  min-width: -webkit-fit-content;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+  border: 2px solid pink;
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  top: 0px;
+}
+body .container .bottom #rows {
+  height: 100%;
+  width: 5%;
+  background-color: red;
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  z-index: inherit;
+}
+body .container .bottom #spreadsheet {
+  height: 200%;
+  width: 300%;
+  cursor: default;
+  min-height: -webkit-fit-content;
+  min-height: -moz-fit-content;
+  min-height: fit-content;
+  min-width: -webkit-fit-content;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+  border: 2px solid green;
+  box-sizing: border-box;
+}
+body .container #cellInput {
+  position: absolute;
+  display: none;
+  font: 14px Arial;
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+}/*# sourceMappingURL=style.css.map */
