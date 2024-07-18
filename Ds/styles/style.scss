@@ -1,0 +1,146 @@
+$color_dk_1 : #03045E;
+$color_dk_2 : #023E8A;
+$color_dk_3 : #0077B6;
+$color_dk_4 : #0096C7;
+$color_lg_5 : #00B4D8;
+$color_lg_4 : #48CAE4;
+$color_lg_3 : #90E0EF;
+$color_lg_2 : #ADE8F4;
+$color_lg_1 : #e9fcff;
+$color_gray: gray;
+@mixin resetCss {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+@mixin centerFlex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body {
+    @include resetCss();
+    height: 100vh;
+    width: 100vw;
+
+    >header {
+        height: 20%;
+        border: 1px solid red;
+        box-sizing: border-box;
+
+    }
+
+    >.mainContainer {
+
+        height: 80%;
+        display: flex;
+        border: 1px solid black;
+        flex-direction: column;
+        box-sizing: border-box;
+
+
+
+        >.topSection {
+            border: 1px solid blue;
+            height: 5%;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+
+            >.nothing{
+                width: 5%;
+                height: 100%;
+
+            }
+            >#horizontalCanvas{
+                width: 94%;
+                height: 100%;
+                border: 1px solid blueviolet;
+            }
+        }
+
+        >.middleSection {
+            // border: 1px solid green;
+            height: 95%;
+            display: flex;
+            width: 100%;
+            box-sizing: border-box;
+
+
+            >#verticalCanvas {
+                // border: 1px solid grey;
+                width: 5%;
+                box-sizing: border-box;
+                height: 98%;
+
+            }
+
+            >#fullCanvas {
+                width: 95%;
+                display: flex;
+                box-sizing: border-box;
+                position: relative;
+
+                >#spreadsheetCanvas {
+                    background-color: aliceblue;
+                    width: 99%;
+                    height: 98%;
+                    box-sizing: border-box;
+
+                }
+
+                >.horizontalScroll {
+                    box-sizing: border-box;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    height: 2%;
+                    width: 99%;
+                    @include centerFlex();
+
+                    >#horizontalBar{
+                        height: 80%;
+                        width: 80%;
+                        background-color: $color_gray;
+                        position: absolute;
+                        left: 0px;
+                        transition: all 0.1s;
+                        border-radius: 25px;
+                    }
+
+                }
+
+                >.verticalScroll {
+                    // border: 1px solid yellow;
+                    transition: all 0.1s;
+                    box-sizing: border-box;
+                    position: absolute;
+                    height: 98%;
+                    top: 0;
+                    right: 0;
+                    width: 1%;
+                    @include centerFlex();
+
+                    >#verticalBar{
+                        height: 80%;
+                        width:80%;
+                        background-color: $color_gray;
+                        position: absolute;
+                        top: 0;
+                        transition: all 0.1s;
+                        border-radius: 25px;
+                    }
+
+                }
+            }
+        }
+
+        >input {
+            display: none;
+        }
+
+    }
+
+}

@@ -1,0 +1,102 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+}
+body > header {
+  height: 20%;
+  border: 1px solid red;
+  box-sizing: border-box;
+}
+body > .mainContainer {
+  height: 80%;
+  display: flex;
+  border: 1px solid black;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+body > .mainContainer > .topSection {
+  border: 1px solid blue;
+  height: 5%;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+}
+body > .mainContainer > .topSection > .nothing {
+  width: 5%;
+  height: 100%;
+}
+body > .mainContainer > .topSection > #horizontalCanvas {
+  width: 94%;
+  height: 100%;
+  border: 1px solid blueviolet;
+}
+body > .mainContainer > .middleSection {
+  height: 95%;
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+}
+body > .mainContainer > .middleSection > #verticalCanvas {
+  width: 5%;
+  box-sizing: border-box;
+  height: 98%;
+}
+body > .mainContainer > .middleSection > #fullCanvas {
+  width: 95%;
+  display: flex;
+  box-sizing: border-box;
+  position: relative;
+}
+body > .mainContainer > .middleSection > #fullCanvas > #spreadsheetCanvas {
+  background-color: aliceblue;
+  width: 99%;
+  height: 98%;
+  box-sizing: border-box;
+}
+body > .mainContainer > .middleSection > #fullCanvas > .horizontalScroll {
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2%;
+  width: 99%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body > .mainContainer > .middleSection > #fullCanvas > .horizontalScroll > #horizontalBar {
+  height: 80%;
+  width: 80%;
+  background-color: gray;
+  position: absolute;
+  left: 0px;
+  transition: all 0.1s;
+  border-radius: 25px;
+}
+body > .mainContainer > .middleSection > #fullCanvas > .verticalScroll {
+  transition: all 0.1s;
+  box-sizing: border-box;
+  position: absolute;
+  height: 98%;
+  top: 0;
+  right: 0;
+  width: 1%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body > .mainContainer > .middleSection > #fullCanvas > .verticalScroll > #verticalBar {
+  height: 80%;
+  width: 80%;
+  background-color: gray;
+  position: absolute;
+  top: 0;
+  transition: all 0.1s;
+  border-radius: 25px;
+}
+body > .mainContainer > input {
+  display: none;
+}/*# sourceMappingURL=style.css.map */

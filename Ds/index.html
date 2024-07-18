@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sheets</title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+  <header>
+    <div class="nav"></div>
+    <div class="tools"></div>
+  </header>
+  <div class="mainContainer">
+    <div class="topSection">
+      <div class="nothing"></div>
+      <canvas id="horizontalCanvas"></canvas>
+    </div>
+    <div class="middleSection">
+      <canvas id="verticalCanvas"></canvas>
+      <div id="fullCanvas">
+        <canvas id="spreadsheetCanvas"></canvas>
+        <div class="verticalScroll" id="verticalScroll">
+          <div id="verticalBar"></div>
+        </div>
+        <div class="horizontalScroll" id="horizontalScroll">
+          <div id="horizontalBar"></div>
+        </div>
+      </div>
+    </div>
+    <input type="text" id="cellInput">
+  </div>
+
+  <script type="module" src="index.js">
+  </script>
+</body>
+
+</html>
