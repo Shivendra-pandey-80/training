@@ -1,0 +1,152 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+body > header, html > header {
+  margin: 0;
+  padding: 0;
+  height: 18%;
+  box-sizing: border-box;
+}
+body .mainContainer, html .mainContainer {
+  margin: 0;
+  padding: 0;
+  height: 80%;
+  box-sizing: border-box;
+}
+body .mainContainer .row, html .mainContainer .row {
+  margin: 0;
+  padding: 0;
+}
+body .mainContainer .row .excel.resizable, html .mainContainer .row .excel.resizable {
+  margin: 0;
+  padding: 0;
+  border: 1px solid black;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background-color: aliceblue;
+}
+body .mainContainer .row .excel.resizable:hover::after, html .mainContainer .row .excel.resizable:hover::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 5px;
+  height: 5px;
+  background: #000;
+  cursor: nwse-resize;
+}
+body .mainContainer .row .excel.resizable.resizing, html .mainContainer .row .excel.resizable.resizing {
+  opacity: 0.7;
+}
+body .mainContainer .row .excel.resizable .topSection, html .mainContainer .row .excel.resizable .topSection {
+  margin: 0;
+  padding: 0;
+  height: 5%;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+}
+body .mainContainer .row .excel.resizable .topSection .nothing, html .mainContainer .row .excel.resizable .topSection .nothing {
+  width: 3%;
+  height: 100%;
+}
+body .mainContainer .row .excel.resizable .topSection .upperCanvas, html .mainContainer .row .excel.resizable .topSection .upperCanvas {
+  width: 97%;
+  height: 100%;
+  position: relative;
+}
+body .mainContainer .row .excel.resizable .topSection .upperCanvas .horizontalCanvas, html .mainContainer .row .excel.resizable .topSection .upperCanvas .horizontalCanvas {
+  width: 99%;
+  height: 100%;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  background-color: aliceblue;
+}
+body .mainContainer .row .excel.resizable .middleSection, html .mainContainer .row .excel.resizable .middleSection {
+  height: 95%;
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+body .mainContainer .row .excel.resizable .middleSection .verticalCanvas, html .mainContainer .row .excel.resizable .middleSection .verticalCanvas {
+  width: 3%;
+  height: 98%;
+  background-color: aliceblue;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+body .mainContainer .row .excel.resizable .middleSection .fullCanvas, html .mainContainer .row .excel.resizable .middleSection .fullCanvas {
+  width: 97%;
+  display: flex;
+  position: absolute;
+  height: 100%;
+  top: 0%;
+  left: 3%;
+}
+body .mainContainer .row .excel.resizable .middleSection .fullCanvas .spreadsheetCanvas, html .mainContainer .row .excel.resizable .middleSection .fullCanvas .spreadsheetCanvas {
+  width: 99%;
+  height: 98%;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+body .mainContainer .row .excel.resizable .middleSection .fullCanvas .horizontalScroll, html .mainContainer .row .excel.resizable .middleSection .fullCanvas .horizontalScroll {
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2%;
+  width: 99%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body .mainContainer .row .excel.resizable .middleSection .fullCanvas .horizontalScroll .horizontalBar, html .mainContainer .row .excel.resizable .middleSection .fullCanvas .horizontalScroll .horizontalBar {
+  height: 80%;
+  width: 50%;
+  background-color: grey;
+  position: absolute;
+  left: 0px;
+  transition: all 0.1s;
+  border-radius: 25px;
+}
+body .mainContainer .row .excel.resizable .middleSection .fullCanvas .verticalScroll, html .mainContainer .row .excel.resizable .middleSection .fullCanvas .verticalScroll {
+  transition: all 0.1s;
+  box-sizing: border-box;
+  position: absolute;
+  height: 98%;
+  top: 0;
+  right: 0;
+  width: 1%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body .mainContainer .row .excel.resizable .middleSection .fullCanvas .verticalScroll .verticalBar, html .mainContainer .row .excel.resizable .middleSection .fullCanvas .verticalScroll .verticalBar {
+  height: 50%;
+  width: 80%;
+  background-color: grey;
+  position: absolute;
+  top: 0;
+  transition: all 0.1s;
+  border-radius: 25px;
+}
+body .main-footer, html .main-footer {
+  height: 2%;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+body .main-footer .controlBtns, html .main-footer .controlBtns {
+  margin: 0;
+  padding: 0;
+}/*# sourceMappingURL=styles.css.map */

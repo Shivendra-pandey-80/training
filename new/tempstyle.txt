@@ -1,0 +1,164 @@
+@mixin resetCss {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+@mixin centerFlex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body {
+    @include resetCss();
+    height: 100vh;
+    width: 100vw;
+
+    >header {
+        @include resetCss();
+        height: 20%;
+        box-sizing: border-box;
+    }
+
+    >.mainContainer {
+
+        @include resetCss();
+        height: 80%;
+
+        >.row {
+            @include resetCss();
+            
+            >.excel {
+
+                @include resetCss();
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                box-sizing: border-box;
+                background-color: aliceblue;
+
+                >.topSection {
+                    // border: 1px solid blue;
+                    @include resetCss();
+
+                    height: 5%;
+                    width: 100%;
+                    box-sizing: border-box;
+                    display: flex;
+
+                    >.nothing {
+                        width: 3%;
+                        height: 100%;
+
+                    }
+
+                    >.upperCanvas {
+                        width: 97%;
+                        height: 100%;
+
+                        >.horizontalCanvas {
+                            width: 99%;
+                            height: 100%;
+                            // border: 1px solid blueviolet;
+                        }
+                    }
+
+                }
+
+                >.middleSection {
+                    // border: 1px solid green;
+                    height: 95%;
+                    display: flex;
+                    width: 100%;
+                    box-sizing: border-box;
+
+                    >.verticalCanvas {
+                        // border: 1px solid grey;
+                        width: 3%;
+                        height: 98%;
+                        background-color: aliceblue;
+
+                    }
+
+                    >.fullCanvas {
+                        width: 97%;
+                        display: flex;
+                        position: relative;
+
+                        >.spreadsheetCanvas {
+                            width: 99%;
+                            height: 98%;
+                            background-color: white;
+                        }
+
+                        >.horizontalScroll {
+                            box-sizing: border-box;
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            height: 2%;
+                            width: 99%;
+                            @include centerFlex();
+
+                            >.horizontalBar {
+                                height: 80%;
+                                width: 80%;
+                                background-color: grey;
+                                position: absolute;
+                                left: 0px;
+                                transition: all 0.1s;
+                                border-radius: 25px;
+                            }
+
+                        }
+
+                        >.verticalScroll {
+                            // border: 1px solid yellow;
+                            transition: all 0.1s;
+                            box-sizing: border-box;
+                            position: absolute;
+                            height: 98%;
+                            top: 0;
+                            right: 0;
+                            width: 1%;
+                            @include centerFlex();
+
+                            >.verticalBar {
+                                height: 80%;
+                                width: 80%;
+                                background-color: grey;
+                                position: absolute;
+                                top: 0;
+                                transition: all 0.1s;
+                                border-radius: 25px;
+                            }
+
+                        }
+                    }
+                }
+
+                >input {
+                    display: none;
+                }
+            }
+
+        }
+
+
+
+        // >.footer {
+        //     display: flex;
+        //     @include resetCss();
+
+        //     >.controlBtns {
+        //         @include resetCss();
+
+        //     }
+        // }
+
+
+
+    }
+
+}

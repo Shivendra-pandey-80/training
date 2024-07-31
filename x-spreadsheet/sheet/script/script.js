@@ -113,7 +113,7 @@ class spreadsheet{
 //         resizingColumn = col - 1;
 //         canvas.style.cursor = 'col-resize';
 //     } 
-//     // else {
+//     // else {.
 //     //     console.log(x, y)
 //     //     console.log("trying to select")
 

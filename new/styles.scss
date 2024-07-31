@@ -1,0 +1,188 @@
+@mixin resetCss {
+    margin: 0;
+    padding: 0;
+    
+}
+
+@mixin centerFlex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body,html {
+    @include resetCss();
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+
+    > header {
+        @include resetCss();
+        height: 18%;
+        box-sizing: border-box;
+    }
+
+    .mainContainer {
+        @include resetCss();
+        height: 80%;
+        box-sizing: border-box;
+
+        .row {
+            @include resetCss();
+
+            .excel.resizable {
+                @include resetCss();
+                border: 1px solid black;
+                position: relative;
+                height: 100%;
+                width: 100%;
+                background-color: aliceblue;
+
+                &:hover {
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        right: 0;
+                        bottom: 0;
+                        width: 5px;
+                        height: 5px;
+                        background: #000;
+                        cursor: nwse-resize;
+                    }
+                }
+
+                &.resizing {
+                    opacity: 0.7;
+                    
+                }
+
+                .topSection {
+                    // border: 1px solid blue;
+                    @include resetCss();
+
+                    height: 5%;
+                    width: 100%;
+                    box-sizing: border-box;
+                    display: flex;
+
+                    .nothing {
+                        width: 3%;
+                        height: 100%;
+
+                    }
+
+                    .upperCanvas {
+                        width: 97%;
+                        height: 100%;
+                        position: relative;
+                        
+
+                        .horizontalCanvas {
+                            width: 99%;
+                            height: 100%;
+                            position: absolute;
+                            top: 0%;
+                            left: 0%;
+                            background-color: aliceblue;
+                            // border: 1px solid blueviolet;
+                        }
+                    }
+                }
+
+                .middleSection {
+                    // border: 1px solid green;
+                    height: 95%;
+                    display: flex;
+                    width: 100%;
+                    box-sizing: border-box;
+                    position: relative;
+
+                    .verticalCanvas {
+                        // border: 1px solid grey;
+                        width: 3%;
+                        height: 98%;
+                        background-color: aliceblue;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+
+                    }
+
+                    .fullCanvas {
+                        width: 97%;
+                        display: flex;
+                        position: absolute;
+                        height: 100%;
+                        top: 0%;
+                        left: 3%;
+
+                        .spreadsheetCanvas {
+                            width: 99%;
+                            height: 98%;
+                            background-color: white;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                        }
+
+                        .horizontalScroll {
+                            box-sizing: border-box;
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            height: 2%;
+                            width: 99%;
+                            @include centerFlex();
+
+                            .horizontalBar {
+                                height: 80%;
+                                width: 50%;
+                                background-color: grey;
+                                position: absolute;
+                                left: 0px;
+                                transition: all 0.1s;
+                                border-radius: 25px;
+                            }
+
+                        }
+
+                        .verticalScroll {
+                            // border: 1px solid yellow;
+                            transition: all 0.1s;
+                            box-sizing: border-box;
+                            position: absolute;
+                            height: 98%;
+                            top: 0;
+                            right: 0;
+                            width: 1%;
+                            @include centerFlex();
+
+                            .verticalBar {
+                                height: 50%;
+                                width: 80%;
+                                background-color: grey;
+                                position: absolute;
+                                top: 0;
+                                transition: all 0.1s;
+                                border-radius: 25px;
+                            }
+
+                        }
+                    }
+                }
+
+
+            }
+        }
+    }
+
+    .main-footer {
+        height: 2%;
+        display: flex;
+        @include resetCss();
+        
+        .controlBtns {
+            @include resetCss();
+        }
+    }
+}
