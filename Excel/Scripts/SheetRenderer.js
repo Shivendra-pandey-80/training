@@ -4,6 +4,7 @@ import { Scroll } from './scroll.js';
 import { CellFunctionality } from './cellfunctionality.js';
 import { HeaderCellFunctionality } from './headercellfunctionality.js';
 
+
 export class SheetRenderer {
     constructor(sheet) {
         this.sheet = sheet;
@@ -23,7 +24,7 @@ export class SheetRenderer {
         this.sparseMatrix.createCell(4,1,4,1,"A")
         this.sparseMatrix.createCell(1,23,1,23,"B")
         this.sparseMatrix.createCell(2,3,2,3,"C")
-        
+
 
         this.initCanvases();
         this.setupEventListeners();
@@ -71,6 +72,7 @@ export class SheetRenderer {
 
     handleResize() {
         this.resizeCanvases();
+         
     }
 
     handleWheel(event) {
@@ -187,6 +189,7 @@ export class SheetRenderer {
         return horizontalScroll.clientWidth / (horizontalScroll.clientWidth + this.scrollManager.maxScrollX);
     }
 
+    
     draw() {
         this.clearCanvases();
         const { x: scrollX, y: scrollY } = this.scrollManager.getScroll();
@@ -201,14 +204,45 @@ export class SheetRenderer {
         
         this.drawHeaders(scrollX, scrollY);
         this.drawGrid(scrollX, scrollY);
-        this.drawSparseMatrixValues(scrollX, scrollY); // Draw sparse matrix values
-        this.cellFunctionality.drawHighlight(); // Add this line
+        this.drawSparseMatrixValues(scrollX, scrollY);
+        this.cellFunctionality.drawHighlight();
 
-         // Clear any temporary resize lines
+        // Update input box position
+        if (this.cellFunctionality.selectedCell) {
+            this.cellFunctionality.updateInputElement(this.cellFunctionality.selectedCell);
+        }
+
+        // Draw resize line if resizing
         if (this.headerCellFunctionality.isResizing) {
-            this.headerCellFunctionality.drawResizeLine();
+            this.drawResizeLine();
         }
     }
+
+    drawResizeLine() {
+        const { isResizing, resizeType, currentResizePosition } = this.headerCellFunctionality;
+        if (!isResizing || currentResizePosition === null) return;
+
+        const ctx = this.contexts.spreadsheet;
+        const { x: scrollX, y: scrollY } = this.scrollManager.getScroll();
+
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(0, 120, 215, 0.8)';
+        ctx.lineWidth = 2;
+
+        if (resizeType === 'column') {
+            const x = currentResizePosition - scrollX;
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, ctx.canvas.clientHeight);
+        } else {
+            const y = currentResizePosition - scrollY;
+            ctx.moveTo(0, y);
+            ctx.lineTo(ctx.canvas.clientWidth, y);
+        }
+
+        ctx.stroke();
+    }
+
+    
 
     drawHeaders(scrollX, scrollY) {
         this.verticalCells = this.headerCellManager.getVerticalHeaderCells(scrollY);
@@ -271,7 +305,7 @@ export class SheetRenderer {
         const ctx = this.contexts.spreadsheet;
         const verticalCells = this.headerCellManager.getVerticalHeaderCells(scrollY);
         const horizontalCells = this.headerCellManager.getHorizontalHeaderCells(scrollX);
-    
+
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 1;
     
