@@ -254,11 +254,13 @@ export class SheetRenderer {
     }
     
     drawHeaderCells(ctx, cells, isVertical, scroll) {
-        ctx.strokeStyle = '#000000';
+        
         ctx.lineWidth = 1;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-    
+        ctx.strokeStyle = '#000000';
+        ctx.fillStyle = 'black';
+        
         const canvasWidth = this.canvases[isVertical ? 'vertical' : 'horizontal'].width / window.devicePixelRatio;
         const canvasHeight = this.canvases[isVertical ? 'vertical' : 'horizontal'].height / window.devicePixelRatio;
     
@@ -269,6 +271,7 @@ export class SheetRenderer {
             if (drawCell) {
                 ctx.beginPath();
                 if (isVertical) {
+                    
                     const y = cell.y - scroll;
                     ctx.moveTo(0, y);
                     ctx.lineTo(canvasWidth, y);
@@ -308,6 +311,7 @@ export class SheetRenderer {
 
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 1;
+        
     
         const canvasWidth = this.canvases.spreadsheet.width / window.devicePixelRatio;
         const canvasHeight = this.canvases.spreadsheet.height / window.devicePixelRatio;
@@ -378,6 +382,7 @@ export class SheetRenderer {
         
         // Adjust font size if text is too wide
         ctx.font = `${fontSize}px Arial`;
+       
         let textWidth = ctx.measureText(text).width;
         if (textWidth > maxWidth * 0.9) {
             fontSize *= (maxWidth * 0.9) / textWidth;
@@ -387,6 +392,7 @@ export class SheetRenderer {
         fontSize = 14;
         
         ctx.font = `${fontSize}px Arial`;
+        ctx.strokeStyle = "black"
         ctx.fillText(text, x, y, maxWidth);
     }
 

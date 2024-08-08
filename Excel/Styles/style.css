@@ -135,7 +135,7 @@ body .mainContainer .row .excel.resizable .middleSection .fullCanvas .input {
   box-sizing: border-box;
   display: none;
   position: absolute;
-  border: 3px solid green;
+  border: none;
   outline: none;
 }
 body .mainContainer .row .excel.resizable .middleSection .fullCanvas .spreadsheetCanvas {
