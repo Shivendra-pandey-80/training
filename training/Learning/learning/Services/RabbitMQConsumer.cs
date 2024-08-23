@@ -1,108 +1,165 @@
-using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Diagnostics;
-using Microsoft.AspNetCore.Components.RenderTree;
+using System.Threading;
+using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 
-
-namespace learning.Services;
-
-
-public class RabbitMQConsumer
+public class RabbitMQConsumer : IDisposable
 {
+    private readonly IConnection _connection;
+    private readonly IModel _channel;
+    private readonly string _dbConnString;
+    private const int MaxParallelTasks = 10; // Adjust based on your needs
+    private static SemaphoreSlim _semaphore = new SemaphoreSlim(5); // Adjust based on your database's capacity
 
-    private readonly IConnectionFactory connectionFactory;
-    private readonly IConnection connection;
-
-    // private MySqlConnection mySQLConnection;
-    private readonly IModel channel;
-
-    public IConfiguration? configuration;//this will store the configuration settings present in appsetting.json
-    private readonly string? dbConnString;//this is the string required to connect to mysql db
-
-
-    public int currQueueIndex = 0;
-
-    public RabbitMQConsumer(IConfiguration _configuration, IConnectionFactory _connectionFactory)
+    public RabbitMQConsumer(string hostName, string dbConnString)
     {
-        //constructor
-        connectionFactory = _connectionFactory;
-        connection = connectionFactory.CreateConnection();
-        channel = connection.CreateModel();
+        var factory = new ConnectionFactory() { HostName = hostName };
+        _connection = factory.CreateConnection();
+        _channel = _connection.CreateModel();
+        _dbConnString = dbConnString;
 
-
-        //constructor
-        configuration = _configuration;//updating the value
-        dbConnString = configuration.GetConnectionString("DBConnectionString");//updating the value
-
-        // mySQLConnection = new MySqlConnection(dbConnString);
-
-        var numberOfQueues = 5;
-
-        for (int i = 0; i < numberOfQueues; i++)
-        {
-            channel.QueueDeclare(queue: $"queue{i}",
-                     durable: false,
-                     exclusive: false,
-                     autoDelete: false,
-                     arguments: null);
-
-        }
+        // Set prefetch count
+        _channel.BasicQos(prefetchSize: 0, prefetchCount: 10, global: false);
     }
 
-    public async void StartListeningToQueue(int queueNumber)
+    public async Task StartListeningToAllQueues(CancellationToken cancellationToken)
     {
-
-
-        var consumer = new EventingBasicConsumer(channel);//creating a consumer that can listen to queue
-
-        consumer.Received += async (model, ea) =>
+        var tasks = new Task[10];
+        for (int i = 0; i < 10; i++)
         {
-            //this is event that is triggered as the queue has got some data in it
-            //dealing with body once received
+            int queueNumber = i;
+            tasks[i] = StartListeningToQueue(queueNumber, cancellationToken);
+        }
+        await Task.WhenAll(tasks);
+    }
+
+    private async Task StartListeningToQueue(int queueNumber, CancellationToken cancellationToken)
+    {
+        _channel.QueueDeclare(queue: $"queue{queueNumber}", durable: false, exclusive: false, autoDelete: false, arguments: null);
+
+        var consumer = new EventingBasicConsumer(_channel);
+        var pendingTasks = new List<Task>();
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
+        consumer.Received += (model, ea) =>
+        {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
 
-            //call functiont to insert in db
-            // Console.WriteLine("calling insert to db");
-            await InsertToDB(message, queueNumber);
-        };
-        //listening to queue
-
-        channel.BasicConsume(queue: $"queue{queueNumber}",
-                             autoAck: true,
-                             consumer: consumer);
-
-
-    }
-
-    public async Task InsertToDB(string query, int queueN)
-    {
-        //inserting to db
-        // Console.WriteLine("Inside db");
-        // Console.WriteLine("a");
-
-
-        await Task.Run(() =>
-    {
-        using (var mySQLConnection = new MySqlConnection(dbConnString))
-        {
-            mySQLConnection.Open();
-            using (var command = new MySqlCommand(query.ToString(), mySQLConnection))
+            var insertTask = Task.Run(async () =>
             {
-                command.ExecuteNonQuery();
+                try
+                {
+                    await InsertToDB(message, queueNumber);
+                    _channel.BasicAck(ea.DeliveryTag, false);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error processing message: {ex.Message}");
+                    _channel.BasicNack(ea.DeliveryTag, false, true);
+                }
+            });
+
+            pendingTasks.Add(insertTask);
+
+            // Ensure tasks are executed in parallel up to a certain level
+            if (pendingTasks.Count >= MaxParallelTasks)
+            {
+                Task.WaitAny(pendingTasks.ToArray());
+                pendingTasks.RemoveAll(t => t.IsCompleted); // Clean up completed tasks
             }
-            mySQLConnection.Close();
+        };
+
+        string consumerTag = _channel.BasicConsume(queue: $"queue{queueNumber}", autoAck: false, consumer: consumer);
+
+        try
+        {
+            await Task.Delay(Timeout.Infinite, cancellationToken);
         }
-    });
+        catch (OperationCanceledException)
+        {
+            _channel.BasicCancel(consumerTag);
+        }
 
-
-        // Console.WriteLine("jiefr");
-
-        // Console.WriteLine($"Entererd data for queue{queueN}");
-
-
+        // Wait for any remaining tasks to complete after cancellation
+        await Task.WhenAll(pendingTasks);
+        stopwatch.Stop();
+        TimeSpan elapsed = stopwatch.Elapsed;
+        Console.WriteLine($"Total Elapsed time for queue{queueNumber}: {elapsed}");
     }
 
+    private async Task InsertToDB(string query, int queueN)
+    {
+        await _semaphore.WaitAsync();
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
+        Console.WriteLine($"Inserting batch query from queue{queueN}");
+        try
+        {
+            
+            using (var connection = new MySqlConnection(_dbConnString))
+            {
+                TimeSpan elapsed = stopwatch.Elapsed;
+                Console.WriteLine($"Total time for connection queue{queueN}: {elapsed}");
+                await connection.OpenAsync();
+
+
+                // Use MySQL Transaction for batching and atomic operations
+                using (var transaction = await connection.BeginTransactionAsync())
+                {
+                
+                    try
+                    {
+                        using (var command = new MySqlCommand(query, connection, transaction))
+                        {
+                            elapsed = stopwatch.Elapsed;
+                            Console.WriteLine($"Total time for command queue{queueN}: {elapsed}");
+                            command.CommandTimeout = 60; // Adjust as needed
+                            command.ExecuteNonQuery();
+                            elapsed = stopwatch.Elapsed;
+                            Console.WriteLine($"Total time for execution queue{queueN}: {elapsed}");
+                        }
+
+                        await transaction.CommitAsync();
+                        Console.WriteLine($"Executed batch query from queue{queueN}");
+
+                        Console.WriteLine(((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds());
+                        stopwatch.Stop();
+                        elapsed = stopwatch.Elapsed;
+                        Console.WriteLine($"Total Elapsed time for queue{queueN}: {elapsed}");
+                    }
+                    catch (Exception ex)
+                    {
+                        await transaction.RollbackAsync();
+                        Console.WriteLine($"Error executing batch query for queue{queueN}: {ex.Message}");
+                        throw;
+                    }
+                }
+            }
+        
+        
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in InsertToDB: {ex.Message}");
+            throw;
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
+    }
+
+    public void Dispose()
+    {
+        _channel?.Dispose();
+        _connection?.Dispose();
+    }
 }

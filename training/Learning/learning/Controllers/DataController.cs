@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.Text;
 using learning.Models;
-using learning.Services;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 
@@ -443,60 +442,71 @@ public class DataController : ControllerBase
     [HttpPost("uploadAndSplitStream")]
     public async Task<IActionResult> UploadAndSplitStream()
     {
-        Console.WriteLine("Akshay\nBoris");
+        Console.WriteLine("------------------------------------------");
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
         string uploadPath = Path.Combine(Path.GetTempPath(), "uploads");
         Directory.CreateDirectory(uploadPath);
+        Console.WriteLine(uploadPath);
 
         int numberOfParts = 10;
         var partFiles = new string[numberOfParts];
         var partStreams = new StreamWriter[numberOfParts];
+        var processTasks = new Task[numberOfParts];
 
-        // Create and open 10 temporary files for writing
         for (int i = 0; i < numberOfParts; i++)
         {
             partFiles[i] = Path.Combine(uploadPath, $"part_{i}.csv");
-            partStreams[i] = new StreamWriter(new FileStream(partFiles[i], FileMode.Create));
+            partStreams[i] = new StreamWriter(partFiles[i]);
         }
 
         using var reader = new StreamReader(Request.Body);
         int currentPart = 0;
         long totalLinesRead = 0;
-        long linesPerPart = 1000;  // Set this based on your logic (e.g., dividing the stream)
+        long linesPerPart = 10000;
+        await reader.ReadLineAsync();
+        await reader.ReadLineAsync();
+        await reader.ReadLineAsync();
+        await reader.ReadLineAsync();
+        await reader.ReadLineAsync();
 
         string? line;
         while ((line = await reader.ReadLineAsync()) != null)
         {
-            // Write the line to the current part file
-            await partStreams[currentPart].WriteLineAsync(line);
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                continue;
+            }
 
+            await partStreams[currentPart].WriteLineAsync(line);
             totalLinesRead++;
 
-            // Check if we need to move to the next part
             if (totalLinesRead >= linesPerPart && currentPart < numberOfParts - 1)
             {
+                await partStreams[currentPart].FlushAsync();
+                partStreams[currentPart].Dispose();
+
+                int partIndex = currentPart;
+                processTasks[partIndex] = Task.Run(() => ProcessFile(partFiles[partIndex]));
+
                 currentPart++;
                 totalLinesRead = 0;
             }
         }
 
-        // Close all part streams
-        for (int i = 0; i < numberOfParts; i++)
-        {
-            await partStreams[i].FlushAsync();
-            partStreams[i].Dispose();
-        }
+        // Handle the last part
+        await partStreams[currentPart].FlushAsync();
+        partStreams[currentPart].Dispose();
+        processTasks[currentPart] = Task.Run(() => ProcessFile(partFiles[currentPart]));
 
-        // Now process each part concurrently
-        var processTasks = partFiles.Select(partFile =>
-            Task.Run(() => ProcessFile(partFile))
-        );
+        // Wait for all processing tasks to complete
+        await Task.WhenAll(processTasks.Where(t => t != null));
+        stopwatch.Stop();
+        TimeSpan elapsed = stopwatch.Elapsed;
+        Console.WriteLine($"Total Elapsed time: {elapsed}");
 
-        await Task.WhenAll(processTasks);
-
-        return Ok("File uploaded and split successfully.");
+        return Ok("File uploaded, split, and processed successfully.");
     }
-
-
 
 
     private async Task ProcessFile(string filePath)
@@ -518,7 +528,17 @@ public class DataController : ControllerBase
                 Email_id = columns[0],
                 Name = columns[1],
                 Country = columns[2],
-                // ...other columns
+                State = columns[3],
+                City = columns[4],
+                Telephone_number = (int)Int64.Parse(columns[5]),
+                Address_line_1 = columns[6],
+                Address_line_2 = columns[7],
+                Date_of_birth = columns[8],
+                Gross_salary_FY2019_20 = (int)Int64.Parse(columns[9]),
+                Gross_salary_FY2020_21 = (int)Int64.Parse(columns[10]),
+                Gross_salary_FY2021_22 = (int)Int64.Parse(columns[11]),
+                Gross_salary_FY2022_23 = (int)Int64.Parse(columns[12]),
+                Gross_salary_FY2023_24 = (int)Int64.Parse(columns[13])
             });
 
             if (records.Count >= 10000)  // Process in batches
@@ -538,6 +558,7 @@ public class DataController : ControllerBase
 
     private async Task ConvertToQuery(List<DataModel> records)
     {
+
         var queryBuilder = new StringBuilder();
         queryBuilder.Append("INSERT INTO usertest2 (Email_id, Name, Country, State, City, Telephone_number, Address_line_1, Address_line_2, Date_of_birth, Gross_salary_FY2019_20, Gross_salary_FY2020_21, Gross_salary_FY2021_22, Gross_salary_FY2022_23, Gross_salary_FY2023_24) VALUES ");
 
@@ -571,7 +592,233 @@ public class DataController : ControllerBase
 
         queryBuilder.Append(';');
 
-        publisher.SendChunk(queryBuilder.ToString());
+        await publisher.SendChunk(queryBuilder.ToString());
     }
+
+
+    [HttpPost("uploadAndSplitStream1")]
+    public async Task<IActionResult> UploadAndSplitStream1()
+    {
+        Console.WriteLine("------------------------------------------");
+        Console.WriteLine("------------------------------------------");
+        Console.WriteLine("------------------------------------------");
+        Console.WriteLine("------------------------------------------");
+        Console.WriteLine("------------------------------------------");
+        Console.WriteLine("------------------------------------------");
+        Console.WriteLine(((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds());
+
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
+        int numberOfParts = 20;
+        var partLists = new List<string>[numberOfParts];
+        var processTasks = new Task[numberOfParts];
+
+        for (int i = 0; i < numberOfParts; i++)
+        {
+            partLists[i] = new List<string>();
+        }
+
+        using var reader = new StreamReader(Request.Body);
+        int currentPart = 0;
+        long totalLinesRead = 0;
+        long linesPerPart = 5000;
+        await reader.ReadLineAsync();
+        await reader.ReadLineAsync();
+        await reader.ReadLineAsync();
+        await reader.ReadLineAsync();
+        await reader.ReadLineAsync();
+
+        string? line;
+        while ((line = await reader.ReadLineAsync()) != null)
+        {
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                continue;
+            }
+
+            partLists[currentPart].Add(line);
+            totalLinesRead++;
+
+            if (totalLinesRead >= linesPerPart && currentPart < numberOfParts - 1)
+            {
+                int partIndex = currentPart;
+                processTasks[partIndex] = Task.Run(() => ProcessList(partLists[partIndex]));
+
+                currentPart++;
+                totalLinesRead = 0;
+            }
+        }
+
+        // Handle the last part
+        processTasks[currentPart] = Task.Run(() => ProcessList(partLists[currentPart]));
+
+        // Wait for all processing tasks to complete
+        await Task.WhenAll(processTasks.Where(t => t != null));
+        stopwatch.Stop();
+        TimeSpan elapsed = stopwatch.Elapsed;
+        Console.WriteLine($"Total Elapsed time after Restart: {elapsed}");
+
+        return Ok("Data uploaded, split, and processed successfully.");
+    }
+
+    private async Task ProcessList(List<string> lines)
+    {
+        var records = new List<DataModel>();
+
+        foreach (var line in lines)
+        {
+            var columns = line.Split(',');
+
+            if (columns.Length < 14) continue;  // Skip invalid lines
+
+            records.Add(new DataModel
+            {
+                Email_id = columns[0],
+                Name = columns[1],
+                Country = columns[2],
+                State = columns[3],
+                City = columns[4],
+                Telephone_number = (int)Int64.Parse(columns[5]),
+                Address_line_1 = columns[6],
+                Address_line_2 = columns[7],
+                Date_of_birth = columns[8],
+                Gross_salary_FY2019_20 = (int)Int64.Parse(columns[9]),
+                Gross_salary_FY2020_21 = (int)Int64.Parse(columns[10]),
+                Gross_salary_FY2021_22 = (int)Int64.Parse(columns[11]),
+                Gross_salary_FY2022_23 = (int)Int64.Parse(columns[12]),
+                Gross_salary_FY2023_24 = (int)Int64.Parse(columns[13])
+            });
+
+            if (records.Count >= 10000)  // Process in batches
+            {
+                await ConvertToQuery(records);
+                records.Clear();
+            }
+        }
+
+        if (records.Count > 0)
+        {
+            await ConvertToQuery(records);
+        }
+    }
+
+
+
+
+    [HttpPost("uploadAndSplitStream2")]
+    public async Task<IActionResult> UploadAndSplitStream2()
+    {
+        Console.WriteLine("----------------------------------------Time pass--");
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
+
+        string uploadPath = Path.Combine("C:\\ProgramData\\MySQL2\\MySQL Server 8.0\\Uploads\\", "uploads");
+        Directory.CreateDirectory(uploadPath);
+        Console.WriteLine(uploadPath);
+
+        int numberOfParts = 4;
+        var partFiles = new string[numberOfParts];
+        var partStreams = new StreamWriter[numberOfParts];
+        var processTasks = new Task[numberOfParts];
+
+        // Initialize part files and streams
+        for (int i = 0; i < numberOfParts; i++)
+        {
+            partFiles[i] = Path.Combine(uploadPath, $"part_{i}.csv");
+            partStreams[i] = new StreamWriter(partFiles[i]);
+        }
+
+        using var reader = new StreamReader(Request.Body);
+        int currentPart = 0;
+        long totalLinesRead = 0;
+        long linesPerPart = 25000;
+
+        // Skip the first few lines (e.g., headers)
+        Console.WriteLine(await reader.ReadLineAsync());  // Adjust the number of skipped lines based on your file
+        Console.WriteLine(await reader.ReadLineAsync());
+        Console.WriteLine(await reader.ReadLineAsync());
+        Console.WriteLine(await reader.ReadLineAsync());
+        Console.WriteLine(await reader.ReadLineAsync());
+
+        string? line;
+        while ((line = await reader.ReadLineAsync()) != null)
+        {
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                continue;
+            }
+            var columns = line.Split(',');
+
+            if (columns.Length < 14) continue;  // Skip invalid lines
+
+            await partStreams[currentPart].WriteLineAsync(line);
+            totalLinesRead++;
+
+            // Switch to next part if linesPerPart is reached
+            if (totalLinesRead >= linesPerPart && currentPart < numberOfParts - 1)
+            {
+                await partStreams[currentPart].FlushAsync();
+                partStreams[currentPart].Dispose();
+
+                int partIndex = currentPart;
+                processTasks[partIndex] = Task.Run(() => ProcessFile2(partFiles[partIndex]));
+
+                currentPart++;
+                totalLinesRead = 0;
+            }
+        }
+
+        // Handle the last part
+        await partStreams[currentPart].FlushAsync();
+        partStreams[currentPart].Dispose();
+        processTasks[currentPart] = Task.Run(() => ProcessFile2(partFiles[currentPart]));
+
+        // Wait for all processing tasks to complete
+        await Task.WhenAll(processTasks.Where(t => t != null));
+        stopwatch.Stop();
+        TimeSpan elapsed = stopwatch.Elapsed;
+        Console.WriteLine($"Total Elapsed time after Restart: {elapsed}");
+
+        return Ok("File uploaded, split, and processed successfully.");
+
+    }
+
+    private async Task ProcessFile2(string filePath)
+    {
+        try
+        {
+            // Simulate processing using LOAD DATA INFILE
+            var connectionString = "server=localhost;port=3306;user=root;password=root;database=training";  // Replace with your actual connection string
+
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+
+                var loadQuery = $@"
+                LOAD DATA INFILE '{filePath.Replace("\\", "/")}'
+                INTO TABLE usertest2
+                FIELDS TERMINATED BY ',' 
+                LINES TERMINATED BY '\n'; ";
+    
+            using (var command = new MySqlCommand(loadQuery, connection))
+                {
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
+
+                    command.ExecuteNonQuery();
+                    TimeSpan elapsed = stopwatch.Elapsed;
+                    Console.WriteLine($"Total time for execution queue {elapsed}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error processing file {filePath}: {ex.Message}");
+        }
+    }
+
+
 
 }

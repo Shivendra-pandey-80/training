@@ -1,66 +1,51 @@
-using System.Text;
 using RabbitMQ.Client;
+using System;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace learning.Services;
-
-
-public class RabbitMQPublisher
+public class RabbitMQPublisher : IDisposable
 {
+    private readonly IConnection _connection;
+    private readonly IModel _channel;
+    private int _currentQueueIndex = 0;
+    private const int QueueCount = 10;
 
-    private readonly RabbitMQConsumer consumer;
-
-    private readonly IConnectionFactory connectionFactory;
-    private readonly IConnection connection;
-    private readonly IModel channel;
-
-    public int currQueueIndex;
-
-    public RabbitMQPublisher(IConnectionFactory _connectionFactory, RabbitMQConsumer _consumer)
+    public RabbitMQPublisher(string hostName)
     {
+        var factory = new ConnectionFactory() { HostName = hostName };
+        _connection = factory.CreateConnection();
+        _channel = _connection.CreateModel();
 
-        //constructor
-        connectionFactory = _connectionFactory;
-        connection = connectionFactory.CreateConnection();
-        channel = connection.CreateModel();
-        consumer = _consumer;
-
-        var numberOfQueues = 5;
-        currQueueIndex = 0;
-
-        for (int i = 0; i < numberOfQueues; i++)
+        // Declare queues
+        for (int i = 0; i < QueueCount; i++)
         {
-            channel.QueueDeclare(queue: $"queue{i}",
-                     durable: false,
-                     exclusive: false,
-                     autoDelete: false,
-                     arguments: null);
-
+            _channel.QueueDeclare(queue: $"queue{i}", durable: false, exclusive: false, autoDelete: false, arguments: null);
         }
     }
 
-    public async void  SendChunk(string chunks)
+    public async Task SendChunk(string chunk)
     {
+        var body = Encoding.UTF8.GetBytes(chunk);
 
-        if (currQueueIndex == 5)
-        {
-            currQueueIndex = 0;
+        _channel.BasicPublish(exchange: string.Empty,
+                              routingKey: $"queue{_currentQueueIndex}",
+                              basicProperties: null,
+                              body: body);
+
+        Console.WriteLine($"Sent chunk to queue{_currentQueueIndex}");
+
+        _currentQueueIndex ++;
+        if (_currentQueueIndex==QueueCount){
+            _currentQueueIndex =0;
         }
-        var body = Encoding.UTF8.GetBytes(chunks);
 
-        // var properties = channel.CreateBasicProperties();
-        // properties.Persistent = true;
-
-        channel.BasicPublish(exchange: string.Empty,
-                             routingKey: $"queue{currQueueIndex}",
-                             basicProperties: null,
-                             body: body);
-
-        consumer.StartListeningToQueue(currQueueIndex);
-
-        currQueueIndex += 1;
-
+        // Simulate some processing time
+        await Task.Delay(00);
     }
 
-
+    public void Dispose()
+    {
+        _channel?.Dispose();
+        _connection?.Dispose();
+    }
 }
-
