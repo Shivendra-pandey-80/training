@@ -32,7 +32,7 @@ public class RabbitMQPublisher : IDisposable
                               basicProperties: null,
                               body: body);
 
-        Console.WriteLine($"Sent chunk to queue{_currentQueueIndex}");
+        //Console.WriteLine($"Sent chunk to queue{_currentQueueIndex}");
 
         _currentQueueIndex ++;
         if (_currentQueueIndex==QueueCount){
@@ -40,7 +40,7 @@ public class RabbitMQPublisher : IDisposable
         }
 
         // Simulate some processing time
-        await Task.Delay(00);
+        await Task.Delay(100);
     }
 
     public void Dispose()

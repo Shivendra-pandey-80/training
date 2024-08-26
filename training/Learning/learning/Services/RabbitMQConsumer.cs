@@ -91,7 +91,7 @@ public class RabbitMQConsumer : IDisposable
         await Task.WhenAll(pendingTasks);
         stopwatch.Stop();
         TimeSpan elapsed = stopwatch.Elapsed;
-        Console.WriteLine($"Total Elapsed time for queue{queueNumber}: {elapsed}");
+        //Console.WriteLine($"Total Elapsed time for queue{queueNumber}: {elapsed}");
     }
 
     private async Task InsertToDB(string query, int queueN)
@@ -100,14 +100,14 @@ public class RabbitMQConsumer : IDisposable
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
 
-        Console.WriteLine($"Inserting batch query from queue{queueN}");
+        //Console.WriteLine($"Inserting batch query from queue{queueN}");
         try
         {
             
             using (var connection = new MySqlConnection(_dbConnString))
             {
                 TimeSpan elapsed = stopwatch.Elapsed;
-                Console.WriteLine($"Total time for connection queue{queueN}: {elapsed}");
+                //Console.WriteLine($"Total time for connection queue{queueN}: {elapsed}");
                 await connection.OpenAsync();
 
 
@@ -120,25 +120,25 @@ public class RabbitMQConsumer : IDisposable
                         using (var command = new MySqlCommand(query, connection, transaction))
                         {
                             elapsed = stopwatch.Elapsed;
-                            Console.WriteLine($"Total time for command queue{queueN}: {elapsed}");
+                            //Console.WriteLine($"Total time for command queue{queueN}: {elapsed}");
                             command.CommandTimeout = 60; // Adjust as needed
                             command.ExecuteNonQuery();
                             elapsed = stopwatch.Elapsed;
-                            Console.WriteLine($"Total time for execution queue{queueN}: {elapsed}");
+                            //Console.WriteLine($"Total time for execution queue{queueN}: {elapsed}");
                         }
 
                         await transaction.CommitAsync();
-                        Console.WriteLine($"Executed batch query from queue{queueN}");
+                        //Console.WriteLine($"Executed batch query from queue{queueN}");
 
-                        Console.WriteLine(((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds());
+                        //Console.WriteLine(((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds());
                         stopwatch.Stop();
                         elapsed = stopwatch.Elapsed;
-                        Console.WriteLine($"Total Elapsed time for queue{queueN}: {elapsed}");
+                        //Console.WriteLine($"Total Elapsed time for transaction queue{queueN}: {elapsed}");
                     }
                     catch (Exception ex)
                     {
                         await transaction.RollbackAsync();
-                        Console.WriteLine($"Error executing batch query for queue{queueN}: {ex.Message}");
+                        //Console.WriteLine($"Error executing batch query for queue{queueN}: {ex.Message}");
                         throw;
                     }
                 }
