@@ -1,34 +1,19 @@
 export class UploadAndFetch {
-    constructor() {
-        document.querySelector('form').addEventListener('submit', (e) => this.handleFileUpload(e));
-        this.data = null;
-    }
+  constructor(sheet) {
+    this.sheet = sheet;
+    console.log(this.sheet)
+    console.log(this.sheet.sparsematrix);
+    
+    this.data = null;
+  }
 
-    async handleFileUpload(e) {
-        e.preventDefault();
+  showTableCreationPopup(columns, tempFilePath) {
+    console.log("hello");
+    const popup = document.createElement("div");
+    popup.className = "popup";
 
-        const formData = new FormData(e.target);
-        console.log(formData);
-        
-        const response = await fetch('http://localhost:5228/api/Data/uploadAndCreateTable', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            this.showTableCreationPopup(data.columns, data.tempFilePath);
-        } else {
-            alert('Error uploading file');
-        }
-    }
-
-    showTableCreationPopup(columns, tempFilePath) {
-        const popup = document.createElement('div');
-        popup.className = 'popup';
-
-        const form = document.createElement('form');
-        form.innerHTML = `
+    const form = document.createElement("form");
+    form.innerHTML = `
             <h2>Create Table</h2>
             <label for="tableName">Table Name:</label>
             <input type="text" id="tableName" required>
@@ -42,7 +27,9 @@ export class UploadAndFetch {
                     </tr>
                 </thead>
                 <tbody>
-                    ${columns.map((column, index) => `
+                    ${columns
+                      .map(
+                        (column, index) => `
                         <tr>
                             <td>${column}</td>
                             <td>
@@ -60,85 +47,117 @@ export class UploadAndFetch {
                                 <input type="radio" name="primary_key" value="${index}">
                             </td>
                         </tr>
-                    `).join('')}
+                    `
+                      )
+                      .join("")}
                 </tbody>
             </table>
             <button type="submit">Create Table and Upload Data</button>
         `;
 
-        popup.appendChild(form);
-        document.body.appendChild(popup);
+    popup.appendChild(form);
+    document.body.appendChild(popup);
 
-        form.addEventListener('submit', (e) => this.handleTableCreation(e, columns, tempFilePath, popup));
-    }
+    form.addEventListener("submit", (e) =>
+      this.handleTableCreation(e, columns, tempFilePath, popup)
+    );
+  }
 
-    async handleTableCreation(e, columns, tempFilePath, popup) {
-        e.preventDefault();
 
-        const tableName = document.getElementById('tableName').value;
-        const columnDefinitions = columns.map((column, index) => ({
-            name: column,
-            type: document.querySelector(`[name="type_${index}"]`).value,
-            allowNull: document.querySelector(`[name="null_${index}"]`).checked,
-            isPrimaryKey: document.querySelector(`[name="primary_key"]:checked`)?.value == index
-        }));
 
-        const response = await fetch('http://localhost:5228/api/Data/createTableAndUpload1', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                tableName,
-                columns: columnDefinitions,
-                tempFilePath
-            })
+  async handleTableCreation(e, columns, tempFilePath, popup) {
+    e.preventDefault();
+
+    const tableName = document.getElementById("tableName").value;
+    const columnDefinitions = columns.map((column, index) => ({
+      name: column,
+      type: document.querySelector(`[name="type_${index}"]`).value,
+      allowNull: document.querySelector(`[name="null_${index}"]`).checked,
+      isPrimaryKey:
+        document.querySelector(`[name="primary_key"]:checked`)?.value == index,
+    }));
+
+    const response = await fetch(
+      "http://localhost:5228/api/Data/createTableAndUpload1",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tableName,
+          columns: columnDefinitions,
+          tempFilePath,
+        }),
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      this.data = data;
+      console.log(data);
+      alert("Table created and data upload started");
+      popup.remove();
+      this.checkMiscellaneousRows(tableName);
+
+      for (let i = 1; i <= this.data.length; i++) {
+        let j = 1;
+
+        Object.keys(this.data[i-1]).forEach((key) => {
+          this.sheet.sparsematrix.setCell(i, j, this.data[i][key]);
+          console.log(i,j,this.data[i][key])
+          j++;
         });
+      }
 
-        if (response.ok) {
-            const data = await response.json();
-            this.data = data;
-            console.log(data);
-            alert('Table created and data upload started');
-            popup.remove();
-            this.checkMiscellaneousRows(tableName);
-        } else {
-            alert('Error creating table and uploading data');
-        }
+      this.sheet.sheetRenderer.draw();
+
+
+    //   for (let i = 0; i < this.data.length; i++) {
+    //     for (let j = 0; j < this.data[i].length; j++) {
+    //       const targetRow = i;
+    //       const targetCol = j;
+    //       const value = pastedData[i][j] !== undefined ? pastedData[i][j] : ""; // Ensure value is never undefined
+    //       console.log(targetRow, targetCol, value);
+    //     }
+    //   }
+      console.log("end");
+    } else {
+      alert("Error creating table and uploading data");
     }
+  }
 
-    async checkMiscellaneousRows(tableName) {
-        try {
-            const response = await fetch('http://localhost:5228/api/Data/checkMiscellaneousRows', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ tableName })
-            });
+  async checkMiscellaneousRows(tableName) {
+    try {
+      const response = await fetch("http://localhost:5228/api/Data/cmr", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-            const data = await response.json();
-            if (data.hasMiscellaneousRows) {
-                this.showMiscellaneousRowsPopup(tableName);
-            } else {
-                alert('Data upload completed successfully');
-            }
-        } catch (error) {
-            console.error('Error checking for miscellaneous rows:', error);
-            alert('Error checking for miscellaneous rows');
-        }
+      const data = await response.json();
+      if (data.hasMiscellaneousRows) {
+        this.showMiscellaneousRowsPopup(tableName);
+      } else {
+        alert("Data upload completed successfully");
+      }
+    } catch (error) {
+      console.error("Error checking for miscellaneous rows:", error);
+      alert("Error checking for miscellaneous rows");
     }
+  }
 
-    showMiscellaneousRowsPopup(tableName) {
-        const popup = document.createElement('div');
-        popup.className = 'popup';
+  showMiscellaneousRowsPopup(tableName) {
+    const popup = document.createElement("div");
+    popup.className = "popup";
 
-        const form = document.createElement('form');
-        form.innerHTML = `
+    const form = document.createElement("form");
+    form.innerHTML = `
             <h2>Miscellaneous Rows Detected</h2>
             <p>Some rows have more columns than expected. How would you like to handle them?</p>
             <select id="miscAction">
@@ -157,58 +176,81 @@ export class UploadAndFetch {
             <button type="submit">Process Miscellaneous Rows</button>
         `;
 
-        popup.appendChild(form);
-        document.body.appendChild(popup);
+    popup.appendChild(form);
+    document.body.appendChild(popup);
 
-        const actionSelect = document.getElementById('miscAction');
-        const newColumnsDiv = document.getElementById('newColumnsDiv');
-        const columnCountDiv = document.getElementById('columnCountDiv');
+    const actionSelect = document.getElementById("miscAction");
+    const newColumnsDiv = document.getElementById("newColumnsDiv");
+    const columnCountDiv = document.getElementById("columnCountDiv");
 
-        actionSelect.addEventListener('change', () => {
-            newColumnsDiv.style.display = actionSelect.value === 'alterTable' ? 'block' : 'none';
-            columnCountDiv.style.display = actionSelect.value === 'truncate' ? 'block' : 'none';
-        });
+    actionSelect.addEventListener("change", () => {
+      newColumnsDiv.style.display =
+        actionSelect.value === "alterTable" ? "block" : "none";
+      columnCountDiv.style.display =
+        actionSelect.value === "truncate" ? "block" : "none";
+    });
 
-        form.addEventListener('submit', (e) => this.handleMiscellaneousRows(e, actionSelect, newColumnsDiv, columnCountDiv, tableName, popup));
-    }
+    form.addEventListener("submit", (e) =>
+      this.handleMiscellaneousRows(
+        e,
+        actionSelect,
+        newColumnsDiv,
+        columnCountDiv,
+        tableName,
+        popup
+      )
+    );
+  }
 
-    async handleMiscellaneousRows(e, actionSelect, newColumnsDiv, columnCountDiv, tableName, popup) {
-        e.preventDefault();
+  async handleMiscellaneousRows(
+    e,
+    actionSelect,
+    newColumnsDiv,
+    columnCountDiv,
+    tableName,
+    popup
+  ) {
+    e.preventDefault();
 
-        const action = actionSelect.value;
-        const newColumns = newColumnsDiv.style.display === 'block'
-            ? document.getElementById('newColumns').value.split(',').map(c => c.trim())
-            : [];
-        const columnCount = columnCountDiv.style.display === 'block'
-            ? parseInt(document.getElementById('columnCount').value)
-            : null;
+    const action = actionSelect.value;
+    const newColumns =
+      newColumnsDiv.style.display === "block"
+        ? document
+            .getElementById("newColumns")
+            .value.split(",")
+            .map((c) => c.trim())
+        : [];
+    const columnCount =
+      columnCountDiv.style.display === "block"
+        ? parseInt(document.getElementById("columnCount").value)
+        : null;
 
-        try {
-            const response = await fetch('http://localhost:5228/api/Data/handleMiscellaneousRows', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    action,
-                    tableName,
-                    newColumns,
-                    columnCount
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            alert('Miscellaneous rows processed successfully');
-            popup.remove();
-        } catch (error) {
-            console.error('Error processing miscellaneous rows:', error);
-            alert('Error processing miscellaneous rows');
+    try {
+      const response = await fetch(
+        "http://localhost:5228/api/Data/handleMiscellaneousRows",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            action,
+            tableName,
+            newColumns,
+            columnCount,
+          }),
         }
-    }
-}
+      );
 
-// Instantiate the class to bind events and handle file upload and table creation
-const uploadAndFetch = new UploadAndFetch();
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      alert("Miscellaneous rows processed successfully");
+      popup.remove();
+    } catch (error) {
+      console.error("Error processing miscellaneous rows:", error);
+      alert("Error processing miscellaneous rows");
+    }
+  }
+}

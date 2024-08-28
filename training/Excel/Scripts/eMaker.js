@@ -1,5 +1,7 @@
 import {SheetRenderer} from './SheetRenderer.js' // Adjust the path if necessary
 import {SparseMatrix} from './ds.js'
+import { UploadAndFetch } from './uploadandfetch.js';
+
 
 export class Sheet {
     constructor(name, row, col, index) {
@@ -10,8 +12,9 @@ export class Sheet {
         this.index = index;
         this.elements = this.createElements();
         setTimeout(() => {
-            this.sparsematrix = new SparseMatrix(this);   
+            this.sparsematrix = new SparseMatrix(this);  
             this.renderer = new SheetRenderer(this);   
+            this.UploadAndFetch = new UploadAndFetch(this); 
         }, 0);
     }
 
@@ -103,14 +106,31 @@ export class Sheet {
 
 
 export class Emaker {
-    constructor(excel,row,col) {
+    constructor(excel,row,col,Excel) {
         this.row  = row;
         this.col = col;
         this.excel = excel;
         this.sheets = [{ name: 'Sheet1', instance: new Sheet('Sheet1', this.row, this.col, 0) }];
+        this.Excel = Excel;
         this.activeSheetIndex = 0;
         this.createExcel();
+        this.handleEvents();
+        this.Excel.updateCurrExcel(this.row,this.col,this.sheets[this.activeSheetIndex])
     }
+
+    
+    handleMouseDown(e){
+        e.preventDefault();
+        this.Excel.updateCurrExcel(this.row,this.col,this.sheets[this.activeSheetIndex]);
+    }
+
+    handleEvents(){
+        this.excel.addEventListener("click",(e)=>{
+            this.handleMouseDown(e);
+        })
+    }
+
+    
 
     createExcel() {
         this.excel.innerHTML = '';

@@ -129,7 +129,6 @@ export class Scroll {
     
         if (scrollBar) {
             const expandFactor = 1.2; // Factor to expand content
-            const shrinkFactor = 0.8; // Factor to shrink content
 
             if (direction === 'horizontal') {
                 if (this.scrollX >= 0.8 * (this.maxScrollX - this.sheetRenderer.canvases.spreadsheet.clientWidth)) {

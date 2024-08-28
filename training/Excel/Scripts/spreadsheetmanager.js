@@ -3,6 +3,7 @@ export class SpreadsheetManager {
         this.cellFunctionality = cellFunctionality;
         this.sheetRenderer = this.cellFunctionality.sheetRenderer;
         this.sparseMatrix = this.cellFunctionality.sheetRenderer.sparseMatrix;
+      
 
         // Attach event listener to input element to update SparseMatrix on input change
         this.setupInputEventListener();
