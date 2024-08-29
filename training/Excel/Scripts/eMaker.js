@@ -13,8 +13,8 @@ export class Sheet {
         this.elements = this.createElements();
         setTimeout(() => {
             this.sparsematrix = new SparseMatrix(this);  
-            this.renderer = new SheetRenderer(this);   
             this.UploadAndFetch = new UploadAndFetch(this); 
+            this.renderer = new SheetRenderer(this);  
         }, 0);
     }
 

@@ -4,6 +4,7 @@ using learning.Models;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System.IO;
+using System.Data;
 
 namespace learning.Controllers;
 
@@ -32,113 +33,114 @@ public class DataController : ControllerBase
         publisher = _publisher;
     }
 
-    [HttpGet]// identifies a action as GET
-    public ActionResult<List<DataModel>> GetData()
-    {
-        //this method returns a actionresult (status code) and list of datamodels
+    // [HttpGet]// identifies a action as GET
+    // public ActionResult<List<DataModel>> GetData()
+    // {
+    //     //this method returns a actionresult (status code) and list of datamodels
 
-        var listOfData = new List<DataModel> { };//defining a list of datamodels with initally nothing in it
-
-
-        //using is used to dispose the variable once finished using it which is used only inside {}
-        using (var connection = new MySqlConnection(dbConnString))
-        {
-            connection.Open();
-
-            var query = "SELECT * FROM user2";//creating the syntax
-
-            using (var command = new MySqlCommand(query, connection))
-            {
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-
-                        var data = new DataModel
-                        {
-                            Email_id = reader.GetString("Email_id"),
-                            Name = reader.GetString("Name"),
-                            Country = reader.GetString("Country"),
-                            State = reader.GetString("State"),
-                            City = reader.GetString("City"),
-                            Telephone_number = (int)reader.GetInt64("Telephone_number"),
-                            Address_line_1 = reader.GetString("Address_line_1"),
-                            Address_line_2 = reader.GetString("Address_line_2"),
-                            Date_of_birth = reader.GetString("Date_of_birth"),
-                            Gross_salary_FY2019_20 = (int)reader.GetInt64("Gross_salary_FY2019_20"),
-                            Gross_salary_FY2020_21 = (int)reader.GetInt64("Gross_salary_FY2020_21"),
-                            Gross_salary_FY2021_22 = (int)reader.GetInt64("Gross_salary_FY2021_22"),
-                            Gross_salary_FY2022_23 = (int)reader.GetInt64("Gross_salary_FY2022_23"),
-                            Gross_salary_FY2023_24 = (int)reader.GetInt64("Gross_salary_FY2023_24")
-
-                        };
-
-                        listOfData.Add(data);
-                    }
-
-                }
-
-            }
+    //     var listOfData = new List<DataModel> { };//defining a list of datamodels with initally nothing in it
 
 
-            return Ok(listOfData);
-        }
+    //     //using is used to dispose the variable once finished using it which is used only inside {}
+    //     using (var connection = new MySqlConnection(dbConnString))
+    //     {
+    //         connection.Open();
 
-    }
+    //         var query = "SELECT * FROM user2";//creating the syntax
+
+    //         using (var command = new MySqlCommand(query, connection))
+    //         {
+    //             using (var reader = command.ExecuteReader())
+    //             {
+    //                 while (reader.Read())
+    //                 {
+
+    //                     var data = new DataModel
+    //                     {
+    //                         Email_id = reader.GetString("Email_id"),
+    //                         Name = reader.GetString("Name"),
+    //                         Country = reader.GetString("Country"),
+    //                         State = reader.GetString("State"),
+    //                         City = reader.GetString("City"),
+    //                         Telephone_number = (int)reader.GetInt64("Telephone_number"),
+    //                         Address_line_1 = reader.GetString("Address_line_1"),
+    //                         Address_line_2 = reader.GetString("Address_line_2"),
+    //                         Date_of_birth = reader.GetString("Date_of_birth"),
+    //                         Gross_salary_FY2019_20 = (int)reader.GetInt64("Gross_salary_FY2019_20"),
+    //                         Gross_salary_FY2020_21 = (int)reader.GetInt64("Gross_salary_FY2020_21"),
+    //                         Gross_salary_FY2021_22 = (int)reader.GetInt64("Gross_salary_FY2021_22"),
+    //                         Gross_salary_FY2022_23 = (int)reader.GetInt64("Gross_salary_FY2022_23"),
+    //                         Gross_salary_FY2023_24 = (int)reader.GetInt64("Gross_salary_FY2023_24")
+
+    //                     };
+
+    //                     listOfData.Add(data);
+    //                 }
+
+    //             }
+
+    //         }
+
+
+    //         return Ok(listOfData);
+    //     }
+
+    // }
+
 
     // POST method to add a new DataModel
-    [HttpPost("insertSingleData")]
-    public async Task<IActionResult> PostData(DataModel dataModel)
-    {
-        if (dataModel == null)
-        {
-            return BadRequest("DataModel object is null.");
-        }
+    // [HttpPost("insertSingleData")]
+    // public async Task<IActionResult> PostData(DataModel dataModel)
+    // {
+    //     if (dataModel == null)
+    //     {
+    //         return BadRequest("DataModel object is null.");
+    //     }
 
-        try
-        {
-            using (var connection = new MySqlConnection(dbConnString))
-            {
-                await connection.OpenAsync();
+    //     try
+    //     {
+    //         using (var connection = new MySqlConnection(dbConnString))
+    //         {
+    //             await connection.OpenAsync();
 
-                var query = @"
-                        INSERT INTO usertest2 
-                        (Email_id, Name, Country, State, City, Telephone_number, Address_line_1, Address_line_2, Date_of_birth, Gross_salary_FY2019_20, Gross_salary_FY2020_21, Gross_salary_FY2021_22, Gross_salary_FY2022_23, Gross_salary_FY2023_24) 
-                        VALUES 
-                        (@Email_id, @Name, @Country, @State, @City, @Telephone_number, @Address_line_1, @Address_line_2, @Date_of_birth, @Gross_salary_FY2019_20, @Gross_salary_FY2020_21, @Gross_salary_FY2021_22, @Gross_salary_FY2022_23, @Gross_salary_FY2023_24);";
+    //             var query = @"
+    //                     INSERT INTO usertest2 
+    //                     (Email_id, Name, Country, State, City, Telephone_number, Address_line_1, Address_line_2, Date_of_birth, Gross_salary_FY2019_20, Gross_salary_FY2020_21, Gross_salary_FY2021_22, Gross_salary_FY2022_23, Gross_salary_FY2023_24) 
+    //                     VALUES 
+    //                     (@Email_id, @Name, @Country, @State, @City, @Telephone_number, @Address_line_1, @Address_line_2, @Date_of_birth, @Gross_salary_FY2019_20, @Gross_salary_FY2020_21, @Gross_salary_FY2021_22, @Gross_salary_FY2022_23, @Gross_salary_FY2023_24);";
 
-                using (var command = new MySqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Email_id", dataModel.Email_id);
-                    command.Parameters.AddWithValue("@Name", dataModel.Name);
-                    command.Parameters.AddWithValue("@Country", dataModel.Country);
-                    command.Parameters.AddWithValue("@State", dataModel.State);
-                    command.Parameters.AddWithValue("@City", dataModel.City);
-                    command.Parameters.AddWithValue("@Telephone_number", dataModel.Telephone_number);
-                    command.Parameters.AddWithValue("@Address_line_1", dataModel.Address_line_1);
-                    command.Parameters.AddWithValue("@Address_line_2", dataModel.Address_line_2);
-                    command.Parameters.AddWithValue("@Date_of_birth", dataModel.Date_of_birth);
-                    command.Parameters.AddWithValue("@Gross_salary_FY2019_20", dataModel.Gross_salary_FY2019_20);
-                    command.Parameters.AddWithValue("@Gross_salary_FY2020_21", dataModel.Gross_salary_FY2020_21);
-                    command.Parameters.AddWithValue("@Gross_salary_FY2021_22", dataModel.Gross_salary_FY2021_22);
-                    command.Parameters.AddWithValue("@Gross_salary_FY2022_23", dataModel.Gross_salary_FY2022_23);
-                    command.Parameters.AddWithValue("@Gross_salary_FY2023_24", dataModel.Gross_salary_FY2023_24);
+    //             using (var command = new MySqlCommand(query, connection))
+    //             {
+    //                 command.Parameters.AddWithValue("@Email_id", dataModel.Email_id);
+    //                 command.Parameters.AddWithValue("@Name", dataModel.Name);
+    //                 command.Parameters.AddWithValue("@Country", dataModel.Country);
+    //                 command.Parameters.AddWithValue("@State", dataModel.State);
+    //                 command.Parameters.AddWithValue("@City", dataModel.City);
+    //                 command.Parameters.AddWithValue("@Telephone_number", dataModel.Telephone_number);
+    //                 command.Parameters.AddWithValue("@Address_line_1", dataModel.Address_line_1);
+    //                 command.Parameters.AddWithValue("@Address_line_2", dataModel.Address_line_2);
+    //                 command.Parameters.AddWithValue("@Date_of_birth", dataModel.Date_of_birth);
+    //                 command.Parameters.AddWithValue("@Gross_salary_FY2019_20", dataModel.Gross_salary_FY2019_20);
+    //                 command.Parameters.AddWithValue("@Gross_salary_FY2020_21", dataModel.Gross_salary_FY2020_21);
+    //                 command.Parameters.AddWithValue("@Gross_salary_FY2021_22", dataModel.Gross_salary_FY2021_22);
+    //                 command.Parameters.AddWithValue("@Gross_salary_FY2022_23", dataModel.Gross_salary_FY2022_23);
+    //                 command.Parameters.AddWithValue("@Gross_salary_FY2023_24", dataModel.Gross_salary_FY2023_24);
 
-                    await command.ExecuteNonQueryAsync();
-                }
-            }
+    //                 await command.ExecuteNonQueryAsync();
+    //             }
+    //         }
 
-            return CreatedAtAction(nameof(GetData), new { email_id = dataModel.Email_id }, dataModel);
-            // 1. Action name to retrieve the resource
-            // 2. Route values (identifier of the newly created resource)
-            // 3. The newly created resource to return in the response body
-        }
-        catch (Exception ex)
-        {
-            // Handle exceptions (e.g., log the error)
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
-    }
+    //         return CreatedAtAction(nameof(GetData), new { email_id = dataModel.Email_id }, dataModel);
+    //         // 1. Action name to retrieve the resource
+    //         // 2. Route values (identifier of the newly created resource)
+    //         // 3. The newly created resource to return in the response body
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         // Handle exceptions (e.g., log the error)
+    //         return StatusCode(500, $"Internal server error: {ex.Message}");
+    //     }
+    // }
 
 
     //POST method to add multiple DataModels
@@ -921,8 +923,10 @@ public class DataController : ControllerBase
         }
     }
 
+
+
     [HttpPost("createTableAndUpload1")]
-    public async Task<IActionResult> CreateTableAndUpload1([FromBody] TableCreationRequest request)
+    public async Task<ActionResult> CreateTableAndUpload1([FromBody] TableCreationRequest request)
     {
         Console.WriteLine(((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds());
         try
@@ -933,12 +937,10 @@ public class DataController : ControllerBase
             await UploadAndSplitStream(request.TableName, request.Columns.Count, request.TempFilePath);
             Console.WriteLine("Hello");
 
-            List<DataModel>  Data = await FetchData(request.TableName);
-            Console.WriteLine(Data);
 
             // Delete the temporary file
             System.IO.File.Delete(request.TempFilePath);
-            return Ok(Data);
+            return Ok("File saved");
         }
         catch (Exception ex)
         {
@@ -1047,9 +1049,9 @@ public class DataController : ControllerBase
             FIELDS TERMINATED BY ',' 
             LINES TERMINATED BY '\r\n'; ";
             await publisher.SendChunk(loadQuery);
-          
 
-               
+
+
         }
         catch (Exception ex)
         {
@@ -1059,108 +1061,60 @@ public class DataController : ControllerBase
 
 
 
-
-
-
-
-
-
-    private async Task<List<DataModel>> FetchData(string tablename)
+    [HttpPost("fetchData")]
+    public async Task<ActionResult<List<Dictionary<string, object>>>> GetData([FromBody] Fetchdata request)
     {
-        //this method returns a actionresult (status code) and list of datamodels
-
-        var listOfData = new List<DataModel> { };//defining a list of datamodels with initally nothing in it
-
-
-        //using is used to dispose the variable once finished using it which is used only inside {}
+        // Console.WriteLine("boris");
+        var listOfData = new List<Dictionary<string, object>>();
+        // Console.WriteLine(request.Offset);
         using (var connection = new MySqlConnection(dbConnString))
         {
-            connection.Open();
+            await connection.OpenAsync();
 
-            var query = $@"SELECT *
-            FROM {tablename}
-            LIMIT 10 OFFSET 0";//creating the syntax
+            // Sanitize the table name to prevent SQL injection
+            string sanitizedTableName = MySqlHelper.EscapeString(request.TableName);
+            // Console.WriteLine(sanitizedTableName);
 
-            Console.WriteLine(query);
+            var query = $"SELECT * FROM `{sanitizedTableName}` LIMIT @limit OFFSET @offset";
+
             using (var command = new MySqlCommand(query, connection))
             {
-                Console.WriteLine(command);
-                using (var reader = command.ExecuteReader())
+                command.Parameters.AddWithValue("@limit", request.Limit);
+                command.Parameters.AddWithValue("@offset", request.Offset);
+                Console.WriteLine(query);
+
+                using (var reader = await command.ExecuteReaderAsync())
                 {
-                    while (reader.Read())
+                    while (await reader.ReadAsync())
                     {
-                        Console.WriteLine(reader);
-
-                        var data = new DataModel
+                        // Console.WriteLine(reader);
+                        var row = new Dictionary<string, object>();
+                        for (int i = 0; i < reader.FieldCount; i++)
                         {
-                            Email_id = reader.GetString("Email_id"),
-                            Name = reader.GetString("Name"),
-                            Country = reader.GetString("Country"),
-                            State = reader.GetString("State"),
-                            City = reader.GetString("City"),
-                            Telephone_number = (int)reader.GetInt64("Telephone_number"),
-                            Address_line_1 = reader.GetString("Address_line_1"),
-                            Address_line_2 = reader.GetString("Address_line_2"),
-                            Date_of_birth = reader.GetString("Date_of_birth"),
-                            Gross_salary_FY2019_20 = (int)reader.GetInt64("Gross_salary_FY2019_20"),
-                            Gross_salary_FY2020_21 = (int)reader.GetInt64("Gross_salary_FY2020_21"),
-                            Gross_salary_FY2021_22 = (int)reader.GetInt64("Gross_salary_FY2021_22"),
-                            Gross_salary_FY2022_23 = (int)reader.GetInt64("Gross_salary_FY2022_23"),
-                            Gross_salary_FY2023_24 = (int)reader.GetInt64("Gross_salary_FY2023_24")
-
-                        };
-
-                        listOfData.Add(data);
+                            string columnName = reader.GetName(i);
+                            Console.WriteLine(columnName);
+                            object value = reader.IsDBNull(i) ? null : reader.GetValue(i);
+                            row[columnName] = value;
+                        }
+                        listOfData.Add(row);
                     }
-
                 }
-
             }
-            Console.WriteLine(listOfData.Count);
-
-
-            return listOfData;
         }
+        
 
+        return Ok(listOfData);
     }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    [HttpPost("checkMiscellaneousRows")]
-    public IActionResult CheckMiscellaneousRows([FromBody] string tableName)
+    [HttpPost("cmr")]
+    public IActionResult Cmr()
     {
+        Console.WriteLine("inchedkmis");
         string miscFilePath = Path.Combine("C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\", "uploads", "miscellaneous.csv");
         bool hasMiscellaneousRows = System.IO.File.Exists(miscFilePath) && new FileInfo(miscFilePath).Length > 0;
-
+        Console.WriteLine("aftercheckmis");
         return Ok(new { hasMiscellaneousRows });
     }
 
@@ -1303,6 +1257,13 @@ public class DataController : ControllerBase
         public string? TableName { get; set; }
         public List<ColumnDefinition>? Columns { get; set; }
         public string? TempFilePath { get; set; }
+    }
+
+     public class Fetchdata
+    {
+        public string? TableName { get; set; }
+        public int? Limit { get; set; }
+        public int? Offset { get; set; }
     }
 
     public class ColumnDefinition

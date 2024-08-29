@@ -1,10 +1,12 @@
 export class UploadAndFetch {
   constructor(sheet) {
     this.sheet = sheet;
-    console.log(this.sheet)
-    console.log(this.sheet.sparsematrix);
-    
     this.data = null;
+    this.from = 0;
+    this.to = 100; // Initial batch size
+    this.tableName = "vikas";
+    this.columnDefinitions = null;
+    this.fetchMoreData();
   }
 
   showTableCreationPopup(columns, tempFilePath) {
@@ -68,8 +70,9 @@ export class UploadAndFetch {
   async handleTableCreation(e, columns, tempFilePath, popup) {
     e.preventDefault();
 
-    const tableName = document.getElementById("tableName").value;
-    const columnDefinitions = columns.map((column, index) => ({
+    this.tableName = document.getElementById("tableName").value;
+  
+    this.columnDefinitions = columns.map((column, index) => ({
       name: column,
       type: document.querySelector(`[name="type_${index}"]`).value,
       allowNull: document.querySelector(`[name="null_${index}"]`).checked,
@@ -85,47 +88,87 @@ export class UploadAndFetch {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          tableName,
-          columns: columnDefinitions,
+          tableName: this.tableName,
+          columns: this.columnDefinitions,
           tempFilePath,
         }),
       }
     );
 
     if (response.ok) {
-      const data = await response.json();
-      this.data = data;
-      console.log(data);
+      // const data = await response.json();
+      // this.data = data;
+      // console.log(data);
       alert("Table created and data upload started");
       popup.remove();
-      this.checkMiscellaneousRows(tableName);
+      this.checkMiscellaneousRows(this.tableName);
+      this.fetchMoreData()
 
-      for (let i = 1; i <= this.data.length; i++) {
-        let j = 1;
-
-        Object.keys(this.data[i-1]).forEach((key) => {
-          this.sheet.sparsematrix.setCell(i, j, this.data[i][key]);
-          console.log(i,j,this.data[i][key])
-          j++;
-        });
-      }
-
-      this.sheet.sheetRenderer.draw();
-
-
-    //   for (let i = 0; i < this.data.length; i++) {
-    //     for (let j = 0; j < this.data[i].length; j++) {
-    //       const targetRow = i;
-    //       const targetCol = j;
-    //       const value = pastedData[i][j] !== undefined ? pastedData[i][j] : ""; // Ensure value is never undefined
-    //       console.log(targetRow, targetCol, value);
-    //     }
-    //   }
+      
       console.log("end");
     } else {
       alert("Error creating table and uploading data");
     }
   }
+
+
+  async fetchMoreData() {
+    if (!this.tableName) {
+      throw new Error('Table name is not set. Please create a table first.');
+    }
+
+    try {
+      const response = await fetch(`http://localhost:5228/api/Data/fetchData`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          TableName: this.tableName,
+          Limit: this.to,
+          Offset: this.from
+        })
+      });
+
+
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const newData = await response.json();
+      this.data = this.data ? [...this.data, ...newData] : newData;
+      
+      // Update from and to for the next fetch
+      this.from = this.to;
+      this.to += 1000; // Increase by 10 each time, adjust as needed
+      Object.keys(this.data[0]).forEach((d, i) => {
+        this.sheet.sparsematrix.setCell(1, i+1, d);;
+      });
+      for (let i = 2; i <= this.data.length-1; i++) {
+        let j = 1;
+        
+        Object.keys(this.data[i-1]).forEach((key) => {
+          this.sheet.sparsematrix.setCell(i, j, this.data[i][key]);
+          // console.log(i,j,this.data[i][key])
+          j++;
+        });
+      }
+
+      // this.sheet.sheetRenderer.draw();
+
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  }
+
+
+
+
+
+
+
 
   async checkMiscellaneousRows(tableName) {
     try {

@@ -129,6 +129,7 @@ public class RabbitMQConsumer : IDisposable
 
                         await transaction.CommitAsync();
                         //Console.WriteLine($"Executed batch query from queue{queueN}");
+                        await connection.CloseAsync();
 
                         //Console.WriteLine(((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds());
                         stopwatch.Stop();

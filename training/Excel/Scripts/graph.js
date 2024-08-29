@@ -1,0 +1,186 @@
+export class Graph {
+
+    constructor(sheetRenderer) {
+        this.sheetRenderer = sheetRenderer;
+        this.cellFunctionality = this.sheetRenderer.cellFunctionality;
+
+        this.graphCanvasElement = document.getElementById("myChart");
+        this.graph = document.querySelector(".graph");
+        this.barGraphBtn = document.querySelector(".graph-bar-btn");
+        this.lineGraphBtn = document.querySelector(".graph-line-btn");
+        this.pieGraphBtn = document.querySelector(".graph-pie-btn");
+        this.graphCloseBtn = document.querySelector(".graph-close")
+
+        this.init()
+    }
+
+
+    init() {
+        this.barGraphBtn.addEventListener("click", () => {
+            this.graph.style.display = "inline-block";
+            this.drawBarGraph();  
+          });
+      
+          this.lineGraphBtn.addEventListener("click", () => {
+            this.graph.style.display = "inline-block";
+            this.drawLineGraph();
+          });
+      
+          this.pieGraphBtn.addEventListener("click", () => {
+            this.graph.style.display = "inline-block";
+            this.drawPieGraph();
+          });
+
+          this.graphCloseBtn.addEventListener("click",() => {
+            this.graph.style.display = "none";
+          });
+    }
+
+    print(){
+        // this.selectedCells = [];
+        // console.log(this.cellFunctionality.selectedCells)
+        // const minY = this.cellFunctionality.selectedCells.map((cell) => cell.row.row);
+        // console.log(minY.length)
+
+        // console.log(this.cellFunctionality.selectedCells.row.length)
+    //     for (let i = 0; i < this.cellFunctionality.selectedCells.length ; i++){
+    //         let row = [this.cellFunctionality.selectedCells[i]]
+    //         this.selectedCells.push(row)
+    //     }
+    //     console.log(this.selectedCells)
+    // 
+        this.selectedCells = new Object();
+        this.keys = null;
+
+        for (let i = 0; i < this.cellFunctionality.selectedCells.length ; i++){
+            var key = this.cellFunctionality.selectedCells[i].row.row
+            if(key in this.selectedCells){
+                this.selectedCells[this.cellFunctionality.selectedCells[i].row.row].push([this.cellFunctionality.selectedCells[i]])
+            }
+            else{
+                this.selectedCells[this.cellFunctionality.selectedCells[i].row.row] = []
+                this.selectedCells[this.cellFunctionality.selectedCells[i].row.row].push([this.cellFunctionality.selectedCells[i]])
+            }
+        }
+
+        this.keys  = Object.keys(this.selectedCells)
+     
+        // console.log(keys)
+        // console.log(keys[0])
+
+        if(this.keys.length >= 1) {
+
+            // let xValues=[];
+            // for(let i=keys[0]; i<= keys[keys.length-1]; i++){
+            //     let dataSet={
+            //         label: i,   // sticker or no. of colours
+            //         data:[],
+            //         borderWidth: 1,
+            //     }
+            //     for(let j= 0; j< this.selectedCells[keys[0]].length; j++){
+            //         xValues[j] = ((this.selectedCells[i])[j])[0].row.row
+            //         dataSet.data.push(((this.selectedCells[i])[j])[0].linkedListValue.value)
+            //     }
+    
+            //     dataSets.push(dataSet)
+            // }
+        }
+
+
+
+    }
+
+    getGraphValue(){
+        let xValues=[];
+        let dataSets=[];
+        if(this.isHorizantalSizebigger()){
+            for(let i=this.keys[0]; i<= this.keys[this.keys.length-1]; i++){
+                let dataSet={
+                    label: i,   // sticker or no. of colours
+                    data:[],
+                    borderWidth: 1,
+                }
+                for(let j= 0; j< this.selectedCells[this.keys[0]].length; j++){
+                    // console.log
+                    xValues[j] = ((this.selectedCells[i])[j])[0].column.value
+
+                    dataSet.data.push(((this.selectedCells[i])[j])[0].linkedListValue.value)
+                }
+    
+                dataSets.push(dataSet)
+            }
+        }
+        else{
+            for(let i=0 ; i < this.selectedCells[this.keys[0]].length;i++){
+                let dataSet={
+                    label: ((this.selectedCells[this.keys[0]])[i])[0].column.value,
+                    data:[],
+                    borderWidth: 1,
+                }
+                console.log("colors", ((this.selectedCells[this.keys[0]])[i])[0].column.value)
+                // console.log(this.keys[0], this.keys[this.keys.length-1])
+                for(let j=this.keys[0]; j <=this.keys[this.keys.length-1]; j++){
+
+                    xValues[j-this.keys[0]]= parseInt(j);
+                    dataSet.data.push(((this.selectedCells[j])[i])[0].linkedListValue.value)
+                    console.log(j, ((this.selectedCells[j])[i])[0].linkedListValue.value)
+                }
+                dataSets.push(dataSet)
+            }
+        }
+    
+        return {xValues,dataSets};
+    }
+  
+    isHorizantalSizebigger(){
+      if(this.selectedCells[this.keys[0]].length > this.keys.length) return true;
+      
+      return false;
+    }
+
+    // destroy graph
+    destroyGraph(){
+        if(this.draw){
+          this.draw.destroy()
+        }
+    }
+
+    //  * Drawing Bar Graph
+    drawBarGraph() {
+        this.destroyGraph()
+        let {xValues:xValues,dataSets:dataSets}=this.getGraphValue();
+        this.draw = new Chart(this.graphCanvasElement, {
+            type: "bar",
+            data: {
+            labels: xValues,
+            datasets: dataSets
+            }
+        });
+        }
+    
+        //  * Drawing Line Graph
+        drawLineGraph() {
+        this.destroyGraph()
+        let {xValues:xValues,dataSets:dataSets}=this.getGraphValue();
+        this.draw = new Chart(this.graphCanvasElement, {
+            type : 'line',
+            data: {
+            labels: xValues,
+            datasets: dataSets
+            }
+        });
+        }
+    
+        //  * Drawing Pie Chart
+        drawPieGraph(){
+        this.destroyGraph()
+        let {xValues:xValues,dataSets:dataSets}=this.getGraphValue();
+        this.draw=new Chart(this.graphCanvasElement, {
+            type : 'pie',
+            data: {
+            labels: xValues,
+            datasets: dataSets
+            }
+        });
+        }
+}

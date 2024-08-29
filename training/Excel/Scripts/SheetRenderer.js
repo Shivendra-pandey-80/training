@@ -2,6 +2,7 @@
 import { HeaderCellManager } from './cellmaker.js';
 import { Scroll } from './scroll.js';
 import { CellFunctionality } from './cellfunctionality.js';
+import { Graph } from './graph.js'
 import { HeaderCellFunctionality } from './headercellfunctionality.js';
 
 
@@ -20,7 +21,8 @@ export class SheetRenderer {
         
         // Initialize the SparseMatrix instance
         this.sparseMatrix = this.sheet.sparsematrix;
-        this.sparseMatrix.createCell(1,1,1,1,12)
+        this.fetch = this.sheet.UploadAndFetch;
+        // this.sparseMatrix.createCell(1,1,1,1,12)
 
 
         this.initCanvases();
@@ -44,6 +46,7 @@ export class SheetRenderer {
         this.scrollManager = new Scroll(this);
         this.cellFunctionality = new CellFunctionality(this);
         this.headerCellFunctionality = new HeaderCellFunctionality(this);
+        this.graph = new Graph(this)
         this.resizeCanvases();
     }
 
@@ -330,7 +333,7 @@ export class SheetRenderer {
     
     drawSparseMatrixValues(scrollX, scrollY) {
         
-
+        this.graph.print();
         const ctx = this.contexts.spreadsheet;
         const visibleWidth = this.canvases.spreadsheet.width / window.devicePixelRatio;
         const visibleHeight = this.canvases.spreadsheet.height / window.devicePixelRatio;
@@ -338,6 +341,7 @@ export class SheetRenderer {
         // Get visible header cells
         const visibleVerticalCells = this.headerCellManager.getVerticalHeaderCells(scrollY);
         const visibleHorizontalCells = this.headerCellManager.getHorizontalHeaderCells(scrollX);
+
     
         // Create a map for faster lookup of horizontal cells
         const horizontalCellMap = new Map(visibleHorizontalCells.map(cell => [cell.value, cell]));

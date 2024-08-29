@@ -311,7 +311,7 @@ export class SparseMatrix {
 
     setCell(row, col, value) {
         this._ensureSharedRefs(row, col);
-        console.log("Hello");
+        // console.log("Hello");
         if (!this.rowHeaders[row]) {
             this.createCell(row, col, row, col, value);
         } else {
@@ -329,6 +329,7 @@ export class SparseMatrix {
                 }
                 current = current.nextCol;
             }
+            
         }
 
         if (!this.colHeaders[col]) {

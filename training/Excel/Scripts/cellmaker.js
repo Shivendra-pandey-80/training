@@ -14,7 +14,7 @@ class HeaderCell {
 export class HeaderCellManager {
     constructor(visibleWidth, visibleHeight, scale) {
         this.minCellSize = 30;
-        this.baseCellWidth = 80;
+        this.baseCellWidth = 120;
         this.baseCellHeight = 40;
         this.scale = scale;
         this.visibleWidth = visibleWidth*2;

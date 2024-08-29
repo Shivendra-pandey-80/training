@@ -8,7 +8,7 @@ public class RabbitMQPublisher : IDisposable
     private readonly IConnection _connection;
     private readonly IModel _channel;
     private int _currentQueueIndex = 0;
-    private const int QueueCount = 10;
+    private const int QueueCount = 1;
 
     public RabbitMQPublisher(string hostName)
     {
@@ -40,7 +40,10 @@ public class RabbitMQPublisher : IDisposable
         }
 
         // Simulate some processing time
-        await Task.Delay(100);
+        Console.WriteLine("hello");
+        await Task.Delay(1000);
+        Console.WriteLine("ram");
+
     }
 
     public void Dispose()
