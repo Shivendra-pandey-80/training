@@ -37,18 +37,6 @@ export class Graph {
     }
 
     print(){
-        // this.selectedCells = [];
-        // console.log(this.cellFunctionality.selectedCells)
-        // const minY = this.cellFunctionality.selectedCells.map((cell) => cell.row.row);
-        // console.log(minY.length)
-
-        // console.log(this.cellFunctionality.selectedCells.row.length)
-    //     for (let i = 0; i < this.cellFunctionality.selectedCells.length ; i++){
-    //         let row = [this.cellFunctionality.selectedCells[i]]
-    //         this.selectedCells.push(row)
-    //     }
-    //     console.log(this.selectedCells)
-    // 
         this.selectedCells = new Object();
         this.keys = null;
 
@@ -64,9 +52,7 @@ export class Graph {
         }
 
         this.keys  = Object.keys(this.selectedCells)
-     
-        // console.log(keys)
-        // console.log(keys[0])
+       
 
         if(this.keys.length >= 1) {
 
@@ -93,7 +79,9 @@ export class Graph {
     getGraphValue(){
         let xValues=[];
         let dataSets=[];
+        console.log(this.keys)
         if(this.isHorizantalSizebigger()){
+            console.log("Bigger")
             for(let i=this.keys[0]; i<= this.keys[this.keys.length-1]; i++){
                 let dataSet={
                     label: i,   // sticker or no. of colours
@@ -111,19 +99,21 @@ export class Graph {
             }
         }
         else{
+            console.log("smaller",this.selectedCells[this.keys[0]].length)
             for(let i=0 ; i < this.selectedCells[this.keys[0]].length;i++){
                 let dataSet={
                     label: ((this.selectedCells[this.keys[0]])[i])[0].column.value,
                     data:[],
                     borderWidth: 1,
                 }
-                console.log("colors", ((this.selectedCells[this.keys[0]])[i])[0].column.value)
+                // console.log("colors", ((this.selectedCells[this.keys[0]])[i])[0].column.value)
                 // console.log(this.keys[0], this.keys[this.keys.length-1])
+                console.log(this.keys,this.keys[0],this.keys[this.keys.length-1],this.keys[0] <=this.keys[this.keys.length-1])
                 for(let j=this.keys[0]; j <=this.keys[this.keys.length-1]; j++){
-
-                    xValues[j-this.keys[0]]= parseInt(j);
+                    console.log(j)
+                    xValues[parseInt(j)-parseInt(this.keys[0])]= parseInt(j);
                     dataSet.data.push(((this.selectedCells[j])[i])[0].linkedListValue.value)
-                    console.log(j, ((this.selectedCells[j])[i])[0].linkedListValue.value)
+                    // console.log(j, ((this.selectedCells[j])[i])[0].linkedListValue.value)
                 }
                 dataSets.push(dataSet)
             }

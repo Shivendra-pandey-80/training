@@ -101,6 +101,14 @@ class Grid_maker {
         this.mainContainer.style.display = 'flex';
         this.mainContainer.style.flexDirection = 'column';
         this.addNewRow();
+        this.addNewCol(1);
+        this.addNewRow();
+        this.addNewRow();
+
+        this.addNewCol(2);
+                this.addNewCol(2);
+
+
        
         this.addResizeHandles();
         this.handleResize();

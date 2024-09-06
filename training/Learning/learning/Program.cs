@@ -66,6 +66,7 @@ var app = builder.Build();
 app.Run();
 
 // RabbitMQConsumerService.cs
+
 public class RabbitMQConsumerService : BackgroundService
 {
     private readonly RabbitMQConsumer _consumer;

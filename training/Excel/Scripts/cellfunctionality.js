@@ -41,6 +41,7 @@ export class CellFunctionality {
       this.selectedCells = []; // Reset selected cells on new drag
       this.updateSelectedCells(this.startPoint);
       this.stopMarchingAnts();
+      console.log("pointer down calling draw")
       this.sheetRenderer.draw();
       this.marchingAntsActive = false;
     }
@@ -74,6 +75,7 @@ export class CellFunctionality {
         this.selectedCells = [];
         this.selectedCell = null; // Clear the individual selected cell
         this.hideInputElement(); // Hide the input element if it's visible
+        console.log("deselect calling draw")
         this.sheetRenderer.draw(); // Redraw the sheet to remove any highlighting
     }
 }
@@ -108,6 +110,7 @@ export class CellFunctionality {
   updateSelectedCells(endPoint) {
     const cells = this.cellUtility.getCellsFromRect(this.startPoint, endPoint);
     this.selectedCells = cells;
+    console.log("update selected cells calling draw")
     this.sheetRenderer.draw(); // Redraw the sheet to show cell highlight
   }
 
@@ -164,16 +167,15 @@ export class CellFunctionality {
     const { x: scrollX, y: scrollY } =
       this.sheetRenderer.scrollManager.getScroll();
     const scale = this.sheetRenderer.scale;
-
-    // const adjustedLeft = cell.column.x - scrollX + 2;
-    // const adjustedTop = cell.row.y - scrollY + 2;
-
+    const inputchange = 2;
+    const fontSize = 14;
+    
     this.input.style.position = "absolute";
-    this.input.style.left = `${cell.column.x - scrollX + 2}px`;
-    this.input.style.top = `${cell.row.y - scrollY + 2}px`;
-    this.input.style.width = `${cell.column.width - 4}px`;
-    this.input.style.height = `${cell.row.height - 4}px`;
-    this.input.style.fontSize = `${14 * scale}px`; // Adjust font size based on scale
+    this.input.style.left = `${cell.column.x - scrollX +  inputchange}px`;
+    this.input.style.top = `${cell.row.y - scrollY +  inputchange}px`;
+    this.input.style.width = `${cell.column.width -  2*inputchange}px`;
+    this.input.style.height = `${cell.row.height -  2*inputchange}px`;
+    this.input.style.fontSize = `${fontSize * scale}px`; // Adjust font size based on scale
     this.input.style.textAlign = "center";
     // input.style.zIndex = 10;
     this.input.style.display = "block";
@@ -199,6 +201,8 @@ export class CellFunctionality {
     if (this.selectedCells.length > 0) {
       this.selectedCells = [];
       this.hideInputElement();
+      console.log("deselect current cells cells calling draw")
+
       this.sheetRenderer.draw();
     }
   }
@@ -346,6 +350,8 @@ export class CellFunctionality {
       this.selectedCell = cell;
       this.updateInputElement(cell); // Update and show input element
     }
+    console.log(" selected cells calling draw")
+
     this.sheetRenderer.draw(); // Redraw the entire sheet to show/hide the highlight
   }
 

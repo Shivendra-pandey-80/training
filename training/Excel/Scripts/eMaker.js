@@ -1,11 +1,18 @@
-import {SheetRenderer} from './SheetRenderer.js' // Adjust the path if necessary
-import {SparseMatrix} from './ds.js'
+import { SheetRenderer } from './SheetRenderer.js'; // Adjust the path if necessary
+import { SparseMatrix } from './ds.js';
 import { UploadAndFetch } from './uploadandfetch.js';
 
-
+/**
+ * Represents a spreadsheet sheet.
+ */
 export class Sheet {
+    /**
+     * @param {string} name - The name of the sheet.
+     * @param {number} row - The row index of the sheet.
+     * @param {number} col - The column index of the sheet.
+     * @param {number} index - The index of the sheet.
+     */
     constructor(name, row, col, index) {
-        
         this.name = name;  // Keeping name for potential future use
         this.row = row;
         this.col = col;
@@ -18,6 +25,10 @@ export class Sheet {
         }, 0);
     }
 
+    /**
+     * Creates the DOM elements for the sheet.
+     * @returns {Object} The elements of the sheet.
+     */
     createElements() {
         return {
             topSection: this.createTopSection(),
@@ -25,6 +36,10 @@ export class Sheet {
         };
     }
 
+    /**
+     * Creates the top section of the sheet.
+     * @returns {HTMLElement} The top section element.
+     */
     createTopSection() {
         const topSection = document.createElement('div');
         topSection.id = `topsection_${this.row}_${this.col}_${this.index}`;
@@ -49,6 +64,10 @@ export class Sheet {
         return topSection;
     }
 
+    /**
+     * Creates the middle section of the sheet.
+     * @returns {HTMLElement} The middle section element.
+     */
     createMiddleSection() {
         const midSection = document.createElement('div');
         midSection.id = `midSection_${this.row}_${this.col}_${this.index}`;
@@ -76,7 +95,7 @@ export class Sheet {
 
         const inputEle = document.createElement('input');
         inputEle.setAttribute('type', 'text');
-        inputEle.id = `input_${this.row}_${this.col}_${this.index}`
+        inputEle.id = `input_${this.row}_${this.col}_${this.index}`;
         inputEle.className = 'input';
 
         fullCanvas.appendChild(inputEle);
@@ -90,6 +109,11 @@ export class Sheet {
         return midSection;
     }
 
+    /**
+     * Creates a scrollbar element.
+     * @param {string} orientation - The orientation of the scrollbar ('vertical' or 'horizontal').
+     * @returns {HTMLElement} The scrollbar element.
+     */
     createScrollbar(orientation) {
         const scroll = document.createElement('div');
         scroll.id = `${orientation}Scroll_${this.row}_${this.col}_${this.index}`;
@@ -104,10 +128,18 @@ export class Sheet {
     }
 }
 
-
+/**
+ * Represents a manager for an Excel-like sheet interface.
+ */
 export class Emaker {
-    constructor(excel,row,col,Excel) {
-        this.row  = row;
+    /**
+     * @param {HTMLElement} excel - The main container element for the Excel interface.
+     * @param {number} row - The row index for the sheet.
+     * @param {number} col - The column index for the sheet.
+     * @param {Object} Excel - An object representing the Excel application or manager.
+     */
+    constructor(excel, row, col, Excel) {
+        this.row = row;
         this.col = col;
         this.excel = excel;
         this.sheets = [{ name: 'Sheet1', instance: new Sheet('Sheet1', this.row, this.col, 0) }];
@@ -115,23 +147,30 @@ export class Emaker {
         this.activeSheetIndex = 0;
         this.createExcel();
         this.handleEvents();
-        this.Excel.updateCurrExcel(this.row,this.col,this.sheets[this.activeSheetIndex])
+        this.Excel.updateCurrExcel(this.row, this.col, this.sheets[this.activeSheetIndex]);
     }
 
-    
-    handleMouseDown(e){
+    /**
+     * Handles the mouse down event.
+     * @param {MouseEvent} e - The mouse event.
+     */
+    handleMouseDown(e) {
         e.preventDefault();
-        this.Excel.updateCurrExcel(this.row,this.col,this.sheets[this.activeSheetIndex]);
+        this.Excel.updateCurrExcel(this.row, this.col, this.sheets[this.activeSheetIndex]);
     }
 
-    handleEvents(){
-        this.excel.addEventListener("click",(e)=>{
+    /**
+     * Sets up event listeners.
+     */
+    handleEvents() {
+        this.excel.addEventListener("click", (e) => {
             this.handleMouseDown(e);
-        })
+        });
     }
 
-    
-
+    /**
+     * Creates the Excel interface.
+     */
     createExcel() {
         this.excel.innerHTML = '';
         const wrapper = document.createElement('div');
@@ -148,6 +187,9 @@ export class Emaker {
         this.excel.appendChild(wrapper);
     }
 
+    /**
+     * Updates the content area to display the active sheet.
+     */
     updateContentArea() {
         this.contentArea.innerHTML = '';
         const activeSheet = this.sheets[this.activeSheetIndex].instance;
@@ -155,6 +197,10 @@ export class Emaker {
         this.contentArea.appendChild(activeSheet.elements.middleSection);
     }
 
+    /**
+     * Creates the sheet bar with tabs and controls.
+     * @returns {HTMLElement} The sheet bar element.
+     */
     createSheetBar() {
         const sheetBar = document.createElement('div');
         sheetBar.className = 'sheet-bar';
@@ -190,6 +236,10 @@ export class Emaker {
         return sheetBar;
     }
 
+    /**
+     * Updates the sheet tabs in the sheet bar.
+     * @param {HTMLElement} tabsContainer - The container for the sheet tabs.
+     */
     updateSheetTabs(tabsContainer) {
         tabsContainer.innerHTML = this.sheets.map((sheet, index) => `
             <div class="sheet-tab ${index === this.activeSheetIndex ? 'active' : ''}" data-index="${index}">
@@ -199,6 +249,9 @@ export class Emaker {
         `).join('');
     }
 
+    /**
+     * Adds a new sheet to the Excel interface.
+     */
     addSheet() {
         const newIndex = this.sheets.length;
         const newName = `Sheet${newIndex + 1}`;
@@ -207,6 +260,10 @@ export class Emaker {
         this.updateSheetTabs(this.excel.querySelector('.sheet-tabs'));
     }
 
+    /**
+     * Switches to a different sheet.
+     * @param {number} index - The index of the sheet to switch to.
+     */
     switchSheet(index) {
         if (index !== this.activeSheetIndex && index >= 0 && index < this.sheets.length) {
             this.activeSheetIndex = index;
@@ -215,6 +272,10 @@ export class Emaker {
         }
     }
 
+    /**
+     * Removes a sheet from the Excel interface.
+     * @param {number} index - The index of the sheet to remove.
+     */
     removeSheet(index) {
         if (this.sheets.length <= 1) {
             alert("You cannot remove the last sheet.");

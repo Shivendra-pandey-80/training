@@ -48,7 +48,7 @@ export class SpreadsheetManager {
     handleInputBlur(event) {
         this.updateCellValue(event.target.value);
         this.cellFunctionality.selectedCell = null;
-        this.sheetRenderer.draw();
+        // this.sheetRenderer.draw();
     }
 
     updateCellValue(value) {

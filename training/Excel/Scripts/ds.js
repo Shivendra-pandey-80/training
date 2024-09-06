@@ -1,49 +1,19 @@
-class Node{
-    constructor(sharedRow, sharedCol, value, nextRow = null, nextCol = null, prevCol = null, prevRow = null){
-        this.sharedRow = sharedRow;
-        this.sharedCol = sharedCol
+class Node {
+    constructor(rowValue, colValue, value, nextRow = null, nextCol = null, prevCol = null, prevRow = null) {
+        this.rowValue = rowValue; // Direct row value
+        this.colValue = colValue; // Direct column value
         this.value = value;
         this.nextRow = nextRow;
         this.nextCol = nextCol;
         this.prevRow = prevRow;
         this.prevCol = prevCol;
     }
-    // Getter and setter for row and column
-
-    get rowValue(){
-        return this.sharedRow.value;
-    }
-    set rowValue(newValue){
-        this.sharedRow.value = newValue;
-    }
-    get colValue(){
-        return this.sharedCol.value;
-    }
-    set colValue(newValue){
-        this.sharedCol.value = newValue;
-    }
-    
 }
-
 
 export class SparseMatrix {
     constructor() {
         this.rowHeaders = {}; // Stores the head of each row linked list
         this.colHeaders = {}; // Stores the head of each column linked list
-        this.sharedRows = {}; // Stores shared row objects
-        this.sharedCols = {}; // Stores shared column objects
-    }
-
-    // Helper function to ensure shared row and column objects exist
-    _ensureSharedRefs(row, col) {
-        if (!this.sharedRows[row]) {
-            this.sharedRows[row] = { value: null }; // Create shared row object
-
-        }
-        if (!this.sharedCols[col]) {
-            this.sharedCols[col] = { value: null }; // Create shared column object
-            
-        }
     }
 
     // Check if a cell already exists at the given row and column
@@ -58,24 +28,17 @@ export class SparseMatrix {
         return false;
     }
 
-    // Insert a cell with shared row and column references
-    createCell(row, col, rowValue, colValue, value) {
+    // Insert a cell into the sparse matrix
+    createCell(row, col, value) {
         if (this._cellExists(row, col)) {
-            console.log("try other location");
             return;
         }
 
-        this._ensureSharedRefs(row, col);
-        let newNode = new Node(this.sharedRows[row], this.sharedCols[col], value);
+        let newNode = new Node(row, col, value);
 
         // Insert into row list
         if (!this.rowHeaders[row]) {
-            this._ensureSharedRefs(row, 0);
-            let tempNode = new Node(this.sharedRows[row], { value: 0 });
-            this.sharedCols[0].value = colValue;
-            this.rowHeaders[row] = tempNode;
-            tempNode.nextCol = newNode;
-            newNode.prevCol = tempNode;
+            this.rowHeaders[row] = newNode;
         } else {
             let current = this.rowHeaders[row];
             let prev = null;
@@ -97,12 +60,7 @@ export class SparseMatrix {
 
         // Insert into column list
         if (!this.colHeaders[col]) {
-            this._ensureSharedRefs(0, col);
-            let tempNode = new Node({ value: 0 }, this.sharedCols[col]);
-            this.sharedRows[0].value = rowValue;
-            this.colHeaders[col] = tempNode;
-            tempNode.nextRow = newNode;
-            newNode.prevRow = tempNode;
+            this.colHeaders[col] = newNode;
         } else {
             let current = this.colHeaders[col];
             let prev = null;
@@ -121,185 +79,106 @@ export class SparseMatrix {
                 current.prevRow = newNode;
             }
         }
-
-        // Set the initial values
-        this.sharedRows[row].value = rowValue;
-        this.sharedCols[col].value = colValue;
     }
 
+    // Shift cells to the right
     _shiftCellsRight(row, col) {
         let current = this.rowHeaders[row];
         let prev = null;
 
-        // Find the position to start shifting
         while (current && current.colValue < col) {
             prev = current;
             current = current.nextCol;
         }
 
-        // Shift cells to the right
         while (current) {
-            let oldColValue = current.colValue;
-            let newColValue = oldColValue + 1;
-            this._ensureSharedRefs(row, newColValue);
+            let newColValue = current.colValue + 1;
+            let newNode = new Node(current.rowValue, newColValue, current.value);
 
-            // Create a new node for the shifted cell
-            let newNode = new Node(current.sharedRow, this.sharedCols[newColValue], current.value);
-
-            // Adjust row pointers
             newNode.nextCol = current.nextCol;
             newNode.prevCol = prev;
-            if (current.nextCol) {
-                current.nextCol.prevCol = newNode;
-            }
-            if (prev) {
-                prev.nextCol = newNode;
-            } else {
-                this.rowHeaders[row] = newNode;
-            }
-
-            // Adjust column pointers
-            if (!this.colHeaders[newColValue]) {
-                // Create a root node for the new column if it doesn't exist
-                this._ensureSharedRefs(0, newColValue);
-                let rootNode = new Node({ value: 0 }, this.sharedCols[newColValue]);
-                this.colHeaders[newColValue] = rootNode;
-            }
+            if (current.nextCol) current.nextCol.prevCol = newNode;
+            if (prev) prev.nextCol = newNode;
+            else this.rowHeaders[row] = newNode;
 
             let currentInNewCol = this.colHeaders[newColValue];
             while (currentInNewCol.nextRow && currentInNewCol.nextRow.rowValue < row) {
                 currentInNewCol = currentInNewCol.nextRow;
             }
 
-            // Insert the new node
             newNode.prevRow = currentInNewCol;
             newNode.nextRow = currentInNewCol.nextRow;
             currentInNewCol.nextRow = newNode;
-            if (newNode.nextRow) {
-                newNode.nextRow.prevRow = newNode;
-            }
+            if (newNode.nextRow) newNode.nextRow.prevRow = newNode;
 
-            // Remove the node from the old column
-            if (current.prevRow) {
-                current.prevRow.nextRow = current.nextRow;
-            } else {
-                this.colHeaders[oldColValue] = current.nextRow;
-            }
-            if (current.nextRow) {
-                current.nextRow.prevRow = current.prevRow;
-            }
+            if (current.prevRow) current.prevRow.nextRow = current.nextRow;
+            if (current.nextRow) current.nextRow.prevRow = current.prevRow;
 
             prev = newNode;
             current = newNode.nextCol;
         }
     }
 
-    insertCellShiftRight(row, col, rowValue, colValue, value) {
-        this._ensureSharedRefs(row, col);
-
-        // Shift cells to the right
-        this._shiftCellsRight(row, col);
-
-        // Insert the new cell
-        this.createCell(row, col, rowValue, colValue, value);
-    }
-
+    // Shift cells down
     _shiftCellsDown(row, col) {
         let current = this.colHeaders[col];
         let prev = null;
-    
-        // Find the position to start shifting
+
         while (current && current.rowValue < row) {
             prev = current;
             current = current.nextRow;
         }
-    
-        // Shift cells down
+
         while (current) {
-            let oldRowValue = current.rowValue;
-            let newRowValue = oldRowValue + 1;
-            this._ensureSharedRefs(newRowValue, col);
-    
-            // Create a new node for the shifted cell
-            let newNode = new Node(this.sharedRows[newRowValue], current.sharedCol, current.value);
-    
-            // Adjust column pointers
+            let newRowValue = current.rowValue + 1;
+            let newNode = new Node(newRowValue, current.colValue, current.value);
+
             newNode.nextRow = current.nextRow;
             newNode.prevRow = prev;
-            if (current.nextRow) {
-                current.nextRow.prevRow = newNode;
-            }
-            if (prev) {
-                prev.nextRow = newNode;
-            } else {
-                this.colHeaders[col] = newNode;
-            }
-    
-            // Adjust row pointers
-            if (!this.rowHeaders[newRowValue]) {
-                // Create a root node for the new row if it doesn't exist
-                this._ensureSharedRefs(newRowValue, 0);
-                let rootNode = new Node(this.sharedRows[newRowValue], { value: 0 });
-                this.rowHeaders[newRowValue] = rootNode;
-            }
-    
+            if (current.nextRow) current.nextRow.prevRow = newNode;
+            if (prev) prev.nextRow = newNode;
+            else this.colHeaders[col] = newNode;
+
             let currentInNewRow = this.rowHeaders[newRowValue];
             while (currentInNewRow.nextCol && currentInNewRow.nextCol.colValue < col) {
                 currentInNewRow = currentInNewRow.nextCol;
             }
-    
-            // Insert the new node in the row
+
             newNode.prevCol = currentInNewRow;
             newNode.nextCol = currentInNewRow.nextCol;
             currentInNewRow.nextCol = newNode;
-            if (newNode.nextCol) {
-                newNode.nextCol.prevCol = newNode;
-            }
-    
-            // Remove the node from the old row
-            if (this.rowHeaders[oldRowValue] === current) {
-                this.rowHeaders[oldRowValue] = current.nextCol;
-                if (current.nextCol) {
-                    current.nextCol.prevCol = null;
-                }
+            if (newNode.nextCol) newNode.nextCol.prevCol = newNode;
+
+            if (this.rowHeaders[current.rowValue] === current) {
+                this.rowHeaders[current.rowValue] = current.nextCol;
+                if (current.nextCol) current.nextCol.prevCol = null;
             } else {
-                if (current.prevCol) {
-                    current.prevCol.nextCol = current.nextCol;
-                }
-                if (current.nextCol) {
-                    current.nextCol.prevCol = current.prevCol;
-                }
+                if (current.prevCol) current.prevCol.nextCol = current.nextCol;
+                if (current.nextCol) current.nextCol.prevCol = current.prevCol;
             }
-    
-            // Update shared references
-            newNode.sharedRow = this.sharedRows[newRowValue];
-            newNode.rowValue = newRowValue;
-    
+
             prev = newNode;
             current = newNode.nextRow;
         }
-    
-        // Update the column's shared reference value
-        if (this.colHeaders[col]) {
-            this.colHeaders[col].colValue = col;
-        }
     }
-    
-    insertCellShiftDown(row, col, rowValue, colValue, value) {
-        this._ensureSharedRefs(row, col);
-    
-        // Shift cells down
+
+    insertCellShiftRight(row, col, value) {
+        this._shiftCellsRight(row, col);
+        this.createCell(row, col, value);
+    }
+
+    insertCellShiftDown(row, col, value) {
         this._shiftCellsDown(row, col);
-    
-        // Insert the new cell
-        this.createCell(row, col, rowValue, colValue, value);
+        this.createCell(row, col, value);
     }
+
+
 
     // Getter function to retrieve the value at a specific row and column
     getCell(row, col) {
         if (!this.rowHeaders[row]) return null;
 
-        let current = this.rowHeaders[row].nextCol;
+        let current = this.rowHeaders[row];
         while (current) {
             if (current.colValue === col) {
                 return current.value;
@@ -309,11 +188,25 @@ export class SparseMatrix {
         return null;
     }
 
+    async updateCellsInBackground(data, from) {
+        const worker = new Worker('Scripts/cellworker.js');
+      
+        worker.onmessage = (event) => {
+          const updates = event.data;
+      
+          updates.forEach(update => {
+            this.setCell(update.row, update.col, update.value);
+          });
+        };
+      
+        worker.postMessage({ data, from });
+      }
+    
+    
+
     setCell(row, col, value) {
-        this._ensureSharedRefs(row, col);
-        // console.log("Hello");
         if (!this.rowHeaders[row]) {
-            this.createCell(row, col, row, col, value);
+            this.createCell(row, col, value);
         } else {
             let current = this.rowHeaders[row];
             while (current) {
@@ -322,18 +215,17 @@ export class SparseMatrix {
                     return;
                 }
                 if (!current.nextCol || current.nextCol.colValue > col) {
-                    let newNode = new Node(this.sharedRows[row], this.sharedCols[col], value, null, current.nextCol, current);
+                    let newNode = new Node(row, col, value, null, current.nextCol, current);
                     if (current.nextCol) current.nextCol.prevCol = newNode;
                     current.nextCol = newNode;
                     break;
                 }
                 current = current.nextCol;
             }
-            
         }
 
         if (!this.colHeaders[col]) {
-            this.createCell(row, col, row, col, value);
+            this.createCell(row, col, value);
         } else {
             let current = this.colHeaders[col];
             while (current) {
@@ -342,7 +234,7 @@ export class SparseMatrix {
                     return;
                 }
                 if (!current.nextRow || current.nextRow.rowValue > row) {
-                    let newNode = new Node(this.sharedRows[row], this.sharedCols[col], value, current.nextRow, null, null, current);
+                    let newNode = new Node(row, col, value, current.nextRow, null, null, current);
                     if (current.nextRow) current.nextRow.prevRow = newNode;
                     current.nextRow = newNode;
                     break;
@@ -352,7 +244,7 @@ export class SparseMatrix {
         }
     }
 
-    // Print the matrix
+    // Print the matrix by rows
     printMatrixbyrow() {
         for (let row in this.rowHeaders) {
             let current = this.rowHeaders[row];
@@ -365,54 +257,18 @@ export class SparseMatrix {
         }
     }
 
+    // Print the matrix by columns
     printMatrixbycol() {
         for (let col in this.colHeaders) {
             let current = this.colHeaders[col];
-            let rowValues = [];
+            let colValues = [];
             while (current) {
-                rowValues.push(`${current.value}`);
+                colValues.push(`${current.value}`);
                 current = current.nextRow;
             }
-            console.log(rowValues.join(' -> '));
+            console.log(colValues.join(' -> '));
         }
     }
-
-    printMatrix() {
-        // Find the maximum row and column indices
-        let maxRow = Math.max(...Object.keys(this.sharedRows).map(Number), ...Object.keys(this.rowHeaders).map(Number));
-        let maxCol = Math.max(...Object.keys(this.sharedCols).map(Number), ...Object.keys(this.colHeaders).map(Number));
-    
-        // Initialize an empty matrix
-        let matrix = [];
-        for (let i = 0; i <= maxRow; i++) {
-            matrix.push(new Array(maxCol + 1).fill(null));
-        }
-    
-        // Fill the matrix with values from row headers
-        for (let row in this.rowHeaders) {
-            let current = this.rowHeaders[row];
-            while (current) {
-                matrix[row][current.colValue] = current.value;
-                current = current.nextCol;
-            }
-        }
-    
-        // Fill any missing values from column headers
-        for (let col in this.colHeaders) {
-            let current = this.colHeaders[col];
-            while (current) {
-                if (matrix[current.rowValue][col] === null) {
-                    matrix[current.rowValue][col] = current.value;
-                }
-                current = current.nextRow;
-            }
-        }
-    
-        // Print the matrix
-        for (let i = 0; i <= maxRow; i++) {
-            let rowStr = matrix[i].map(value => (value !== null ? value : '0')).join(' ');
-            console.log(rowStr);
-        }
-    }
-
 }
+
+

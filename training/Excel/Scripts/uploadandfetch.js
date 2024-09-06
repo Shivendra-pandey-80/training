@@ -2,15 +2,16 @@ export class UploadAndFetch {
   constructor(sheet) {
     this.sheet = sheet;
     this.data = null;
+    this.start = 0;
     this.from = 0;
-    this.to = 100; // Initial batch size
+    this.to = 1000; // Initial batch size
     this.tableName = "vikas";
     this.columnDefinitions = null;
-    this.fetchMoreData();
+    // this.fetchMoreData();
   }
 
   showTableCreationPopup(columns, tempFilePath) {
-    console.log("hello");
+    ////console.log("hello");
     const popup = document.createElement("div");
     popup.className = "popup";
 
@@ -30,8 +31,8 @@ export class UploadAndFetch {
                 </thead>
                 <tbody>
                     ${columns
-                      .map(
-                        (column, index) => `
+        .map(
+          (column, index) => `
                         <tr>
                             <td>${column}</td>
                             <td>
@@ -50,8 +51,8 @@ export class UploadAndFetch {
                             </td>
                         </tr>
                     `
-                      )
-                      .join("")}
+        )
+        .join("")}
                 </tbody>
             </table>
             <button type="submit">Create Table and Upload Data</button>
@@ -65,13 +66,11 @@ export class UploadAndFetch {
     );
   }
 
-
-
   async handleTableCreation(e, columns, tempFilePath, popup) {
     e.preventDefault();
 
     this.tableName = document.getElementById("tableName").value;
-  
+
     this.columnDefinitions = columns.map((column, index) => ({
       name: column,
       type: document.querySelector(`[name="type_${index}"]`).value,
@@ -96,79 +95,63 @@ export class UploadAndFetch {
     );
 
     if (response.ok) {
-      // const data = await response.json();
-      // this.data = data;
-      // console.log(data);
+    
       alert("Table created and data upload started");
       popup.remove();
       this.checkMiscellaneousRows(this.tableName);
-      this.fetchMoreData()
 
-      
-      console.log("end");
+   
     } else {
       alert("Error creating table and uploading data");
     }
   }
 
+  async fetchMoreData(startIndex, endindex) {
 
-  async fetchMoreData() {
+
     if (!this.tableName) {
-      throw new Error('Table name is not set. Please create a table first.');
+      throw new Error("Table name is not set. Please create a table first.");
     }
+
+    this.start = startIndex;
 
     try {
       const response = await fetch(`http://localhost:5228/api/Data/fetchData`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           TableName: this.tableName,
           Limit: this.to,
-          Offset: this.from
-        })
+          Offset: this.start,
+        }),
       });
 
-
-
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
 
       const newData = await response.json();
       this.data = this.data ? [...this.data, ...newData] : newData;
-      
-      // Update from and to for the next fetch
-      this.from = this.to;
-      this.to += 1000; // Increase by 10 each time, adjust as needed
-      Object.keys(this.data[0]).forEach((d, i) => {
-        this.sheet.sparsematrix.setCell(1, i+1, d);;
-      });
-      for (let i = 2; i <= this.data.length-1; i++) {
-        let j = 1;
-        
-        Object.keys(this.data[i-1]).forEach((key) => {
-          this.sheet.sparsematrix.setCell(i, j, this.data[i][key]);
-          // console.log(i,j,this.data[i][key])
-          j++;
+      if (this.from == 0) {
+        Object.keys(this.data[0]).forEach((d, i) => {
+          this.sheet.sparsematrix.setCell(1, i + 1, d);
         });
       }
+      this.from = this.from + this.to;
 
-      // this.sheet.sheetRenderer.draw();
+      await this.sheet.sparsematrix.updateCellsInBackground(
+        this.data,
+        this.start
+      );
 
+      this.data = null;
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       throw error;
     }
   }
-
-
-
-
-
-
-
 
   async checkMiscellaneousRows(tableName) {
     try {
@@ -259,9 +242,9 @@ export class UploadAndFetch {
     const newColumns =
       newColumnsDiv.style.display === "block"
         ? document
-            .getElementById("newColumns")
-            .value.split(",")
-            .map((c) => c.trim())
+          .getElementById("newColumns")
+          .value.split(",")
+          .map((c) => c.trim())
         : [];
     const columnCount =
       columnCountDiv.style.display === "block"

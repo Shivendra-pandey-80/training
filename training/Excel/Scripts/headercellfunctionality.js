@@ -84,7 +84,7 @@ export class HeaderCellFunctionality {
                 this.resizeIndex = cells[resizeEdge.index].row - 1; // Use row index for resizing rows
             }
             
-            console.log(this.resizeIndex);
+            //console.log(this.resizeIndex);
             event.preventDefault();
         }
         
