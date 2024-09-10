@@ -198,7 +198,7 @@
         getVerticalHeaderCells(scrollY) {
             const startIndex = this.findStartingIndex("vertical", scrollY);
             const visibleCells = [];
-            const buffer = 50; // Buffer size before and after the start index
+            const buffer = this.sheet.UploadAndFetch.to; // Buffer size before and after the start index
             const fetchStartIndex = Math.max(startIndex - buffer, 0);
             const fetchEndIndex = startIndex + buffer;
         
@@ -255,7 +255,7 @@
             // Get the latest fetch request (removes from the queue)
             const { fetchStartIndex, fetchEndIndex } = this.fetchQueue.pop();
             //console.log(fetchStartIndex, fetchEndIndex);
-            console.log("hello",this.fetchQueue[0],this.fetchQueue[1],this.fetchQueue[2])
+            // console.log("hello",this.fetchQueue[0],this.fetchQueue[1],this.fetchQueue[2])
 
         
             // Set the fetching flag to true

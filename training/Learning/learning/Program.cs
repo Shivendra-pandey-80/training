@@ -29,7 +29,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddSingleton<RabbitMQConsumer>(sp => 
     {
         var factory = sp.GetRequiredService<IConnectionFactory>();
-        return new RabbitMQConsumer("localhost", dbConnString);
+        return new RabbitMQConsumer("localhost", dbConnString!);
     });
 
     builder.Services.AddCors(options =>

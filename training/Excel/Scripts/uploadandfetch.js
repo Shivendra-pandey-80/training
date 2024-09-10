@@ -7,6 +7,9 @@ export class UploadAndFetch {
     this.to = 1000; // Initial batch size
     this.tableName = "vikas";
     this.columnDefinitions = null;
+    this.columnName = []
+    this.search = document.getElementById('search');
+    this.search.addEventListener('click',(e)=>{this.find()});
     // this.fetchMoreData();
   }
 
@@ -31,8 +34,8 @@ export class UploadAndFetch {
                 </thead>
                 <tbody>
                     ${columns
-        .map(
-          (column, index) => `
+                      .map(
+                        (column, index) => `
                         <tr>
                             <td>${column}</td>
                             <td>
@@ -51,8 +54,8 @@ export class UploadAndFetch {
                             </td>
                         </tr>
                     `
-        )
-        .join("")}
+                      )
+                      .join("")}
                 </tbody>
             </table>
             <button type="submit">Create Table and Upload Data</button>
@@ -95,24 +98,34 @@ export class UploadAndFetch {
     );
 
     if (response.ok) {
-    
       alert("Table created and data upload started");
       popup.remove();
       this.checkMiscellaneousRows(this.tableName);
-
-   
     } else {
       alert("Error creating table and uploading data");
     }
   }
 
+  find () {
+    const search = document.getElementById('search-input').value;
+
+    if (!search) {
+      alert("Please enter a search term");
+      return;
+    }
+
+  
+    // Call the searchData function with the searchColumns
+    this.searchData(search);
+  };
+  
+
+
+
   async fetchMoreData(startIndex, endindex) {
-
-
     if (!this.tableName) {
       throw new Error("Table name is not set. Please create a table first.");
     }
-
     this.start = startIndex;
 
     try {
@@ -136,9 +149,11 @@ export class UploadAndFetch {
       this.data = this.data ? [...this.data, ...newData] : newData;
       if (this.from == 0) {
         Object.keys(this.data[0]).forEach((d, i) => {
+          this.columnName.push(d);
           this.sheet.sparsematrix.setCell(1, i + 1, d);
         });
       }
+      console.log(this.columnName)
       this.from = this.from + this.to;
 
       await this.sheet.sparsematrix.updateCellsInBackground(
@@ -151,6 +166,129 @@ export class UploadAndFetch {
       console.error("Error:", error);
       throw error;
     }
+  }
+
+  async updateData(rowid,colid, value) {
+    if (!this.tableName) {
+      throw new Error("Table name is not set. Please create a table first.");
+    }
+    console.log(colid,this.columnName[colid])
+    const updatedColumns = {
+      [this.columnName[colid]]: value
+    };
+    console.log(rowid,this.tableName,updatedColumns)
+
+    try {
+      const response = await fetch(
+        `http://localhost:5228/api/Data/updateData`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            TableName: this.tableName,
+            rowid: rowid, 
+            Columns: updatedColumns,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      this.sheet.sparsematrix.setCell(rowid+1, colid+1, value);
+
+      
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error updating data");
+    }
+  }
+
+  async searchData(search) {
+    if (!this.tableName) {
+      throw new Error("Table name is not set. Please create a table first.");
+    }
+  
+
+  //   const formattedObject = {
+  //     "columns": search.map(column => ({ "name": column }))
+  // };
+    // Log the columns that are being searched
+    console.log("Searching columns:", search);
+    const searchColumns = this.columnName.reduce((acc, column) => {
+      acc[column] = search; // Set each column name as a key with 'abc' as its value
+      return acc;
+    }, {});    
+    console.log(searchColumns)
+  
+    try {
+      const response = await fetch(
+        `http://localhost:5228/api/Data/searchData`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            TableName: this.tableName,
+            Columns: searchColumns,  // The columns and values for search
+          }),
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+  
+      const searchResults = await response.json();
+      console.log("Search Results:", searchResults);
+  
+      // Example: Populate the UI with search results
+      this.populateSearchResults(searchResults);
+  
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error searching data");
+    }
+  }
+  
+  // Function to display search results in the UI (example)
+  populateSearchResults(results) {
+    const resultTable = document.getElementById("search-results");
+    resultTable.innerHTML = "";  // Clear previous results
+  
+    // Create table headers dynamically
+    if (results.length > 0) {
+      const headerRow = document.createElement("tr");
+      Object.keys(results[0]).forEach((key) => {
+        const th = document.createElement("th");
+        th.innerText = key;
+        headerRow.appendChild(th);
+      });
+      resultTable.appendChild(headerRow);
+    }
+  
+    // Populate each result row
+    results.forEach((row) => {
+      const rowElement = document.createElement("tr");
+      Object.values(row).forEach((value) => {
+        const td = document.createElement("td");
+        td.innerText = value;
+        rowElement.appendChild(td);
+      });
+      resultTable.appendChild(rowElement);
+    });
+  }
+  
+
+  // Call this function on edit
+  handleCellEdit(rowId, columnName, newValue) {
+    const updatedColumns = {
+      [columnName]: newValue,
+    };
+    this.updateData(rowId, updatedColumns);
   }
 
   async checkMiscellaneousRows(tableName) {
@@ -242,9 +380,9 @@ export class UploadAndFetch {
     const newColumns =
       newColumnsDiv.style.display === "block"
         ? document
-          .getElementById("newColumns")
-          .value.split(",")
-          .map((c) => c.trim())
+            .getElementById("newColumns")
+            .value.split(",")
+            .map((c) => c.trim())
         : [];
     const columnCount =
       columnCountDiv.style.display === "block"

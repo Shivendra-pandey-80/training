@@ -31,7 +31,10 @@ export class SpreadsheetManager {
             const columnNumber = this.letterToNumber(column.value);
 
             // Update SparseMatrix with new value
-            this.sparseMatrix.setCell(rowNumber, columnNumber, value);
+            console.log(rowNumber,columnNumber)
+            console.log(this.sheetRenderer.sheet.UploadAndFetch.updateData(rowNumber-1,columnNumber-1,value))
+
+            // this.sparseMatrix.setCell(rowNumber, columnNumber, value);
         } else {
             console.warn('No cell is currently selected.');
         }

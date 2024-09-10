@@ -156,10 +156,16 @@ export class Scroll {
      */
     scroll(deltaX, deltaY) {
         // Limit the maximum scroll speed
-        const maxScrollSpeed = 1000000; // Adjust this value to control the maximum scroll speed
+        const maxScrollSpeed = 10000; // Adjust this value to control the maximum scroll speed
+
+        if (deltaX>0 || deltaY>0){
+            deltaX = Math.max(-maxScrollSpeed, Math.min(deltaX, maxScrollSpeed));
+            deltaY = Math.max(-maxScrollSpeed, Math.min(deltaY, maxScrollSpeed));
+
+        
+        }
     
-        deltaX = Math.max(-maxScrollSpeed, Math.min(deltaX, maxScrollSpeed));
-        deltaY = Math.max(-maxScrollSpeed, Math.min(deltaY, maxScrollSpeed));
+        
     
         this.scrollX = Math.max(0, Math.min(this.scrollX + deltaX, this.maxScrollX));
         this.scrollY = Math.max(0, Math.min(this.scrollY + deltaY, this.maxScrollY));

@@ -27,12 +27,23 @@
         <button class="graph-line-btn">line</button>
         <button class="graph-pie-btn">chart</button>
       </div>
+
+      <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search..." />
+        <button id="search">Search</button>
+      </div>
+
+      
+      <table id="search-results" border="1">
+        <!-- Search results will be dynamically populated here -->
+      </table>
     </header>
+
+
     
       <!-- graph -->
-      <div class="graph">
-        <button class="graph-close btn btn-sm btn-danger">X</button>
-        <canvas id="myChart"></canvas>
+      <div class="graph" id="graph">
+    
       </div>
 
 

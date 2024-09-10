@@ -100,16 +100,7 @@ class Grid_maker {
     init() {
         this.mainContainer.style.display = 'flex';
         this.mainContainer.style.flexDirection = 'column';
-        this.addNewRow();
-        this.addNewCol(1);
-        this.addNewRow();
-        this.addNewRow();
-
-        this.addNewCol(2);
-                this.addNewCol(2);
-
-
-       
+        this.addNewRow();       
         this.addResizeHandles();
         this.handleResize();
         this.borderHighlighter = new ExcelBorderHighlighter(this.mainContainer);

@@ -4,12 +4,25 @@ export class Graph {
         this.sheetRenderer = sheetRenderer;
         this.cellFunctionality = this.sheetRenderer.cellFunctionality;
 
-        this.graphCanvasElement = document.getElementById("myChart");
+
+        this.graphCloseBtn = document.createElement('button');
+        this.graphCloseBtn.innerText = 'X'; // Text inside the button
+        this.graphCloseBtn.className = 'graph-close btn btn-sm btn-danger'; // Assign classes to the button
+
+        // Create a canvas element dynamically
+        this.graphCanvasElement = document.createElement('canvas');
+        this.graphCanvasElement.id = 'myChart'; // Set an ID to the canvas
+
+        // Append button and canvas to the container div
         this.graph = document.querySelector(".graph");
+        this.graph.appendChild(this.graphCloseBtn);
+        this.graph.appendChild(this.graphCanvasElement);
+
+
         this.barGraphBtn = document.querySelector(".graph-bar-btn");
         this.lineGraphBtn = document.querySelector(".graph-line-btn");
         this.pieGraphBtn = document.querySelector(".graph-pie-btn");
-        this.graphCloseBtn = document.querySelector(".graph-close")
+        
 
         this.init()
     }
@@ -34,6 +47,7 @@ export class Graph {
           this.graphCloseBtn.addEventListener("click",() => {
             this.graph.style.display = "none";
           });
+          this.handleEvents();
     }
 
     print(){
@@ -172,5 +186,31 @@ export class Graph {
             datasets: dataSets
             }
         });
+        }
+
+        dragChart(evt) {
+            if (this.draging) {
+                let graphX = this.graph.getBoundingClientRect().x;
+                let graphY = this.graph.getBoundingClientRect().y;
+                let newX = graphX + evt.movementX;
+                if (newX > 0) {
+                    this.graph.style.left = newX + "px";
+                }
+                let newY = graphY + evt.movementY;
+                if (newY > 0) {
+                    this.graph.style.top = newY + "px";
+                }
+            }
+        }
+    
+        handleEvents() {
+    
+            this.graph.addEventListener("mousedown", () => {
+                this.draging = true;
+            });
+            window.addEventListener("mouseup", () => {
+                this.draging = false;
+            });
+            window.addEventListener("mousemove", this.dragChart.bind(this));
         }
 }

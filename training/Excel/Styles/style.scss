@@ -25,6 +25,38 @@ body {
         @include resetCss();
         height: 18%;
         box-sizing: border-box;
+       
+    .search-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+  
+        #search-input {
+          padding: 0.5rem;
+          border-radius: 4px;
+          border: 1px solid #ced4da;
+          font-size: 1rem;
+          min-width: 200px;
+  
+          &:focus {
+            outline: none;
+            border-color: #007bff;
+          }
+        }
+  
+        #search-btn {
+          background-color: #007bff;
+          color: #fff;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 4px;
+          font-size: 1rem;
+          cursor: pointer;
+  
+          &:hover {
+            background-color: #0056b3;
+          }
+        }}
     }
 
     .mainContainer {
@@ -456,3 +488,21 @@ body {
     right: 5px;
     top: 5px;
   }
+
+
+
+table#search-results {
+  width: 100%;
+  margin-top: 2px;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 1px;
+    border: 1px solid #ccc;
+  }
+
+  th {
+    background-color: #f1f1f1;
+  }
+}
+

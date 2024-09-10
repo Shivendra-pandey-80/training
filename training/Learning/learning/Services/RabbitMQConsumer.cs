@@ -136,7 +136,7 @@ public class RabbitMQConsumer : IDisposable
                         elapsed = stopwatch.Elapsed;
                         //Console.WriteLine($"Total Elapsed time for transaction queue{queueN}: {elapsed}");
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         await transaction.RollbackAsync();
                         //Console.WriteLine($"Error executing batch query for queue{queueN}: {ex.Message}");

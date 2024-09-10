@@ -33,7 +33,7 @@ public class DataController : ControllerBase
         publisher = _publisher;
     }
 
-  
+
 
     [HttpPost("uploadAndCreateTable")]
     public async Task<IActionResult> UploadAndCreateTable()
@@ -81,12 +81,12 @@ public class DataController : ControllerBase
             var createTableQuery = BuildCreateTableQuery(request);
             await publisher.SendChunk(createTableQuery);
             // Now proceed with file upload and processing
-            await UploadAndSplitStream(request.TableName, request.Columns.Count, request.TempFilePath);
+            await UploadAndSplitStream(request.TableName!, request.Columns!.Count, request.TempFilePath!);
             Console.WriteLine("Hello");
 
 
             // Delete the temporary file
-            System.IO.File.Delete(request.TempFilePath);
+            System.IO.File.Delete(request.TempFilePath!);
             return Ok("File saved");
         }
         catch (Exception ex)
@@ -211,122 +211,192 @@ public class DataController : ControllerBase
     [HttpPost("fetchData")]
     public async Task<ActionResult<List<Dictionary<string, object>>>> GetData([FromBody] Fetchdata request)
     {
-        // Console.WriteLine("boris");
         var listOfData = new List<Dictionary<string, object>>();
-        // Console.WriteLine(request.Offset);
         using (var connection = new MySqlConnection(dbConnString))
         {
             await connection.OpenAsync();
 
             // Sanitize the table name to prevent SQL injection
             string sanitizedTableName = MySqlHelper.EscapeString(request.TableName);
-            // Console.WriteLine(sanitizedTableName);
 
-            var query = $"SELECT * FROM `{sanitizedTableName}` ORDER BY `name` ASC LIMIT @limit OFFSET @offset";
+            var query = $@"SELECT CONCAT('SELECT rowId, ', GROUP_CONCAT(COLUMN_NAME ORDER BY ORDINAL_POSITION SEPARATOR ', '), 
+            ' FROM {sanitizedTableName} ', 
+            ' ORDER BY rowId ASC LIMIT @limit OFFSET @offset') AS sql_query
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_NAME = '{sanitizedTableName}'
+            AND COLUMN_NAME != 'rowId'
+            AND TABLE_SCHEMA = 'training';";
+            var command = new MySqlCommand(query, connection);
+            // Execute the query to get the dynamic SQL command
+            var result = command.ExecuteScalar()?.ToString();
+            query = result + ";";
 
-            using (var command = new MySqlCommand(query, connection))
+            // var query = $"SELECT `rowid`, * FROM `{sanitizedTableName}` ORDER BY `rowid` ASC LIMIT @limit OFFSET @offset";
+
+            using (command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@limit", request.Limit);
                 command.Parameters.AddWithValue("@offset", request.Offset);
-                Console.WriteLine(query);
-                Console.WriteLine(request.Limit);
-                Console.WriteLine(request.Offset);
+
+
 
                 using (var reader = await command.ExecuteReaderAsync())
                 {
                     while (await reader.ReadAsync())
                     {
-                        // Console.WriteLine(reader);
                         var row = new Dictionary<string, object>();
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
                             string columnName = reader.GetName(i);
                             // Console.WriteLine(columnName);
-                            object value = reader.IsDBNull(i) ? null : reader.GetValue(i);
-                            row[columnName] = value;
+                            object? value = reader.IsDBNull(i) ? null : reader.GetValue(i);
+                            row[columnName] = value!;
                         }
                         listOfData.Add(row);
                     }
                 }
             }
         }
-        
+
 
         return Ok(listOfData);
     }
 
 
 
-[HttpPost("updateData")]
-public async Task<ActionResult> UpdateData([FromBody] List<Dictionary<string, object>> records)
-{
-    using (var connection = new MySqlConnection(dbConnString))
+    [HttpPost("updateData")]
+    public async Task<IActionResult> UpdateData([FromBody] UpdateRequest request)
     {
-        await connection.OpenAsync();
-
-        using (var transaction = await connection.BeginTransactionAsync())
+        try
         {
-            try
+            using (var connection = new MySqlConnection(dbConnString))
             {
-                foreach (var record in records)
+                await connection.OpenAsync();
+
+                // Sanitize table name to prevent SQL injection
+                string? sanitizedTableName = MySqlHelper.EscapeString(request.TableName);
+
+                // Prepare the SET clause for the update query
+                var setClauses = new List<string>();
+                foreach (var column in request.Columns!)
                 {
-                    if (!record.ContainsKey("id"))
-                    {
-                        return BadRequest("Each record must contain an 'id' field for updating.");
-                    }
+                    setClauses.Add($"`{MySqlHelper.EscapeString(column.Key)}` = @{column.Key}");
 
-                    // Get the ID of the record to update
-                    var recordId = record["id"];
-                    
-                    // Build the SQL query dynamically based on the fields in the dictionary
-                    var updateFields = new List<string>();
-                    var parameters = new Dictionary<string, object>();
-
-                    foreach (var keyValue in record)
-                    {
-                        if (keyValue.Key != "id")
-                        {
-                            updateFields.Add($"`{MySqlHelper.EscapeString(keyValue.Key)}` = @{keyValue.Key}");
-                            parameters.Add($"@{keyValue.Key}", keyValue.Value ?? DBNull.Value);
-                        }
-                    }
-
-                    if (updateFields.Count == 0)
-                    {
-                        continue; // No fields to update for this record
-                    }
-
-                    var query = $"UPDATE `your_table_name` SET {string.Join(", ", updateFields)} WHERE `id` = @id";
-                    
-                    using (var command = new MySqlCommand(query, connection, transaction))
-                    {
-                        command.Parameters.AddWithValue("@id", recordId);
-
-                        // Add the parameters for the dynamic fields
-                        foreach (var param in parameters)
-                        {
-                            command.Parameters.AddWithValue(param.Key, param.Value);
-                        }
-
-                        await command.ExecuteNonQueryAsync();
-                    }
                 }
 
-                await transaction.CommitAsync();
-                return Ok("Records updated successfully.");
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync();
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                string setClause = string.Join(", ", setClauses);
+
+
+                // Create the update query
+                var query = $"UPDATE `{sanitizedTableName}` SET {setClause} WHERE `rowid` = @id";
+
+
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    // Bind column values to parameters
+                    foreach (var column in request.Columns)
+                    {
+                        command.Parameters.AddWithValue($"@{column.Key}", column.Value);
+                    }
+
+                    // Bind the ID for the WHERE clause
+                    command.Parameters.AddWithValue("@id", request.Rowid);
+
+                    var affectedRows = await command.ExecuteNonQueryAsync();
+
+                    if (affectedRows > 0)
+                    {
+                        return Ok("Data updated successfully");
+                    }
+                    else
+                    {
+                        return Ok("No rows were updated");
+                    }
+                }
             }
         }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
+
+    // Request class for update
+    public class UpdateRequest
+    {
+        public string? TableName { get; set; }
+        public int Rowid { get; set; }
+        public Dictionary<string, object>? Columns { get; set; }
+    }
+
+
+
+    [HttpPost("searchData")]
+    public async Task<IActionResult> SearchData([FromBody] SearchRequest request)
+    {
+        Console.WriteLine("in serach data");
+        try
+        {
+            using (var connection = new MySqlConnection(dbConnString))
+            {
+                await connection.OpenAsync();
+
+                // Sanitize table name to prevent SQL injection
+                string? sanitizedTableName = MySqlHelper.EscapeString(request.TableName);
+
+                // Prepare the WHERE clause with LIKE for the search query
+                var whereClauses = new List<string>();
+                foreach (var column in request.Columns!)
+                {
+                    whereClauses.Add($"`{MySqlHelper.EscapeString(column.Key)}` LIKE @{column.Key}");
+                }
+
+                string whereClause = string.Join(" OR ", whereClauses);
+
+                // Create the search query using LIKE operator
+                var query = $"SELECT * FROM `{sanitizedTableName}` WHERE {whereClause}";
+                Console.WriteLine(query);
+            
+
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    // Bind search values to parameters using LIKE
+                    foreach (var column in request.Columns)
+                    {
+                        command.Parameters.AddWithValue($"@{column.Key}", $"%{column.Value}%");
+                        Console.WriteLine(column);
+                    }
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        var results = new List<Dictionary<string, object>>();
+                        while (await reader.ReadAsync())
+                        {
+                            var row = new Dictionary<string, object>();
+                            for (var i = 0; i < reader.FieldCount; i++)
+                            {
+                                row[reader.GetName(i)] = reader.GetValue(i);
+                            }
+                            results.Add(row);
+                        }
+
+                        return Ok(results);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+
+    public class SearchRequest
+{
+    public string? TableName { get; set; }
+    public Dictionary<string, string>? Columns { get; set; } // Key: Column Name, Value: Search Term
 }
-
-
-
-
 
 
 
@@ -353,11 +423,11 @@ public async Task<ActionResult> UpdateData([FromBody] List<Dictionary<string, ob
                 break;
             case "alterTable":
                 // Alter the table to add new columns
-                AlterTableAddColumns(action.TableName, action.NewColumns);
+                AlterTableAddColumns(action.TableName!, action.NewColumns!);
                 break;
             case "truncate":
                 // Upload only up to specified columns
-                UploadTruncatedMiscRows(action.TableName, action.ColumnCount);
+                UploadTruncatedMiscRows(action.TableName!, action.ColumnCount);
                 break;
             default:
                 return BadRequest("Invalid action specified");
@@ -418,17 +488,17 @@ public async Task<ActionResult> UpdateData([FromBody] List<Dictionary<string, ob
     private string BuildCreateTableQuery(TableCreationRequest request)
     {
         // Sanitize table name
-        string CorrectTableName = NameCorrection(request.TableName);
+        string CorrectTableName = NameCorrection(request.TableName!);
         var query = new StringBuilder($"CREATE TABLE `{CorrectTableName}` (");
 
         bool hasPrimaryKey = false;
 
-        for (int i = 0; i < request.Columns.Count; i++)
+        for (int i = 0; i < request.Columns!.Count; i++)
         {
             var column = request.Columns[i];
 
             // Sanitize column name
-            string CorrectColumnName = NameCorrection(column.Name);
+            string CorrectColumnName = NameCorrection(column.Name!);
 
             query.Append($"`{CorrectColumnName}` {column.Type}");
 
@@ -482,7 +552,7 @@ public async Task<ActionResult> UpdateData([FromBody] List<Dictionary<string, ob
         public string? TempFilePath { get; set; }
     }
 
-     public class Fetchdata
+    public class Fetchdata
     {
         public string? TableName { get; set; }
         public int? Limit { get; set; }
