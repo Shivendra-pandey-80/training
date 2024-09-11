@@ -13,7 +13,7 @@ export class CellFunctionality {
     this.spreadsheetManager = new SpreadsheetManager(this);
     this.cellUtility = new CellUtility(sheetRenderer, this.spreadsheetManager); // Instantiate CellUtility
     this.copyPasteManager = new CopyPasteManager(this, this.spreadsheetManager);
-    // this.calculationManager = new CalculationManager(this);
+    this.calculationManager = new CalculationManager(this);
     // Marching ants properties
     this.marchingAntsActive = false;
     this.dashOffset = 0;
@@ -28,8 +28,6 @@ export class CellFunctionality {
     document.addEventListener("pointermove", this.handlePointerMove.bind(this));
     document.addEventListener("keydown", this.handleKeyDown.bind(this));
     // document.addEventListener("mousedown", this.handleMouseDown.bind(this));
-
-    
   }
 
   handlePointerDown(event) {
@@ -44,7 +42,6 @@ export class CellFunctionality {
       this.selectedCells = []; // Reset selected cells on new drag
       this.updateSelectedCells(this.startPoint);
       this.stopMarchingAnts();
-      console.log("pointer down calling draw")
       this.sheetRenderer.draw();
       this.marchingAntsActive = false;
     }
@@ -60,10 +57,8 @@ export class CellFunctionality {
 
   handlePointerUp(event) {
     this.isScrolling = false;
-    console.log("hellohoney");
     this.removeEventListeners();
     if (this.isDragging) {
-      console.log("hellohoney");
       this.isDragging = false;
      
     }
@@ -118,7 +113,6 @@ export class CellFunctionality {
   updateSelectedCells(endPoint) {
     const cells = this.cellUtility.getCellsFromRect(this.startPoint, endPoint);
     this.selectedCells = cells;
-    console.log("update selected cells calling draw")
     this.sheetRenderer.draw(); // Redraw the sheet to show cell highlight
   }
 
@@ -276,14 +270,15 @@ export class CellFunctionality {
     if (this.selectedCells.length > 0) {
       this.selectedCells = [];
       this.hideInputElement();
-      console.log("deselect current cells cells calling draw")
 
       this.sheetRenderer.draw();
     }
   }
 
   hideInputElement() {
-    const input = document.querySelector('input[type="text"]');
+    const input =document.getElementById(
+      `input_${this.sheetRenderer.sheet.row}_${this.sheetRenderer.sheet.col}_${this.sheetRenderer.sheet.index}`
+    );
     if (input) {
       input.style.display = "none";
     }
@@ -425,7 +420,6 @@ export class CellFunctionality {
       this.selectedCell = cell;
       this.updateInputElement(cell); // Update and show input element
     }
-    console.log(" selected cells calling draw")
 
     this.sheetRenderer.draw(); // Redraw the entire sheet to show/hide the highlight
   }

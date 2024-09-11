@@ -180,7 +180,7 @@
             const visibleCells = [];
             let position = this.horizontalHeaderCells[startIndex]?.x || 0;
 
-            for (let i = startIndex; position < scrollX + this.visibleWidth * 2; i++) {
+            for (let i = startIndex; position < scrollX + this.visibleWidth; i++) {
             if (i >= this.horizontalHeaderCells.length) {
                 const width = this.getCellSize("horizontal", i);
                 this.horizontalHeaderCells.push(
@@ -203,7 +203,7 @@
             const fetchEndIndex = startIndex + buffer;
         
             // Add the fetch request to the queue
-            this.addToFetchQueue(fetchStartIndex, fetchEndIndex);
+            let _ = this.addToFetchQueue(fetchStartIndex, fetchEndIndex);
         
             let position = this.verticalHeaderCells[startIndex]?.y || 0;
             for (let i = startIndex; position < scrollY + this.visibleHeight; i++) {
@@ -220,7 +220,7 @@
             return visibleCells;
         }
         
-        addToFetchQueue(fetchStartIndex, fetchEndIndex) {
+        async addToFetchQueue(fetchStartIndex, fetchEndIndex) {
             const currentTime = Date.now();
         
             // Throttle: Ensure a minimum interval between fetch requests
@@ -318,27 +318,6 @@
             this.fetchedRanges[i] = true;
             }
         }
-
-        // getVerticalHeaderCells(scrollY) {
-        //     const startIndex = this.findStartingIndex('vertical', scrollY);
-        //     const visibleCells = [];
-        //     let position = this.verticalHeaderCells[startIndex]?.y || 0;
-        //     for (let i = startIndex; position < scrollY + (this.visibleHeight); i++) {
-        //         if (i >= this.verticalHeaderCells.length) {
-        //             const height = this.getCellSize('vertical', i);
-        //             if (i == this.sheet.UploadAndFetch.start ){
-        //                 this.sheet.UploadAndFetch.start = this.sheet.UploadAndFetch.start + this.sheet.UploadAndFetch.to
-        //                 this.sheet.UploadAndFetch.fetchMoreData(i)
-        //             }
-
-        //             this.verticalHeaderCells.push(new HeaderCell(0, position, this.minCellSize, height, i + 1, i + 1, 0));
-        //         }
-        //         const cell = this.verticalHeaderCells[i];
-        //         visibleCells.push(cell);
-        //         position += cell.height;
-        //     }
-        //     return visibleCells;
-        // }
 
         getTotalWidth() {
             return this.horizontalHeaderCells.reduce(

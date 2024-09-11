@@ -4,12 +4,11 @@ export class UploadAndFetch {
     this.data = null;
     this.start = 0;
     this.from = 0;
-    this.to = 1000; // Initial batch size
+    this.to = 500; // Initial batch size
     this.tableName = "vikas";
     this.columnDefinitions = null;
     this.columnName = []
-    this.search = document.getElementById('search');
-    this.search.addEventListener('click',(e)=>{this.find()});
+  
     // this.fetchMoreData();
   }
 
@@ -106,8 +105,8 @@ export class UploadAndFetch {
     }
   }
 
-  find () {
-    const search = document.getElementById('search-input').value;
+  async find () {
+    this.search = document.getElementById('search-input').value;
 
     if (!search) {
       alert("Please enter a search term");
@@ -116,7 +115,8 @@ export class UploadAndFetch {
 
   
     // Call the searchData function with the searchColumns
-    this.searchData(search);
+    this.find_data = await this.searchData(this.search);
+    
   };
   
 
@@ -153,7 +153,6 @@ export class UploadAndFetch {
           this.sheet.sparsematrix.setCell(1, i + 1, d);
         });
       }
-      console.log(this.columnName)
       this.from = this.from + this.to;
 
       await this.sheet.sparsematrix.updateCellsInBackground(
@@ -202,6 +201,7 @@ export class UploadAndFetch {
       
     } catch (error) {
       console.error("Error:", error);
+      this.sheet.sparsematrix.setCell(rowid+1, colid+1, value);
       alert("Error updating data");
     }
   }
@@ -246,8 +246,9 @@ export class UploadAndFetch {
       console.log("Search Results:", searchResults);
   
       // Example: Populate the UI with search results
+      return (searchResults);
       this.populateSearchResults(searchResults);
-  
+      
     } catch (error) {
       console.error("Error:", error);
       alert("Error searching data");

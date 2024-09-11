@@ -50,9 +50,179 @@ export class SheetRenderer {
     this.cellFunctionality = new CellFunctionality(this);
     this.headerCellFunctionality = new HeaderCellFunctionality(this);
     this.graph = new Graph(this);
-    this.fetch = this.sheet.fetch;
-    this.resizeCanvases();
+    this.search = document.getElementById('search');
+    this.search.addEventListener('click', (e) => {
+      this.performSearch();  // Call another method to handle the search
+    });
+        this.resizeCanvases();
   }
+
+ 
+  async performSearch() {
+    await this.fetch.find();  // Assuming this fetches the data
+    this.search_result = this.fetch.find_data;  // Fetched result
+    this.search_data = this.fetch.search.toLowerCase();  // Convert search term to lowercase
+    
+    let rowColumnData = [];  // Array to store rowid and corresponding column index
+  
+    // Iterate over each row
+    this.search_result.forEach((row) => {
+      let foundInColumnIndex = null;
+  
+      // Get all the column names of the current row and iterate over them with their index
+      Object.keys(row).forEach((columnName, index) => {
+        if (this.isMatch(row[columnName])) {
+          foundInColumnIndex = index;  // Store the index of the column where the match is found
+        }
+      });
+  
+      // If a match is found, store the rowid and column index info
+      if (foundInColumnIndex !== null) {
+        rowColumnData.push({
+          rowid: row.rowid+1,  // Store the rowid
+          columnIndex: foundInColumnIndex+2  // Store the column index where match was found
+        });
+      }
+    });
+  
+    // Sort the results by rowid in ascending order
+    rowColumnData.sort((a, b) => {
+      return a.rowid - b.rowid;
+    });
+  
+    // Log the first row-column pair
+    console.log(rowColumnData);
+    console.log(this.verticalCells[0].row, this.horizontalCells[0].col);
+  
+    // Start the row scroll loop
+
+    this.scrollUntilRowTarget(rowColumnData[1].rowid, rowColumnData[1].columnIndex);
+    console.log("hello")
+  }
+  
+  // Helper function to check if the search term is a substring (case-insensitive)
+  isMatch(value) {
+    if (value) {
+      return value.toString().toLowerCase().includes(this.search_data);
+    }
+    return false;
+  }
+  
+// Recursive function that scrolls rows until the target row is reached
+scrollUntilRowTarget(targetRow, targetColumnIndex, speed = 500) {
+  // Check if any of the visible vertical cells have reached or passed the target row
+  const reachedTargetRow = this.verticalCells.some(cell => cell.row === targetRow || cell.row > targetRow);
+
+  if (reachedTargetRow) {
+      console.log("Target row reached or exceeded:", targetRow);
+      // Start scrolling columns once the row is reached
+      this.adjustRowPosition(targetRow,targetColumnIndex);
+      return;
+  }
+
+  // Calculate the distance to the target row from the closest cell
+  const minDistance = Math.min(...this.verticalCells.map(cell => Math.abs(cell.row - targetRow)));
+
+  // Adjust speed based on distance (increase speed when far, decrease when near)
+  const scrollSpeed = Math.min(speed * (1 + minDistance / 100), 1000); // Adjust multiplier as needed
+
+  // Perform the row scroll action
+  if (this.verticalCells[0].row < targetRow) {
+      this.scrollManager.scroll(0, scrollSpeed);
+  } else {
+      this.scrollManager.scroll(0, -scrollSpeed);
+  }
+
+  // Continue scrolling rows until the target row is reached
+  requestAnimationFrame(() => 
+    this.scrollUntilRowTarget(targetRow, targetColumnIndex, speed)
+);
+}
+
+
+// Recursive function that scrolls columns until the target column is reached
+scrollUntilColumnTarget(targetColumnIndex, speed = 500) {
+  // Check if any of the visible horizontal cells have reached or passed the target column
+  const reachedTargetColumn = this.horizontalCells.some(cell => cell.col === targetColumnIndex || cell.col > targetColumnIndex);
+
+  if (reachedTargetColumn) {
+      console.log("Target column reached or exceeded:", targetColumnIndex);
+      // If the column has been reached, adjust the scroll position back to the target column
+      this.adjustColumnPosition(targetColumnIndex);
+      return; // Stop the animation loop when the target column is reached
+  }
+
+  // Calculate the distance to the target column from the closest cell
+  const minDistance = Math.min(...this.horizontalCells.map(cell => Math.abs(cell.col - targetColumnIndex)));
+
+  // Adjust speed based on distance (increase speed when far, decrease when near)
+  const scrollSpeed = Math.min(speed * (1 + minDistance / 100), 1000); // Adjust multiplier as needed
+
+  // Perform the column scroll action
+  if (this.horizontalCells[0].col < targetColumnIndex) {
+      this.scrollManager.scroll(scrollSpeed, 0);
+  } else {
+      this.scrollManager.scroll(-scrollSpeed, 0);
+  }
+
+  // Continue scrolling columns until the target column is reached
+  requestAnimationFrame(() => 
+    this.scrollUntilColumnTarget(targetColumnIndex, speed)
+);
+}
+
+// Helper function to adjust column position back to target after reaching/exceeding it
+adjustColumnPosition(targetColumnIndex) {
+  // Determine if we need to scroll back to the exact target column
+  if (this.horizontalCells.some(cell => cell.col !== targetColumnIndex)) {
+      const currentColumn = this.horizontalCells[0].col;
+      const scrollAdjustment = targetColumnIndex - currentColumn;
+      console.log(targetColumnIndex)
+      if (scrollAdjustment === 0){
+        return 
+      }
+      // Perform a fine-tuned scroll adjustment to correct column position
+      this.scrollManager.scroll(scrollAdjustment, 0);
+      
+      // Continue adjusting until the exact target column is reached
+      requestAnimationFrame(() => 
+        this.adjustColumnPosition(targetColumnIndex)
+    );
+  } else {
+      console.log("Exact target column position reached:", targetColumnIndex);
+  }
+}
+
+// Helper function to adjust row position back to target after reaching/exceeding it
+adjustRowPosition(targetRow,targetColumnIndex) {
+  // Determine if we need to scroll back to the exact target row
+  if (this.verticalCells.some(cell => cell.row !== targetRow)) {
+      const currentRow = this.verticalCells[0].row;
+      const scrollAdjustment = targetRow - currentRow;
+      if (scrollAdjustment === 0){
+        this.scrollUntilColumnTarget(targetColumnIndex);
+
+        return 
+      }
+      // Perform a fine-tuned scroll adjustment to correct row position
+      this.scrollManager.scroll(0, scrollAdjustment);
+
+      // Continue adjusting until the exact target row is reached
+      requestAnimationFrame(() => 
+        this.adjustRowPosition(targetRow,targetColumnIndex)
+    );
+  } else {
+      console.log("Exact target row position reached:", targetRow);
+      // Optionally start scrolling columns if needed
+      // this.scrollUntilColumnTarget(targetColumnIndex);
+  }
+}
+
+
+  
+
+
+  
 
   resizeCanvases() {
     const dpr = window.devicePixelRatio;
