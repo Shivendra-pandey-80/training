@@ -158,7 +158,7 @@ export class Scroll {
     // Limit the maximum scroll speed
     const maxScrollSpeed = 10000; // Adjust this value to control the maximum scroll speed
     // console.log(deltaX,deltaY)
-    if (deltaX>=0 || deltaY>=0){
+    if (deltaX>0 || deltaY>0){
         deltaX = Math.max(-maxScrollSpeed, Math.min(deltaX, maxScrollSpeed));
         deltaY = Math.max(-maxScrollSpeed, Math.min(deltaY, maxScrollSpeed));
     }

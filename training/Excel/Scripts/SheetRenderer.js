@@ -59,7 +59,7 @@ export class SheetRenderer {
 
  
   async performSearch() {
-    await this.fetch.find();  // Assuming this fetches the data
+    await this.fetch.find();  
     this.search_result = this.fetch.find_data;  // Fetched result
     this.search_data = this.fetch.search.toLowerCase();  // Convert search term to lowercase
     
@@ -91,13 +91,13 @@ export class SheetRenderer {
     });
   
     // Log the first row-column pair
-    console.log(rowColumnData);
-    console.log(this.verticalCells[0].row, this.horizontalCells[0].col);
+    //console.log(rowColumnData);
+    //console.log(this.verticalCells[0].row, this.horizontalCells[0].col);
   
     // Start the row scroll loop
 
     this.scrollUntilRowTarget(rowColumnData[1].rowid, rowColumnData[1].columnIndex);
-    console.log("hello")
+
   }
   
   // Helper function to check if the search term is a substring (case-insensitive)
@@ -114,7 +114,7 @@ scrollUntilRowTarget(targetRow, targetColumnIndex, speed = 500) {
   const reachedTargetRow = this.verticalCells.some(cell => cell.row === targetRow || cell.row > targetRow);
 
   if (reachedTargetRow) {
-      console.log("Target row reached or exceeded:", targetRow);
+      //console.log("Target row reached or exceeded:", targetRow);
       // Start scrolling columns once the row is reached
       this.adjustRowPosition(targetRow,targetColumnIndex);
       return;
@@ -146,7 +146,7 @@ scrollUntilColumnTarget(targetColumnIndex, speed = 500) {
   const reachedTargetColumn = this.horizontalCells.some(cell => cell.col === targetColumnIndex || cell.col > targetColumnIndex);
 
   if (reachedTargetColumn) {
-      console.log("Target column reached or exceeded:", targetColumnIndex);
+      //console.log("Target column reached or exceeded:", targetColumnIndex);
       // If the column has been reached, adjust the scroll position back to the target column
       this.adjustColumnPosition(targetColumnIndex);
       return; // Stop the animation loop when the target column is reached
@@ -177,19 +177,22 @@ adjustColumnPosition(targetColumnIndex) {
   if (this.horizontalCells.some(cell => cell.col !== targetColumnIndex)) {
       const currentColumn = this.horizontalCells[0].col;
       const scrollAdjustment = targetColumnIndex - currentColumn;
-      console.log(targetColumnIndex)
+      //console.log(targetColumnIndex)
       if (scrollAdjustment === 0){
+        //console.log("hello")
+        //console.log(this.verticalCells[0],this.horizontalCells[0])
+        this.cellFunctionality.updateSelectedCells({x:this.horizontalCells[0].x , y:this.verticalCells[0].y},true)
         return 
       }
       // Perform a fine-tuned scroll adjustment to correct column position
       this.scrollManager.scroll(scrollAdjustment, 0);
       
       // Continue adjusting until the exact target column is reached
-      requestAnimationFrame(() => 
+      // requestAnimationFrame(() => 
         this.adjustColumnPosition(targetColumnIndex)
-    );
+    // );
   } else {
-      console.log("Exact target column position reached:", targetColumnIndex);
+      //console.log("Exact target column position reached:", targetColumnIndex);
   }
 }
 
@@ -208,21 +211,16 @@ adjustRowPosition(targetRow,targetColumnIndex) {
       this.scrollManager.scroll(0, scrollAdjustment);
 
       // Continue adjusting until the exact target row is reached
-      requestAnimationFrame(() => 
+      // requestAnimationFrame(() => 
         this.adjustRowPosition(targetRow,targetColumnIndex)
-    );
+    // );
   } else {
-      console.log("Exact target row position reached:", targetRow);
+      //console.log("Exact target row position reached:", targetRow);
       // Optionally start scrolling columns if needed
       // this.scrollUntilColumnTarget(targetColumnIndex);
   }
 }
 
-
-  
-
-
-  
 
   resizeCanvases() {
     const dpr = window.devicePixelRatio;
@@ -421,12 +419,16 @@ adjustRowPosition(targetRow,targetColumnIndex) {
 
     // Update input box position
     if (this.cellFunctionality.selectedCell) {
+      this.headerCellFunctionality.isheaderSelection = false;
       this.cellFunctionality.updateInputElement(
         this.cellFunctionality.selectedCell
       );
     }
 
     // Draw resize line if resizing
+    if(this.headerCellFunctionality.isheaderSelection){
+      this.headerCellFunctionality.redrawHeaders();
+    }
     if (this.headerCellFunctionality.isResizing) {
       this.drawResizeLine();
     }
@@ -657,6 +659,216 @@ adjustRowPosition(targetRow,targetColumnIndex) {
     ctx.strokeStyle = "black";
     ctx.fillText(text, x, y, maxWidth);
   }
+
+
+  highlightDraggedCell(index, type) {
+    const canvas = type === 'column' ? this.canvases.horizontal : this.canvases.vertical;
+    const ctx = canvas.getContext('2d');
+    const cell = type === 'column'
+        ? this.headerCellManager.horizontalHeaderCells[index]
+        : this.headerCellManager.verticalHeaderCells[index];
+
+    //console.log(cell);
+    ctx.fillStyle = 'rgba(0, 0, 255, 0.3)';
+    ctx.fillRect(cell.x, cell.y, cell.width, cell.height);
+}
+
+clearDragHighlight() {
+    this.draw(); // Re-render the entire sheet to clear highlights
+}
+
+// updateDragPosition(dragIndex, targetIndex, type, position) {
+//     this.draw(); // Re-render the sheet
+
+//     const canvas = type === 'column' ? this.canvases.horizontal : this.canvases.vertical;
+//     const ctx = canvas.getContext('2d');
+
+//     // Draw a line where the column/row will be inserted
+//     ctx.beginPath();
+//     ctx.strokeStyle = 'blue';
+//     ctx.lineWidth = 2;
+    
+//     if (type === 'column') {
+//         const x = this.headerCellManager.horizontalHeaderCells[targetIndex].x;
+//         ctx.moveTo(x, 0);
+//         ctx.lineTo(x, canvas.height);
+//     } else {
+//         const y = this.headerCellManager.verticalHeaderCells[targetIndex].y;
+//         ctx.moveTo(0, y);
+//         ctx.lineTo(canvas.width, y);
+//     }
+//     ctx.stroke();
+// }
+
+
+updateDragPosition(dragIndex, targetIndex, type, position) {
+
+this.draw(); // Re-render the sheet
+
+const canvas = type === 'column' ? this.canvases.horizontal : this.canvases.vertical;
+const ctx = canvas.getContext('2d');
+
+// Clear previous drawings
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+// Draw a line where the column/row will be inserted
+ctx.beginPath();
+ctx.strokeStyle = 'blue';
+ctx.lineWidth = 2;
+
+if (type === 'column') {
+    const x = this.headerCellManager.horizontalHeaderCells[targetIndex].x;
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+
+    // Update the x positions of columns
+    this.updateColumnPositionsOnDrag(dragIndex, targetIndex, position);
+} else {
+    const y = this.headerCellManager.verticalHeaderCells[targetIndex].y;
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+
+    // Update the y positions of rows
+    this.updateRowPositionsOnDrag(dragIndex, targetIndex, position);
+}
+ctx.stroke();
+}
+
+updateColumnPositionsOnDrag(dragIndex, targetIndex, position) {
+// Adjust x positions of columns being dragged
+if (this.headerCellFunctionality.isDragging){
+
+    //console.log("txt")
+    const dragColumn = this.headerCellManager.horizontalHeaderCells[dragIndex];
+    const targetColumn = this.headerCellManager.horizontalHeaderCells[targetIndex];
+
+// Calculate the new x position of the dragged column
+dragColumn.x = position.x;
+
+// Reposition affected columns
+const columns = this.headerCellManager.horizontalHeaderCells;
+for (let i = Math.min(dragIndex, targetIndex); i <= Math.max(dragIndex, targetIndex); i++) {
+    columns[i].x = columns[i].x + (position.x - columns[dragIndex].x);
+}
+
+// Re-render the sheet
+this.draw();
+}
+}
+
+updateRowPositionsOnDrag(dragIndex, targetIndex, position) {
+// Adjust y positions of rows being dragged
+
+const dragRow = this.headerCellManager.verticalHeaderCells[dragIndex];
+const targetRow = this.headerCellManager.verticalHeaderCells[targetIndex];
+
+// Calculate the new y position of the dragged row
+dragRow.y = position.y;
+
+// Reposition affected rows
+const rows = this.headerCellManager.verticalHeaderCells;
+for (let i = Math.min(dragIndex, targetIndex); i <= Math.max(dragIndex, targetIndex); i++) {
+    rows[i].y = rows[i].y + (position.y - rows[dragIndex].y);
+}
+
+// Re-render the sheet
+this.draw();
+}
+
+
+swapRowOrColumn(fromIndex, toIndex, type) {
+    if (type === 'column') {
+        // Swap columns in the header cell manager
+        [this.headerCellManager.horizontalHeaderCells[fromIndex], this.headerCellManager.horizontalHeaderCells[toIndex]] = 
+        [this.headerCellManager.horizontalHeaderCells[toIndex], this.headerCellManager.horizontalHeaderCells[fromIndex]];
+
+        // Swap column data in the actual data structure
+        if (this.data && this.data.columns) {
+            [this.data.columns[fromIndex], this.data.columns[toIndex]] = 
+            [this.data.columns[toIndex], this.data.columns[fromIndex]];
+        }
+
+        // Update x positions of affected columns
+        this.updateColumnPositions(fromIndex, toIndex);
+    } else if (type === 'row') {
+        // Swap rows in the header cell manager
+        [this.headerCellManager.verticalHeaderCells[fromIndex], this.headerCellManager.verticalHeaderCells[toIndex]] = 
+        [this.headerCellManager.verticalHeaderCells[toIndex], this.headerCellManager.verticalHeaderCells[fromIndex]];
+
+        // Swap row data in the actual data structure
+        if (this.data && this.data.rows) {
+            [this.data.rows[fromIndex], this.data.rows[toIndex]] = 
+            [this.data.rows[toIndex], this.data.rows[fromIndex]];
+        }
+
+        // Update y positions of affected rows
+        this.updateRowPositions(Math.min(fromIndex, toIndex));
+    }
+
+    // Re-render the sheet
+    this.draw();
+}
+
+moveRowOrColumn(fromIndex, toIndex, type) {
+    if (fromIndex === toIndex) return; // No need to move if indices are the same
+
+    if (type === 'column') {
+        // Move column in the header cell manager
+        const column = this.headerCellManager.horizontalHeaderCells.splice(fromIndex, 1)[0];
+        this.headerCellManager.horizontalHeaderCells.splice(toIndex, 0, column);
+
+        // Move column data in the actual data structure
+        if (this.data && this.data.columns) {
+            const columnData = this.data.columns.splice(fromIndex, 1)[0];
+            this.data.columns.splice(toIndex, 0, columnData);
+        }
+
+        // Update x positions of affected columns
+        this.updateColumnPositions(fromIndex, toIndex);
+    } else if (type === 'row') {
+        // Move row in the header cell manager
+        const row = this.headerCellManager.verticalHeaderCells.splice(fromIndex, 1)[0];
+        this.headerCellManager.verticalHeaderCells.splice(toIndex, 0, row);
+
+        // Move row data in the actual data structure
+        if (this.data && this.data.rows) {
+            const rowData = this.data.rows.splice(fromIndex, 1)[0];
+            this.data.rows.splice(toIndex, 0, rowData);
+        }
+
+        // Update y positions of affected rows
+        this.updateRowPositions(Math.min(fromIndex, toIndex));
+    }
+
+    // Re-render the sheet
+    this.draw();
+}
+
+
+
+updateColumnPositions(startIndex,toIndex) {
+    let currentX = startIndex > 0 ? this.headerCellManager.horizontalHeaderCells[startIndex - 1].x + this.headerCellManager.horizontalHeaderCells[startIndex - 1].width : 0;
+    //console.log(currentX,startIndex,this.headerCellManager.horizontalHeaderCells[startIndex-1])
+    //console.log(toIndex,this.headerCellManager.horizontalHeaderCells[toIndex])
+    for (let i = startIndex; i < toIndex+1; i++) {
+        const cell = this.headerCellManager.horizontalHeaderCells[i];
+        //console.log(cell,currentX,cell.x)
+        cell.x = currentX;
+        currentX += cell.width;
+    }
+}
+
+updateRowPositions(startIndex) {
+    let currentY = startIndex > 0 ? this.headerCellManager.verticalHeaderCells[startIndex - 1].y + this.headerCellManager.verticalHeaderCells[startIndex - 1].height : 0;
+
+    for (let i = startIndex; i < this.headerCellManager.verticalHeaderCells.length; i++) {
+        const cell = this.headerCellManager.verticalHeaderCells[i];
+        cell.y = currentY;
+        currentY += cell.height;
+    }
+}
+
+
 
   destroy() {
     window.removeEventListener("resize", this.handleResize);

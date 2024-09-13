@@ -8,6 +8,7 @@
             this.height = height;
             this.value = value;
             this.isfetched = false;
+
         }
         }
 
@@ -202,8 +203,7 @@
             const fetchStartIndex = Math.max(startIndex - buffer, 0);
             const fetchEndIndex = startIndex + buffer;
         
-            // Add the fetch request to the queue
-            let _ = this.addToFetchQueue(fetchStartIndex, fetchEndIndex);
+            
         
             let position = this.verticalHeaderCells[startIndex]?.y || 0;
             for (let i = startIndex; position < scrollY + this.visibleHeight; i++) {
@@ -217,6 +217,8 @@
                 visibleCells.push(cell);
                 position += cell.height;
             }
+            // Add the fetch request to the queue
+            let _ = this.addToFetchQueue(fetchStartIndex, fetchEndIndex);
             return visibleCells;
         }
         
@@ -345,6 +347,18 @@
                 this.customVerticalSizes.get(index) ||
                 this.verticalHeaderCells[index]?.height ||
                 this.baseCellHeight * this.scale
+            );
+            }
+        }
+
+        getCellpos(type, index) {
+            if (type === "horizontal") {
+            return (
+                this.horizontalHeaderCells[index]?.x
+            );
+            } else {
+            return (
+                this.verticalHeaderCells[index]?.y
             );
             }
         }

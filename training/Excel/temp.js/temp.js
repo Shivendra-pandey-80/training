@@ -1,64 +1,125 @@
-// async performSearch() {
-//     await this.fetch.find();  // Assuming this fetches the data
-//     this.search_result = this.fetch.find_data;  // Fetched result
-//     this.search_data = this.fetch.search.toLowerCase();  // Convert search term to lowercase
-    
-//     let rowColumnData = [];  // Array to store rowid and corresponding column index
-  
-//     // Iterate over each row
-//     this.search_result.forEach((row) => {
-//       let foundInColumnIndex = null;
-  
-//       // Get all the column names of the current row and iterate over them with their index
-//       Object.keys(row).forEach((columnName, index) => {
-//         if (this.isMatch(row[columnName])) {
-//           foundInColumnIndex = index;  // Store the index of the column where the match is found
-//         }
-//       });
-  
-//       // If a match is found, store the rowid and column index info
-//       if (foundInColumnIndex !== null) {
-//         rowColumnData.push({
-//           rowid: row.rowid+1,  // Store the rowid
-//           columnIndex: foundInColumnIndex+2  // Store the column index where match was found
-//         });
-//       }
-//     });
-  
-//     // Sort the results by rowid in ascending order
-//     rowColumnData.sort((a, b) => {
-//       return a.rowid - b.rowid;
-//     });
-  
-//     // Log the first row-column pair
-//     console.log("row",rowColumnData[0].rowid, "col",rowColumnData[0].columnIndex);
-//     console.log("vertical",this.verticalCells[0], "horizontal",this.horizontalCells[0]);
-  
-//     // Start the scroll loop
-//     this.scrollUntilTarget(rowColumnData[0].rowid);
-//   }
-  
-//   // Helper function to check if the search term is a substring (case-insensitive)
-//   isMatch(value) {
-//     if (value) {
-//       return value.toString().toLowerCase().includes(this.search_data);
-//     }
-//     return false;
-//   }
-  
-//   // Recursive function that uses requestAnimationFrame to scroll until target row is reached
-//   scrollUntilTarget(targetRow) {
-//     // Perform the scroll action
-//     this.scrollManager.scroll(0, 1);
-  
-//     // Check if the scroll position has reached the target row
-//     console.log(this.verticalCells[0].row , targetRow)
-//     if (this.verticalCells[0].row === targetRow) {
-//       console.log("Target row reached:", targetRow);
-//       return;  // Stop the animation loop when the target is reached
-//     }
-  
-//     // Continue calling scroll until the target row is reached
-//     requestAnimationFrame(() => this.scrollUntilTarget(targetRow));
-//   }
-  
+export class HeaderCellFunctionality {
+    constructor(sheetRenderer) {
+        this.sheetRenderer = sheetRenderer;
+        this.isDragging = false;
+        this.dragStart = null;
+        this.dragType = null; // 'row' or 'column'
+        this.dragIndex = null;
+        this.targetIndex = null;
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        const hCanvas = this.sheetRenderer.canvases.horizontal;
+        const vCanvas = this.sheetRenderer.canvases.vertical;
+
+        hCanvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
+        vCanvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
+
+        document.addEventListener('mouseup', this.handleMouseUp.bind(this));
+        document.addEventListener('mousemove', this.handleDrag.bind(this));
+    }
+
+    handleMouseDown(event) {
+        const canvas = event.target;
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        const isHorizontal = canvas === this.sheetRenderer.canvases.horizontal;
+        const scrollOffset = isHorizontal
+            ? this.sheetRenderer.scrollManager.getScroll().x
+            : this.sheetRenderer.scrollManager.getScroll().y;
+        const cells = isHorizontal
+            ? this.sheetRenderer.headerCellManager.getHorizontalHeaderCells(scrollOffset)
+            : this.sheetRenderer.headerCellManager.getVerticalHeaderCells(scrollOffset);
+
+        this.isDragging = true;
+        this.dragType = isHorizontal ? 'column' : 'row';
+        this.dragIndex = this.getDragIndex(cells, x, y, isHorizontal);
+        this.dragStart = { x, y };
+        console.log(this.dragIndex)
+
+        // Highlight the dragged cell
+        this.sheetRenderer.highlightDraggedCell(this.dragIndex, this.dragType);
+    }
+
+    handleMouseUp(event) {
+        if (this.isDragging) {
+            this.isDragging = false;
+            this.finalizeDrag(event);
+          
+            this.sheetRenderer.clearDragHighlight();
+        }
+    }
+
+    handleDrag(event) {
+        if (!this.isDragging) return;
+
+        const canvas = this.dragType === 'column'
+            ? this.sheetRenderer.canvases.horizontal
+            : this.sheetRenderer.canvases.vertical;
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        // Get the current scroll position
+        const scrollX = this.sheetRenderer.scrollManager.getScroll().x;
+        const scrollY = this.sheetRenderer.scrollManager.getScroll().y;
+
+        // Get visible cells, accounting for scroll position
+        const cells = this.dragType === 'column'
+            ? this.sheetRenderer.headerCellManager.getHorizontalHeaderCells(scrollX)
+            : this.sheetRenderer.headerCellManager.getVerticalHeaderCells(scrollY);
+
+        // Calculate the position including scroll offset
+        const adjustedX = x + scrollX;
+        const adjustedY = y + scrollY;
+
+        // Find the target index
+        const newTargetIndex = this.getDragIndex(cells, adjustedX, adjustedY, this.dragType === 'column');
+
+        // If the target index has changed, perform the swap
+        if (newTargetIndex !== this.targetIndex && newTargetIndex !== this.dragIndex) {
+            this.sheetRenderer.swapRowOrColumn(this.dragIndex, newTargetIndex, this.dragType);
+            this.dragIndex = newTargetIndex;
+        }
+
+        this.targetIndex = newTargetIndex;
+
+        // Update the visual feedback
+        this.sheetRenderer.updateDragPosition(this.dragIndex, this.targetIndex, this.dragType, { x, y });
+    }
+
+    getDragIndex(cells, x, y, isHorizontal) {
+        let accumulatedSize = 0;
+        for (let i = 0; i < cells.length; i++) {
+            const cell = cells[i];
+            const cellSize = isHorizontal ? cell.width : cell.height;
+            const position = isHorizontal ? x : y;
+            
+            if (position >= accumulatedSize && position < accumulatedSize + cellSize) {
+                // If we're in the first half of the cell, return the current index
+                // Otherwise, return the next index (for inserting after)
+                return position < accumulatedSize + cellSize / 2 ? i : i + 1;
+            }
+            
+            accumulatedSize += cellSize;
+        }
+        
+        // If we've gone past all cells, return the last index + 1
+        return cells.length;
+    }
+
+    finalizeDrag(event) {
+        this.isDragging = false;
+        
+        this.sheetRenderer.moveRowOrColumn(this.dragIndex, this.targetIndex, this.dragType);
+        
+
+        // Reset drag state
+        this.dragStart = null;
+        this.dragIndex = null;
+        this.targetIndex = null;
+    }
+}

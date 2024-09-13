@@ -126,6 +126,7 @@ export class UploadAndFetch {
     if (!this.tableName) {
       throw new Error("Table name is not set. Please create a table first.");
     }
+    return;
     this.start = startIndex;
 
     try {

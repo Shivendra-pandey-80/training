@@ -110,7 +110,12 @@ export class CellFunctionality {
     }
   }
 
-  updateSelectedCells(endPoint) {
+  updateSelectedCells(endPoint,found = false) {
+    console.log(endPoint)
+    if (found){
+      this.startPoint = endPoint;
+    }
+   
     const cells = this.cellUtility.getCellsFromRect(this.startPoint, endPoint);
     this.selectedCells = cells;
     this.sheetRenderer.draw(); // Redraw the sheet to show cell highlight
@@ -125,100 +130,100 @@ export class CellFunctionality {
     );
   }
 
-  // handleScrolling(event) {
-  //   const { x, y } = this.cellUtility.getCanvasCoordinates(event);
-  //   const { x: scrollX, y: scrollY } =
-  //     this.sheetRenderer.scrollManager.getScroll();
-
-  //   // Check if the pointer is near the edges to trigger scrolling
-  //   const edgeDistance = 30; // Distance from edge to start scrolling
-  //   const canvas = this.sheetRenderer.canvases.spreadsheet;
-
-  //   if (x - scrollX < 0 && event.movementX < 0) {
-  //     this.sheetRenderer.scrollManager.scroll(-10, 0);
-  //   } else if (
-  //     x - scrollX > canvas.clientWidth - edgeDistance &&
-  //     event.movementX > 0
-  //   ) {
-  //     this.sheetRenderer.scrollManager.scroll(10, 0);
-  //   }
-
-  //   if (y - scrollY < 0 && event.movementY < 0) {
-  //     console.log(y - scrollY);
-  //     this.sheetRenderer.scrollManager.scroll(0, -10); // Scroll up
-  //   } else if (
-  //     y - scrollY > canvas.clientHeight - edgeDistance &&
-  //     event.movementY > 0
-  //   ) {
-  //     this.sheetRenderer.scrollManager.scroll(0, 10); // Scroll down
-  //   }
-
-  //   this.updateInputElement(this.clickedCell)
-  // }
-
   handleScrolling(event) {
-    const edgeDistance = 30; // Distance from the edge to start scrolling
-    const scrollSpeed = 20; // The amount to scroll by
-    let scrollTimeout; // Timeout variable to manage delays
-    const scrollIfNearEdge = () => {
-      const { x, y } = this.cellUtility.getCanvasCoordinates(event);
-      const { x: scrollX, y: scrollY } = this.sheetRenderer.scrollManager.getScroll();
-      const canvas = this.sheetRenderer.canvases.spreadsheet;
-      console.log(x,y,scrollX,scrollY,canvas.clientHeight)
-  
-      let scrollXAmount = 0;
-      let scrollYAmount = 0;
-  
-      // Check if the mouse is inside the canvas
-      const isMouseInsideCanvas = (
-          x - scrollX > 0 && 
-          x - scrollX < canvas.clientWidth &&
-          y - scrollY > 0 &&
-          y - scrollY < canvas.clientHeight 
-      );
-  
-      // Stop scrolling if the mouse is inside the canvas
-      if (isMouseInsideCanvas) {
-          console.log("tjl;")
-          this.isScrolling = false;
-          clearTimeout(scrollTimeout); // Stop any ongoing scrolling
-          return; // Exit the function if mouse is inside the canvas
-      }
-  
-      // Check for horizontal scrolling
-      if (x - scrollX < edgeDistance ) {
-          scrollXAmount = -scrollSpeed; // Scroll left
-      } else if (x - scrollX > canvas.clientWidth - edgeDistance) {
-          scrollXAmount = scrollSpeed; // Scroll right
-      }
-  
-      // Check for vertical scrolling
-      if (y - scrollY < edgeDistance ) {
-          scrollYAmount = -scrollSpeed; // Scroll up
-      } else if (y - scrollY > canvas.clientHeight - edgeDistance) {
-          scrollYAmount = scrollSpeed; // Scroll down
-      }
-  
-      // Scroll if needed and if dragging
-      if ((scrollXAmount !== 0 || scrollYAmount !== 0) && this.isDragging && this.isScrolling) {
-          this.sheetRenderer.scrollManager.scroll(scrollXAmount, scrollYAmount);
-  
-          // Clear the previous timeout to prevent stack overflow
-          clearTimeout(scrollTimeout);
-  
-          // Continue scrolling after a delay if the mouse is still near the edge
-          scrollTimeout = setTimeout(scrollIfNearEdge, 100); // Adjust delay as needed
-      } 
-  };
-  
+    const { x, y } = this.cellUtility.getCanvasCoordinates(event);
+    const { x: scrollX, y: scrollY } =
+      this.sheetRenderer.scrollManager.getScroll();
 
-    // If we're not already scrolling, start the scrolling loop
-    if (!this.isScrolling) {
-        scrollIfNearEdge();
+    // Check if the pointer is near the edges to trigger scrolling
+    const edgeDistance = 30; // Distance from edge to start scrolling
+    const canvas = this.sheetRenderer.canvases.spreadsheet;
+
+    if (x - scrollX < 0 && event.movementX < 0) {
+      this.sheetRenderer.scrollManager.scroll(-10, 0);
+    } else if (
+      x - scrollX > canvas.clientWidth - edgeDistance &&
+      event.movementX > 0
+    ) {
+      this.sheetRenderer.scrollManager.scroll(10, 0);
     }
 
-    this.updateInputElement(this.clickedCell);
-}
+    if (y - scrollY < 0 && event.movementY < 0) {
+      console.log(y - scrollY);
+      this.sheetRenderer.scrollManager.scroll(0, -10); // Scroll up
+    } else if (
+      y - scrollY > canvas.clientHeight - edgeDistance &&
+      event.movementY > 0
+    ) {
+      this.sheetRenderer.scrollManager.scroll(0, 10); // Scroll down
+    }
+
+    this.updateInputElement(this.clickedCell)
+  }
+
+  // handleScrolling(event) {
+  //   const edgeDistance = 30; // Distance from the edge to start scrolling
+  //   const scrollSpeed = 20; // The amount to scroll by
+  //   let scrollTimeout; // Timeout variable to manage delays
+  //   const scrollIfNearEdge = () => {
+  //     const { x, y } = this.cellUtility.getCanvasCoordinates(event);
+  //     const { x: scrollX, y: scrollY } = this.sheetRenderer.scrollManager.getScroll();
+  //     const canvas = this.sheetRenderer.canvases.spreadsheet;
+  //     console.log(x,y,scrollX,scrollY,canvas.clientHeight)
+  
+  //     let scrollXAmount = 0;
+  //     let scrollYAmount = 0;
+  
+  //     // Check if the mouse is inside the canvas
+  //     const isMouseInsideCanvas = (
+  //         x - scrollX > 0 && 
+  //         x - scrollX < canvas.clientWidth &&
+  //         y - scrollY > 0 &&
+  //         y - scrollY < canvas.clientHeight 
+  //     );
+  
+  //     // Stop scrolling if the mouse is inside the canvas
+  //     if (isMouseInsideCanvas) {
+  //         console.log("tjl;")
+  //         this.isScrolling = false;
+  //         clearTimeout(scrollTimeout); // Stop any ongoing scrolling
+  //         return; // Exit the function if mouse is inside the canvas
+  //     }
+  
+  //     // Check for horizontal scrolling
+  //     if (x - scrollX < edgeDistance ) {
+  //         scrollXAmount = -scrollSpeed; // Scroll left
+  //     } else if (x - scrollX > canvas.clientWidth - edgeDistance) {
+  //         scrollXAmount = scrollSpeed; // Scroll right
+  //     }
+  
+  //     // Check for vertical scrolling
+  //     if (y - scrollY < edgeDistance ) {
+  //         scrollYAmount = -scrollSpeed; // Scroll up
+  //     } else if (y - scrollY > canvas.clientHeight - edgeDistance) {
+  //         scrollYAmount = scrollSpeed; // Scroll down
+  //     }
+  
+  //     // Scroll if needed and if dragging
+  //     if ((scrollXAmount !== 0 || scrollYAmount !== 0) && this.isDragging && this.isScrolling) {
+  //         this.sheetRenderer.scrollManager.scroll(scrollXAmount, scrollYAmount);
+  
+  //         // Clear the previous timeout to prevent stack overflow
+  //         clearTimeout(scrollTimeout);
+  
+  //         // Continue scrolling after a delay if the mouse is still near the edge
+  //         scrollTimeout = setTimeout(scrollIfNearEdge, 100); // Adjust delay as needed
+  //     } 
+  // };
+  
+
+//     // If we're not already scrolling, start the scrolling loop
+//     if (!this.isScrolling) {
+//         scrollIfNearEdge();
+//     }
+
+//     this.updateInputElement(this.clickedCell);
+// }
 
 
 
@@ -258,13 +263,6 @@ export class CellFunctionality {
     this.input.value = cellValue !== null ? cellValue : ""; // Set the input value
   }
 
-  handleDocumentClick(event) {
-    const canvas = this.sheetRenderer.canvases.spreadsheet;
-    if (!canvas.contains(event.target)) {
-      // Click occurred outside the canvas
-      this.deselectCurrentCells();
-    }
-  }
 
   deselectCurrentCells() {
     if (this.selectedCells.length > 0) {
