@@ -1,0 +1,53 @@
+<!-- <input type="text"  > -->
+<input type="text" [(ngModel)]="inputValue" (input)="saveData()">
+
+<button (click)="saveData()">Save</button>
+<div>
+    <span class="word-span" *ngFor="let word of words; let i = index" [ngClass]="{ 'selected': isSelected(i) }"
+        (click)="selectWord(i)">{{ word }}<span  class="space-span"
+            [ngClass]="{ 'highlight-space': shouldHighlightSpaceAfter(i) }">&nbsp;</span>
+    </span>
+
+</div>
+
+
+<div>
+    <label>
+      <input type="radio" name="option" value="word" [(ngModel)]="selectedOption"> Word
+    </label>
+    <label>
+      <input type="radio" name="option" value="sentence" [(ngModel)]="selectedOption"> Sentence
+    </label>
+    <label>
+      <input type="radio" name="option" value="paragraph" [(ngModel)]="selectedOption"> Paragraph
+    </label>
+    <label>
+      <input type="radio" name="option" value="custom" [(ngModel)]="selectedOption"> Custom
+    </label>
+  </div>
+  
+  <!-- Divs corresponding to each radio button option -->
+  <div *ngIf="selectedOption === 'word'">
+    <p>This is the Word div, visible when 'Word' is selected.</p>
+  </div>
+  
+  <div *ngIf="selectedOption === 'sentence'">
+    <p>This is the Sentence div, visible when 'Sentence' is selected.</p>
+  </div>
+  
+  <div *ngIf="selectedOption === 'paragraph'">
+    <p>This is the Paragraph div, visible when 'Paragraph' is selected.</p>
+  </div>
+  
+  <div *ngIf="selectedOption === 'custom'">
+    <p>This is the Custom div, visible when 'Custom' is selected.</p>
+  </div>
+
+
+
+
+
+
+
+
+  <app-sentence-hightlighter></app-sentence-hightlighter>

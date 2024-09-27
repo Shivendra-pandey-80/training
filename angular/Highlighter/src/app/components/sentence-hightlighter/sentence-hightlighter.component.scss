@@ -1,0 +1,23 @@
+@import '../../../mixin';
+
+.sentence-span {
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .sentence-span:hover {
+    background-color: yellow;
+  }
+  
+  .sentence-span.selected {
+    background-color: yellow;
+  }
+  
+  .space-span {
+    background-color: transparent;
+  }
+  
+  .space-span.highlight-space {
+    background-color: yellow;
+  }

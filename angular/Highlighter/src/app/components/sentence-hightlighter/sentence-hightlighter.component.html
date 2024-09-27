@@ -1,0 +1,13 @@
+<!-- Input to enter text, with two-way binding -->
+<input type="text" [(ngModel)]="inputValue" (input)="saveData()">
+<button (click)="saveData()">Save</button>
+
+<!-- Display sentences instead of words -->
+<div>
+  <span 
+    class="sentence-span" 
+    *ngFor="let sentence of sentences; let i = index" 
+    [ngClass]="{ 'selected': isSelected(i) }"
+    (click)="selectSentence(i)">{{ sentence }}<span class="space-span" [ngClass]="{ 'highlight-space': shouldHighlightSpaceAfter(i) }">&nbsp;</span>
+  </span>
+</div>

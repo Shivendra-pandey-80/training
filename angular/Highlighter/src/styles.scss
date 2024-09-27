@@ -1,0 +1,8 @@
+/* You can add global styles to this file, and also import other style files */
+@import './mixin';
+
+html,body{
+    @include resetCss();
+    height: 100%;
+    width: 100%;
+}
