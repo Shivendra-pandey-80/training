@@ -1,28 +1,176 @@
-@import '../../../mixin';
-
-p {
-    @include resetCss();
-    height: 100vh;
-    background-color: aqua;
+@mixin CenterElement{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.word-span {
-    background-color: transparent;
-    transition: background-color 0.3s ease;
-    cursor: pointer;
+@mixin Init{
+    margin: 0;
+    padding: 0;
 }
 
+.navBar{
+    height: 56px;
+    background-color: #25313F;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-.word-span.selected {
-    background-color: yellow;
-    /* Remain yellow when clicked */
+    >.navLeft{
+        flex: 0.5;
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+        color: #3FD28B;
+        font-size: 24px;
+    }
+
+    >.navRight{
+        @include Init();
+        // height: 100%;
+        flex: 0.2;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        >p{
+            @include Init();
+            cursor: pointer;
+            text-transform: uppercase;
+            // height: 100%;
+            font-size: 14px;
+            color: #3FD28B;
+            border-bottom: 1px solid #3FD28B;
+        }
+
+        >.navprofile{
+            background-color: #3C4E62;
+            border: 2px solid #3FD28B;
+            font-size: 18px;
+            border-radius: 50%;
+            padding: 5px;
+        }
+    }
 }
 
+.mainContainer {
+    display: flex;
+    flex-direction: column;
 
-.space-span {
-    background-color: white; /* Default for space */
-  }
-  
-  .space-span.highlight-space {
-    background-color: yellow; /* Highlight space between selected words */
-  }
+    // align-items: start;
+    // justify-content: center;
+    >.maintop {
+        flex: 0.1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #3C4E62;
+        padding: 5px 10px;
+
+        >.backArrow {
+            color: #3FD28B;
+            font-size: 24px;
+        }
+
+        >p {
+            color: #FFFFFF;
+            font-size: 16px;
+        }
+
+        >.buttons {
+            >button {
+                background-color: #3FD28B;
+                border: none;
+                padding: 5px 15px;
+                margin-right: 10px;
+            }
+        }
+    }
+
+    >.mainRest {
+        flex: 0.9;
+        background-color: #EEEEEE;
+        padding: 10px 15px;
+
+        >.mainRestTop {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            // padding: 15px 10px;
+
+            >p {
+                color: #666666;
+                font-size: 12px;
+                font-weight: 500;
+
+                >span {
+                    color: #222222;
+                    font-size: 20px;
+                    font-weight: 600;
+                }
+            }
+
+            >div {
+                >button {
+                    background-color: #E2F8FE;
+                    border: 1px solid #7994B3;
+                    color: #222222;
+                    padding: 2px 10px;
+                    font-size: 14px;
+                    margin-right: 10px;
+                }
+            }
+        }
+
+        >.mainRestTitle{
+            background-color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px 10px;
+
+            >.mainRestTitleLeft{
+                @include CenterElement();
+                padding: 0px 10px;
+
+                >.left-1{
+                    background-color: #3FD28B;
+                    padding: 5px;
+                    border-radius: 50%
+                }
+
+                >.left-2{
+                    margin-left: 5px;
+                    color: #222222;
+                    font-size: 16px;
+                    font-weight: 600;
+                }
+            }
+
+            >.mainRestTitleMiddle{
+                flex: 1;
+                border: 1px solid rgba(34, 34, 34, 0.12);
+            }
+
+            >.mainRestTitleRight{
+                @include CenterElement();
+                padding: 0px 10px;
+
+
+                >.right-1{
+                    background-color: #3FD28B;
+                    padding: 5px;
+                    border-radius: 50%
+                }
+
+                >.right-2{
+                    margin-left: 5px;
+                    color: #222222;
+                    font-size: 16px;
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+}

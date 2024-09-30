@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input , SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-sentence-hightlighter',
@@ -7,17 +7,21 @@ import { Component } from '@angular/core';
 })
 export class SentenceHightlighterComponent {
   space = ' ';
-  inputValue: string = 'Shiv Akhila is bad. It needs to be better! How can we fix it?';
-  sentences: string[] = this.inputValue.split(/(?<=[.!?])\s+/); // Split by sentence-ending punctuation
+  // inputValue: string = 'Shiv Akhila is bad. It needs to be better!';
+  @Input() message : string  = '' 
+  sentences: string[] =  this.message.split(/(?<=[.!?])\s+/); 
 
   selectedSentenceIndices: Set<number> = new Set(); // Set to track selected sentence indices
 
-  constructor() { }
+  constructor() { 
 
-  saveData() {
-    // Split the input into sentences by punctuation marks and update the sentences array
-    this.sentences = this.inputValue.split(/(?<=[.!?])\s+/);
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.sentences = this.message.split(/(?<=[.!?])\s+/); 
+
+  }
+
 
   selectSentence(index: number) {
     console.log('entered select');

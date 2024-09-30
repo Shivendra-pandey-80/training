@@ -6,27 +6,15 @@ p {
     background-color: aqua;
 }
 
-.word-span {
-    background-color: transparent;
-    transition: background-color 0.3s ease;
-    cursor: pointer;
+.text{
+  width: 100%;
+  height: 20%;
 }
 
-
-.word-span.selected {
-    background-color: yellow;
-    /* Remain yellow when clicked */
+input{
+  height: fit-content;
+  width: fit-content;
 }
-
-
-.space-span {
-    background-color: white; /* Default for space */
-  }
-  
-  .space-span.highlight-space {
-    background-color: yellow; /* Highlight space between selected words */
-  }
-
 
 div {
 padding: 10px;

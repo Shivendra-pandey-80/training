@@ -1,28 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, Input,SimpleChanges } from '@angular/core';
 
 @Component({
-  selector: 'app-body',
-  templateUrl: './body.component.html',
-  styleUrls: ['./body.component.scss']
+  selector: 'app-word-highlighter',
+  templateUrl: './word-highlighter.component.html',
+  styleUrls: ['./word-highlighter.component.scss']
 })
-export class BodyComponent {
-  space  = " "
-  inputValue : string = `  As the evening sun dipped below the horizon, 
-  casting a golden glow across the quiet town, 
-  Emma sat by her window, 
-  staring out at the world she had once known so well. 
-  The familiar streets, 
-  now bathed in the soft hues of twilight, 
-  seemed distant, almost foreign.`;
-  words: string[] = this.inputValue.split(' ');
 
-  constructor(){
-    
+export class WordHighlighterComponent {
+  space  = " "
+  // inputValue : string = "shiv akhila is bad";
+  // words: string[] = this.inputValue.split(' ');
+  @Input() message : string  = '';
+  words:string[] =[];
+
+  constructor() {
+   
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.words = this.message.split(' ');
+  }
+
   selectedWordIndices: Set<number> = new Set(); // Set to track selected word indices
-  saveData() {
-    this.words = this.inputValue.split(' ');
-  }
 
   selectWord(index: number) {
     console.log("entered select")
@@ -49,4 +48,7 @@ export class BodyComponent {
   selectOption(option: string) {
     this.selectedOption = option;
   }
+
+
+
 }

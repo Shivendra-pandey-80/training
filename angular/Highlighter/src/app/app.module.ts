@@ -8,13 +8,15 @@ import { BodyComponent } from './components/body/body.component';
 
 import { FormsModule } from '@angular/forms';
 import { SentenceHightlighterComponent } from './components/sentence-hightlighter/sentence-hightlighter.component';
+import { WordHighlighterComponent } from './components/word-highlighter/word-highlighter.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     BodyComponent,
-    SentenceHightlighterComponent
+    SentenceHightlighterComponent,
+    WordHighlighterComponent
   ],
   imports: [
     BrowserModule,
