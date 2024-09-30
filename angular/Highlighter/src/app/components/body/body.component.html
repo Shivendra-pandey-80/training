@@ -29,7 +29,7 @@
   </div>
   
   <div *ngIf="selectedOption === 'paragraph'">
-    <p>This is the Paragraph div, visible when 'Paragraph' is selected.</p>
+    <app-para-highlighter [message] = "inputValue" ></app-para-highlighter>
   </div>
   
   <div *ngIf="selectedOption === 'custom'">

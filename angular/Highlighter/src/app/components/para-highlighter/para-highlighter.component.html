@@ -1,0 +1,10 @@
+<div>
+    <p 
+      class="paragraph-span" 
+      *ngFor="let paragraph of paragraphs; let i = index" 
+      [ngClass]="{ 'selected': isSelected(i) }"
+      (click)="selectParagraph(i)">
+      {{ paragraph }}
+    </p>
+  </div>
+  
