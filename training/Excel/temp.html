@@ -1,26 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="temp.css">
-
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matching Game</title>
+  <style>
+    .container {
+      display: flex;
+      justify-content: space-between;
+      width: 60%;
+      margin: 50px auto;
+      position: relative;
+    }
+    .left, .right {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .item {
+      padding: 10px;
+      background-color: lightgray;
+      text-align: center;
+      cursor: pointer;
+      border: 2px solid black;
+      user-select: none;
+    }
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
-    
-<div class="mainContainer" id="mainContainer">
-    <div class="row">
-      <div class="cell"></div>
-      <div class="cell"></div>
+  <div class="container">
+    <div class="left">
+      <div class="item" data-value="apple">Apple</div>
+      <div class="item" data-value="orange">Orange</div>
+      <div class="item" data-value="banana">Banana</div>
     </div>
-    <div class="row">
-      <div class="cell"></div>
-      <div class="cell"></div>
+    <svg></svg>
+    <div class="right">
+      <div class="item" data-value="red">Red</div>
+      <div class="item" data-value="orange">Orange</div>
+      <div class="item" data-value="yellow">Yellow</div>
     </div>
-
   </div>
-  <script src="temp.js"></script>
 
+  <script>
+    let svg = document.querySelector('svg');
+    let startItem = null; // Store the starting element
+    let line = null; // Store the current line being drawn
+
+    document.querySelectorAll('.item').forEach(item => {
+      item.addEventListener('mousedown', startLine);
+    });
+
+    document.addEventListener('mousemove', drawLine);
+    document.addEventListener('mouseup', endLine);
+
+    function startLine(e) {
+      startItem = e.target;
+      console.log(e.offsetX,e.clientY)
+
+      // Create an SVG line element when the user clicks an item
+      line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', e.offsetX);
+      line.setAttribute('y1', e.clientY - svg.getBoundingClientRect().top);
+      line.setAttribute('x2', e.offsetX);
+      line.setAttribute('y2', e.clientY - svg.getBoundingClientRect().top);
+      line.setAttribute('stroke', 'black');
+      line.setAttribute('stroke-width', '2');
+      svg.appendChild(line);
+    }
+
+    function drawLine(e) {
+      if (line) {
+        // Update the position of the line as the mouse moves
+        line.setAttribute('x2', e.offsetX);
+        line.setAttribute('y2', e.offsetY);
+      }
+    }
+
+    function endLine(e) {
+      if (!line) return;
+
+      let endItem = document.elementFromPoint(e.clientX, e.clientY);
+
+      // Check if the end point is a valid target and is different from the start point
+      if (endItem && endItem.classList.contains('item') && endItem !== startItem) {
+        // Snap the line to the center of the end item
+        line.setAttribute('x2', endItem.getBoundingClientRect().left + endItem.offsetWidth / 2);
+        line.setAttribute('y2', endItem.getBoundingClientRect().top + endItem.offsetHeight / 2);
+
+        // Check if the matched pair is correct
+        if (startItem.dataset.value === endItem.dataset.value) {
+          line.setAttribute('stroke', 'green'); // Correct match
+        } else {
+          line.setAttribute('stroke', 'red'); // Incorrect match
+        }
+      } else {
+        // If the line was not connected to a valid target, remove the line
+        svg.removeChild(line);
+      }
+
+      // Reset the state
+      startItem = null;
+      line = null;
+    }
+  </script>
+</body>
 </html>
-

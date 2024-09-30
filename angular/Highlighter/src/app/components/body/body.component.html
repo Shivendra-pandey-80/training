@@ -1,10 +1,17 @@
 <!-- <input type="text"  > -->
-<textarea  [(ngModel)]="inputValue" (input)="saveData()" class = "text"></textarea>
+<div class = "main-container">
+<div class = "question">
+Question (Stem)*
+<textarea rows="5" [(ngModel)]="inputValue" class = "text"></textarea>
 <!-- <button (click)="saveData()">Save</button> -->
-<textarea [(ngModel)]="inputValue" (input)="saveData()" class = "text"></textarea>
+</div>
 
+<div class = "textphrase">
+<app-textphrase (textChange)="handleTextChange($event)"></app-textphrase>
+</div>
 
-<div>
+Set Answer Type
+<div class = "answer-type">
     <label>
       <input type="radio" name="option" value="word" [(ngModel)]="selectedOption"> Word
     </label>
@@ -20,18 +27,20 @@
   </div>
   
   <!-- Divs corresponding to each radio button option -->
+  Set Selections*
   <div *ngIf="selectedOption === 'word'">
-  <app-word-highlighter [message]="inputValue"> </app-word-highlighter>
+  <app-word-highlighter [message]="receivedText"> </app-word-highlighter>
   </div>
   
   <div *ngIf="selectedOption === 'sentence'">
-    <app-sentence-hightlighter [message] = "inputValue"></app-sentence-hightlighter>
+    <app-sentence-hightlighter [message] = "receivedText"></app-sentence-hightlighter>
   </div>
   
   <div *ngIf="selectedOption === 'paragraph'">
-    <app-para-highlighter [message] = "inputValue" ></app-para-highlighter>
+    <app-para-highlighter [message] = "receivedText" ></app-para-highlighter>
   </div>
   
   <div *ngIf="selectedOption === 'custom'">
     <p>This is the Custom div, visible when 'Custom' is selected.</p>
   </div>
+</div>

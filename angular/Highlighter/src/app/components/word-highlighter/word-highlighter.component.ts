@@ -22,6 +22,9 @@ export class WordHighlighterComponent {
   }
 
   selectedWordIndices: Set<number> = new Set(); // Set to track selected word indices
+  saveData() {
+    this.words = this.message.split(' ');
+  }
 
   selectWord(index: number) {
     console.log("entered select")

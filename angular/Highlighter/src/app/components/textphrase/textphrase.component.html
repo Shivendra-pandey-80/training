@@ -1,0 +1,23 @@
+Text Phrase*
+<div class="toolbar">
+    <button (click)="applyBold()" class="bold-btn">              
+        <span class="iconify" data-icon="f7:bold" data-width="15" data-height="15"></span>
+    </button>
+    <button (click)="applyItalic()" class="italic-btn">
+        <span class="iconify" data-icon="lucide:italic" data-width="15" data-height="15"></span>
+    </button>
+    <button (click)="alignText('left')">
+        <span class="iconify" data-icon="mingcute:align-left-line" data-width="15" data-height="15"></span>
+    </button>
+    <button (click)="alignText('center')">
+        <span class="iconify" data-icon="mingcute:align-center-line" data-width="15" data-height="15"></span>
+    </button>
+    <button (click)="alignText('right')">
+        <span class="iconify" data-icon="mingcute:align-right-line" data-width="15" data-height="15"></span>
+    </button>
+  </div>
+  
+  <div class="textphrase">
+    <textarea rows="5" [(ngModel)]="inputValue" (input) = 'sendTextToParent()' class="text-area "></textarea>
+  </div>
+   

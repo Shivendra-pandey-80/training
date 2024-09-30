@@ -1,105 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoomable and Resizable Canvas</title>
-    <style>
-        #zoomable-div {
-            width: 100%;
-            height: 100vh;
-            border: 1px solid #000;
-            overflow: hidden;
-            position: relative;
-        }
-
-        #zoomable-div canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matching Game</title>
+  <style>
+    .container {
+      display: flex;
+      justify-content: space-between;
+      width: 60%;
+      margin: 50px auto;
+      position: relative;
+    }
+    .left, .right {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .item {
+      padding: 10px;
+      background-color: lightgray;
+      text-align: center;
+      cursor: pointer;
+      border: 2px solid black;
+      user-select: none;
+    }
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
-    <div id="zoomable-div">
-        <canvas id="zoomable-canvas"></canvas>
+  <div class="container">
+    <div class="left">
+      <div class="item" data-value="apple">Apple</div>
+      <div class="item" data-value="orange">Orange</div>
+      <div class="item" data-value="banana">Banana</div>
     </div>
+    <svg></svg>
+    <div class="right">
+      <div class="item" data-value="red">Red</div>
+      <div class="item" data-value="orange">Orange</div>
+      <div class="item" data-value="yellow">Yellow</div>
+    </div>
+  </div>
 
-    <script>
-        const zoomableDiv = document.getElementById('zoomable-div');
-        const canvas = document.getElementById('zoomable-canvas');
-        const ctx = canvas.getContext('2d');
+  <script>
+    let svg = document.querySelector('svg');
+    let startItem = null; // Store the starting element
+    let line = null; // Store the current line being drawn
 
-        let scale = 1;
-        const minScale = 0.5;
-        const maxScale = 3;
+    document.querySelectorAll('.item').forEach(item => {
+      item.addEventListener('mousedown', startLine);
+    });
 
-        function resizeCanvas() {
-            const rect = zoomableDiv.getBoundingClientRect();
-            canvas.width = rect.width * window.devicePixelRatio;
-            canvas.height = rect.height * window.devicePixelRatio;
-            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-            draw();
+    document.addEventListener('mousemove', drawLine);
+    document.addEventListener('mouseup', endLine);
+
+    function startLine(e) {
+      startItem = e.target;
+
+      // Create an SVG line element when the user clicks an item
+      line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', startItem.getBoundingClientRect().left + startItem.offsetWidth / 2);
+      line.setAttribute('y1', startItem.getBoundingClientRect().top + startItem.offsetHeight / 2);
+      line.setAttribute('x2', startItem.getBoundingClientRect().left + startItem.offsetWidth / 2);
+      line.setAttribute('y2', startItem.getBoundingClientRect().top + startItem.offsetHeight / 2);
+      line.setAttribute('stroke', 'black');
+      line.setAttribute('stroke-width', '2');
+      svg.appendChild(line);
+    }
+
+    function drawLine(e) {
+      if (line) {
+        // Update the position of the line as the mouse moves
+        line.setAttribute('x2', e.clientX);
+        line.setAttribute('y2', e.clientY);
+      }
+    }
+
+    function endLine(e) {
+      if (!line) return;
+
+      let endItem = document.elementFromPoint(e.clientX, e.clientY);
+
+      // Check if the end point is a valid target and is different from the start point
+      if (endItem && endItem.classList.contains('item') && endItem !== startItem) {
+        // Snap the line to the center of the end item
+        line.setAttribute('x2', endItem.getBoundingClientRect().left + endItem.offsetWidth / 2);
+        line.setAttribute('y2', endItem.getBoundingClientRect().top + endItem.offsetHeight / 2);
+
+        // Check if the matched pair is correct
+        if (startItem.dataset.value === endItem.dataset.value) {
+          line.setAttribute('stroke', 'green'); // Correct match
+        } else {
+          line.setAttribute('stroke', 'red'); // Incorrect match
         }
+      } else {
+        // If the line was not connected to a valid target, remove the line
+        svg.removeChild(line);
+      }
 
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.save();
-            ctx.scale(scale, scale);
-
-            const gridSize = Math.max(20 / scale, 10);
-            const lineThickness = Math.max(1 / scale, 0.5);
-
-            const numLinesX = Math.ceil(canvas.width / gridSize);
-            const numLinesY = Math.ceil(canvas.height / gridSize);
-
-            ctx.strokeStyle = 'lightgray';
-            ctx.lineWidth = lineThickness;
-
-            for (let i = 0; i <= numLinesX; i++) {
-                ctx.beginPath();
-                ctx.moveTo(i * gridSize, 0);
-                ctx.lineTo(i * gridSize, canvas.height / scale);
-                ctx.stroke();
-            }
-
-            for (let j = 0; j <= numLinesY; j++) {
-                ctx.beginPath();
-                ctx.moveTo(0, j * gridSize);
-                ctx.lineTo(canvas.width / scale, j * gridSize);
-                ctx.stroke();
-            }
-
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            const fontSize = Math.max(3, gridSize / 2.5);
-            ctx.font = `${fontSize}px Arial`;
-
-            for (let row = 0; row < numLinesY; row++) {
-                for (let col = 0; col < numLinesX; col++) {
-                    const x = col * gridSize + gridSize / 2;
-                    const y = row * gridSize + gridSize / 2;
-                    const randomNumber = Math.floor(Math.random() * 100);
-                    ctx.fillText(randomNumber, x, y);
-                }
-            }
-
-            ctx.restore();
-        }
-
-        resizeCanvas();
-
-        window.addEventListener('resize', resizeCanvas);
-
-        zoomableDiv.addEventListener('wheel', (event) => {
-            event.preventDefault();
-            if (event.deltaY < 0) {
-                scale = Math.min(scale * 1.1, maxScale);
-            } else {
-                scale = Math.max(scale / 1.1, minScale);
-            }
-            draw();
-        });
-    </script>
+      // Reset the state
+      startItem = null;
+      line = null;
+    }
+  </script>
 </body>
 </html>

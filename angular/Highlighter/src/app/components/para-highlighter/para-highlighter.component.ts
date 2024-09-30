@@ -16,7 +16,7 @@ export class ParaHighlighterComponent {
 
   ngOnChanges(changes: SimpleChanges) {
     // Split the message into paragraphs based on line breaks (\n or \r\n) or two or more spaces
-    this.paragraphs = this.message.split(/\n+/).filter(paragraph => paragraph.trim().length > 0);
+    this.paragraphs = this.message.split(/\n\n+/).filter(paragraph => paragraph.trim().length > 0);
   }
 
   selectParagraph(index: number) {

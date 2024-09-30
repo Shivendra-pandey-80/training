@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { SentenceHightlighterComponent } from './components/sentence-hightlighter/sentence-hightlighter.component';
 import { WordHighlighterComponent } from './components/word-highlighter/word-highlighter.component';
 import { ParaHighlighterComponent } from './components/para-highlighter/para-highlighter.component';
+import { TextphraseComponent } from './components/textphrase/textphrase.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ParaHighlighterComponent } from './components/para-highlighter/para-hig
     BodyComponent,
     SentenceHightlighterComponent,
     WordHighlighterComponent,
-    ParaHighlighterComponent
+    ParaHighlighterComponent,
+    TextphraseComponent
   ],
   imports: [
     BrowserModule,

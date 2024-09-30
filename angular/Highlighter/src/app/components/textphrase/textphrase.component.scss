@@ -1,0 +1,47 @@
+.textphrase{
+    width: 100%;
+}
+
+textarea{
+    width: 100%;
+    outline: none;
+    border: 1px solid black;
+    // border-bottom: 1px solid black;
+    resize: none;
+  }
+    .text-area-bold {
+        font-weight: bold;
+    }
+    .text-area-italic {
+        font-style: italic;
+    }
+    
+    .toolbar {
+        // height: 20px;
+        background-color: lightgrey;
+        display: flex;
+        align-items: center;
+        padding: 4px;
+        button {
+            padding: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+        }
+        .active {
+            background-color: black;
+            color: white;
+        }
+  }
+  
+  .textphrase {
+    .text {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+    }
+  }
+  
