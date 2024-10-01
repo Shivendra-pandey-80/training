@@ -1,8 +1,16 @@
-<div>
-    <span class="word-span" *ngFor="let word of words; let i = index" [ngClass]="{ 'selected': isSelected(i) }"
-        (click)="selectWord(i)">{{ word }}<span  class="space-span"
-            [ngClass]="{ 'highlight-space': shouldHighlightSpaceAfter(i) }">&nbsp;</span>
+<div class="user-select-none">
+    <span
+      class="word-span"
+      *ngFor="let word of words; let i = index"
+      [ngClass]="{ 'selected': isSelected(i) }"
+      (mousedown)="startDrag(i)"
+      (mousemove)="dragOver(i)"
+      (mouseup)="endDrag()"
+      >{{ word }}<span
+        class="space-span"
+        [ngClass]="{ 'highlight-space': shouldHighlightSpaceAfter(i) }"
+        >&nbsp;</span
+      >
     </span>
-
-</div>
-
+  </div>
+  

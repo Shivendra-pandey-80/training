@@ -1,31 +1,23 @@
 @import '../../../mixin';
 
-p {
-    @include resetCss();
-    height: 100vh;
-    background-color: aqua;
-}
 
-.word-span {
-    background-color: transparent;
-    transition: background-color 0.3s ease;
-    cursor: pointer;
-}
 
+.user-select-none {
+  user-select: none; /* Prevent default text selection */
+}
 
 .word-span.selected {
-    background-color: yellow;
-    /* Remain yellow when clicked */
+  background-color: yellow; /* Custom highlight for selected words */
 }
 
-
+.space-span.highlight-space {
+  background-color: yellow; /* Highlight space between selected words */
+}
 .space-span {
     background-color: white; /* Default for space */
   }
   
-  .space-span.highlight-space {
-    background-color: yellow; /* Highlight space between selected words */
-  }
+
 
 
 div {
@@ -34,10 +26,3 @@ border: 1px solid #ccc;
 margin-top: 10px;
 }
 
-label {
-margin-right: 15px;
-}
-
-input[type="radio"] {
-margin-right: 5px;
-}
