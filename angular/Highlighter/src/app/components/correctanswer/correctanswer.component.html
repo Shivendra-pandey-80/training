@@ -1,0 +1,26 @@
+<div class = "user-select-none">
+    <span *ngFor="let word of words; let i = index" 
+          [class.highlight]="isInRange(i)" 
+          [class.correct]="isCorrectAnswer(i)"
+          [class.selectable]="isInRange(i)"
+          (mousedown)="onMouseDown(i)">
+      {{ word }}
+    </span>
+  </div>
+
+  <!-- Input box for the maximum number of correct answers allowed -->
+<div>
+    <label for="maxAnswers">Max Correct Answers:</label>
+    <input id="maxAnswers" type="number" (input)="onMaxAnswersChange($event)" />
+  </div>
+  
+  <!-- Display correct answers for debugging or tracking purposes -->
+  <div>
+    <h3>Correct Answers (Selected Ranges):</h3>
+    <ul>
+      <li *ngFor="let range of correctAnswers">
+        Range: {{ range[0] }} to {{ range[1] }}
+      </li>
+    </ul>
+  </div>
+  

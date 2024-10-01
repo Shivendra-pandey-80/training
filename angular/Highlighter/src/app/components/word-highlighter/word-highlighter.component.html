@@ -5,12 +5,6 @@
       [ngClass]="{ 'selected': isSelected(i) }"
       (mousedown)="startDrag(i)"
       (mousemove)="dragOver(i)"
-      (mouseup)="endDrag()"
-      >{{ word }}<span
-        class="space-span"
-        [ngClass]="{ 'highlight-space': shouldHighlightSpaceAfter(i) }"
-        >&nbsp;</span
-      >
-    </span>
+      (mouseup)="endDrag()"> {{ word }}</span>
   </div>
   

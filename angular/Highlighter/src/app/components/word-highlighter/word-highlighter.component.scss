@@ -7,18 +7,15 @@
 }
 
 .word-span.selected {
-  background-color: yellow; /* Custom highlight for selected words */
+  background-color: rgb(255, 30, 0); /* Custom highlight for selected words */
 }
 
 .space-span.highlight-space {
   background-color: yellow; /* Highlight space between selected words */
 }
 .space-span {
-    background-color: white; /* Default for space */
-  }
-  
-
-
+  background-color: white; /* Default for space */
+}
 
 div {
 padding: 10px;

@@ -9,7 +9,8 @@ export class BodyComponent {
   space  = " "
   inputValue : string = ``;
   words: string[] = this.inputValue.split(' ');
-
+  savedRanges: [number, number][] = [];
+  
   constructor(){
     
   }
@@ -20,6 +21,11 @@ export class BodyComponent {
   handleTextChange(text: string) {
     this.receivedText = text;
     console.log(this.handleTextChange)
+  }
+
+  handleSavedRangesChange(savedRanges: [number,number][]){
+    this.savedRanges = savedRanges;
+    console.log(this.savedRanges)
   }
   saveData() {
     this.words = this.inputValue.split(' ');

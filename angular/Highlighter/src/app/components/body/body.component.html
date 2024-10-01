@@ -29,7 +29,7 @@ Set Answer Type
   <!-- Divs corresponding to each radio button option -->
   Set Selections*
   <div *ngIf="selectedOption === 'word'">
-  <app-word-highlighter [message]="receivedText"> </app-word-highlighter>
+  <app-word-highlighter [message]="receivedText" (savedRangesChange)="handleSavedRangesChange($event)"> </app-word-highlighter>
   </div>
   
   <div *ngIf="selectedOption === 'sentence'">
@@ -43,4 +43,8 @@ Set Answer Type
   <div *ngIf="selectedOption === 'custom'">
     <p>This is the Custom div, visible when 'Custom' is selected.</p>
   </div>
+
+  Set Correct Answer*
+  <app-correctanswer [message] = "receivedText" [ranges]="savedRanges"></app-correctanswer>
+  
 </div>

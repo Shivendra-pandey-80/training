@@ -11,6 +11,7 @@ import { SentenceHightlighterComponent } from './components/sentence-hightlighte
 import { WordHighlighterComponent } from './components/word-highlighter/word-highlighter.component';
 import { ParaHighlighterComponent } from './components/para-highlighter/para-highlighter.component';
 import { TextphraseComponent } from './components/textphrase/textphrase.component';
+import { CorrectanswerComponent } from './components/correctanswer/correctanswer.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { TextphraseComponent } from './components/textphrase/textphrase.componen
     SentenceHightlighterComponent,
     WordHighlighterComponent,
     ParaHighlighterComponent,
-    TextphraseComponent
+    TextphraseComponent,
+    CorrectanswerComponent
   ],
   imports: [
     BrowserModule,

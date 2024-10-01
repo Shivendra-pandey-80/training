@@ -1,23 +1,24 @@
-@import '../../../mixin';
+.sentence-container {
+  display: block; // Makes the container inline to fit content in one line
+  user-select: none;
+}
 
-.sentence-span {
-    background-color: transparent;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .sentence-span:hover {
-    background-color: yellow;
-  }
-  
-  .sentence-span.selected {
-    background-color: yellow;
-  }
-  
-  .space-span {
-    background-color: transparent;
-  }
-  
-  .space-span.highlight-space {
-    background-color: yellow;
+.sentence {
+  display: inline; // Keeps each sentence in the same line
+}
+
+span.selected {
+  background-color: yellow; // Highlight selected sentences
+}
+
+.space {
+  display: inline; // Ensure space is inline
+  width: 1em; // Maintain a consistent space width
+}
+
+
+div {
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
   }

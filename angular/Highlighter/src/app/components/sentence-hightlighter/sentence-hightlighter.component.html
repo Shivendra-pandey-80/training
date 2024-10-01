@@ -1,10 +1,12 @@
-
-<!-- Display sentences instead of words -->
-<div>
-  <span 
-    class="sentence-span" 
-    *ngFor="let sentence of sentences; let i = index" 
-    [ngClass]="{ 'selected': isSelected(i) }"
-    (click)="selectSentence(i)">{{ sentence }}<span class="space-span" [ngClass]="{ 'highlight-space': shouldHighlightSpaceAfter(i) }">&nbsp;</span>
+<div class="sentence-container"
+     (mouseleave)="endDrag()">
+  <span *ngFor="let sentence of sentences; let i = index"
+        (mousedown)="startDrag(i)"
+        (mousemove)="dragOver(i)"
+        class="sentence">
+    <span [class.selected]="isSelected(i)" [attr.data-index]="i">
+      {{ sentence }}
+    </span>
+    <span *ngIf="i < sentences.length - 1" class="space"> </span>
   </span>
 </div>

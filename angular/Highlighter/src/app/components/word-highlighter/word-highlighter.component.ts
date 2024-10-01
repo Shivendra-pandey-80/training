@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges, HostListener } from '@angular/core';
+import { Component, Input, SimpleChanges, HostListener ,EventEmitter , Output } from '@angular/core';
 
 @Component({
   selector: 'app-word-highlighter',
@@ -19,7 +19,20 @@ export class WordHighlighterComponent {
   dragEndIndex: number | null = null;
   isDeselecting = false; // Flag to track deselection
 
-  constructor() {}
+  @Output() savedRangesChange: EventEmitter<[number,number][]> = new EventEmitter<[number,number][]>();
+
+  ngOnInit() {
+    this.sendRangeToParent();
+  }  
+
+  // Method to emit the input text to the parent
+  sendRangeToParent() {
+    this.savedRangesChange.emit(this.savedRanges);
+  }
+
+  constructor() {
+    
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     this.words = this.message.split(' ');
@@ -84,6 +97,7 @@ export class WordHighlighterComponent {
       this.savedRanges.push(newRange); // Add the new range
       this.savedRanges = this.savedRanges.sort((a, b) => a[0] - b[0]); // Sort by start index
     }
+    this.sendRangeToParent()
   }
 
   // Deselect the entire range that contains the given index

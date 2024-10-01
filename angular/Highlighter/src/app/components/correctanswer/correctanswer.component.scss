@@ -1,0 +1,35 @@
+/* Default style for words */
+span {
+  padding: 0 5px;
+  cursor: default;
+  /* Default cursor */
+}
+
+/* Highlight style for words in the range (predefined valid words) */
+.highlight {
+  background-color: yellow;
+  font-weight: bold;
+}
+
+/* Correct answer (selected) style */
+.correct {
+  background-color: lightgreen;
+  font-weight: bold;
+}
+
+/* Change cursor to indicate a selectable word */
+.selectable {
+  cursor: pointer;
+}
+
+
+div {
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+.user-select-none {
+  user-select: none;
+  /* Prevent default text selection */
+}
